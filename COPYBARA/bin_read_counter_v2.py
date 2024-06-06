@@ -1,3 +1,4 @@
+from multiprocessing import Pool
 import pysam
 import argparse
 import os
@@ -11,12 +12,11 @@ start_t = timeit.default_timer()
 ##############
 # TO DO
 ##############
-# normalisation - median normalise? 
-# log2 transformation??
-# CBS segmentation
-# turn into function
 
-# THEN... segmentation | tMAD | rascal fitting?? ploidy/purity | --> test on real samples and longitudinal!
+# STEP 1 - multiprocessing by chromosome
+# STEP 2 - normalisation [self,pon,norm] 
+
+# THEN... smoothening | segmentation | tMAD | rascal fitting?? ploidy/purity | --> test on real samples and longitudinal!
 # Also add gene mapper? 
 ##############
 
@@ -25,6 +25,9 @@ start_t = timeit.default_timer()
 #----
 parser = argparse.ArgumentParser(description="Count reads in given bam files across bins (using bin annotation bed file).")
 parser.add_argument('-b', '--bam', type=str, help='Path to bam file.', required=True)
+# parser.add_argument('-nb', '--normal_bam', type=str, help='Path to matched normal bam file.', required=False)
+# parser.add_argument('-np', '--normal_panel', type=str, help='Path to panel-of-normals (PoN) file.', required=False)
+# parser.add_argument('-nb', '--normal_bam', type=str, help='Method of normalisation (self, pon, or norm; default = self).', required=False)
 parser.add_argument('-s', '--sample_prefix', default='bam', type=str, help='Sample name of prefix to use for out files.', required=False)
 parser.add_argument('-a', '--bin_annotations', type=str, help='Path to bed file with bin annotations (need to be generated prior to this). ', required=True)
 parser.add_argument('-q', '--mapping_quality', type=int,  default=20, help='Mapping quality threshold used for read counting', required=False)
@@ -34,7 +37,7 @@ parser.add_argument('-t', '--bl_threshold', type=int,  default='0', help='Percen
 parser.add_argument('--no_basesfilter', dest='bases_filter', action='store_false')
 parser.set_defaults(bases_filter=True)
 parser.add_argument('-bt', '--bases_threshold', type=int,  default='95', help='Percentage of known bases per bin required for read counting (default = 0, i.e. no filtering). Please specify percentage threshold as integer, e.g. "-bt 95" ', required=False)
-parser.add_argument('-sm', '--smoothing_level', type=int,  default='3', help='Number of bases (window size) used to smooth outlier bins (default = 3). Set to "-sm 0" to skip smoothening.', required=False)
+# parser.add_argument('-sm', '--smoothing_level', type=int,  default='3', help='Number of bases (window size) used to smooth outlier bins (default = 3). Set to "-sm 0" to skip smoothening.', required=False)
 parser.add_argument('-o', '--out_dir', type=str, default='.', help='Path to out directory. Default is working directory', required=False)
 args = parser.parse_args()
 

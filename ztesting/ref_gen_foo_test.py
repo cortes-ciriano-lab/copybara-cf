@@ -11,20 +11,29 @@ start_t = timeit.default_timer()
 # 1. Parse command line arguments
 #----
 parser = argparse.ArgumentParser(description="Generate bin annotations from fasta file with given bin size.")
-parser.add_argument('-w', '--bin_size', type=int, help='Bin window size in kbp', required=True)
-parser.add_argument('-f', '--fasta_file', type=str, help='Path to the reference FASTA file', required=True)
-parser.add_argument('-b', '--black_list', type=str, help='Path to the blacklist file', required=False)
+#parser.add_argument('-w', '--bin_size', type=int, help='Bin window size in kbp', required=True)
+#parser.add_argument('-f', '--fasta_file', type=str, help='Path to the reference FASTA file', required=True)
+#parser.add_argument('-b', '--black_list', type=str, help='Path to the blacklist file', required=False)
 parser.add_argument('-c', '--chromosomes', nargs='+', default='all', help='Chromosomes to analyse. To run on all chromosomes, leave unspecified (default). To run on a subset of chromosomes only, specify the chromosome numbers separated by spaces. For x and y chromosomes, use 23 and 24, respectively.  E.g. use "-c 1 4 23 24" to run chromosomes 1, 4, X and Y', required=False)
-parser.add_argument('-t', '--threads', type=int,  default=24, help='number of threads to be used for multiprocessing of chromosomes. Use threads = 1 to avoid multiprocessing.', required=False)
-parser.add_argument('-o', '--out_dir', type=str, default='.', help='Path to out directory. Default is working directory', required=False)
+#parser.add_argument('-t', '--threads', type=int,  default=24, help='number of threads to be used for multiprocessing of chromosomes', required=False)
+#parser.add_argument('-o', '--out_dir', type=str, default='.', help='Path to out directory. Default is working directory', required=False)
 args = parser.parse_args()
 
-bin_size = args.bin_size * int(1000)
-fasta_file_path = args.fasta_file
-blacklist_file = args.black_list
+#bin_size = args.bin_size * int(1000)
+#fasta_file_path = args.fasta_file
+#blacklist_file = args.black_list
 contigs = args.chromosomes
-threads = args.threads
-outdir = args.out_dir
+#threads = args.threads
+#outdir = args.out_dir
+
+print(type(contigs))
+print(contigs)
+
+if len(contigs) >= 1:
+    print("len contigs", len(contigs))
+
+exit()
+
 
 if outdir != '.':
     try:
@@ -122,21 +131,16 @@ fasta.close()
 # 4. Generate bins and count bases per bins for each chrom in parallel (run function using multithreader)
 #----
 
-# only use multiprocessing if more than 1 thread available/being used. 
-if threads == 1:
-    # loop through chromosomes
-    print("multithreading skipped.")
-    chrData = []
-    for contig in chr_in:
-        chrom, chr_length, fasta_file_path = contig[0], contig[1], contig[2]
-        binned_chr = process_chromosome(chrom, chr_length, fasta_file_path)
-        chrData.append(binned_chr)
-else:
-    print(f"multithreading using {threads} threads.")
-    # with ThreadPoolExecutor(max_workers=24) as executor:
-    # chrData = list(executor.map(process_chromosome, chr_in))
-    with Pool(processes=threads) as pool:
-        chrData = list(pool.starmap(process_chromosome, chr_in))
+# only use multiprocessing if more than 1 threads available or being used. 
+
+# if threads == 1:
+    
+
+
+# with ThreadPoolExecutor(max_workers=24) as executor:
+#     chrData = list(executor.map(process_chromosome, chr_in))
+with Pool(processes=threads) as pool:
+    chrData = list(pool.starmap(process_chromosome, chr_in))
 
 #----
 # 5. Concat results into a single bed file
