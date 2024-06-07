@@ -8,9 +8,9 @@ import timeit
 
 start_t = timeit.default_timer()
 
-###################
-# DEFINE FUNCTIONS
-###################
+#----
+# 1. Define functions
+#----
 
 # function to calculate an influence factor (scaling factor) used to determine outliers while using a trimming percentage (value between 0-1)
 def dnorm(x):

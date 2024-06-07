@@ -15,9 +15,9 @@ logging.basicConfig(level=logging.WARN)
 import timeit
 start_t = timeit.default_timer()
 
-###################
-# DEFINE FUNCTIONS
-###################
+#----
+# 1. Define functions
+#----
 
 # Code adapted from: https://github.com/jeremy9959/cbs
 def cbs_stat(x):
