@@ -14,7 +14,7 @@ start_t = timeit.default_timer()
 # TO DO
 ##############
 
-# STEP 1 - multiprocessing by chromosome
+# /DONE/ STEP 1 - multiprocessing by chromosome
 # STEP 2 - normalisation [self,pon,norm] 
 
 # THEN... smoothening | segmentation | tMAD | rascal fitting?? ploidy/purity | --> test on real samples and longitudinal!
@@ -24,11 +24,12 @@ start_t = timeit.default_timer()
 #----
 # 1. Parse command line arguments
 #----
+
 parser = argparse.ArgumentParser(description="Count reads in given bam files across bins (using bin annotation bed file).")
 parser.add_argument('-b', '--bam', type=str, help='Path to bam file.', required=True)
 # parser.add_argument('-nb', '--normal_bam', type=str, help='Path to matched normal bam file.', required=False)
 # parser.add_argument('-np', '--normal_panel', type=str, help='Path to panel-of-normals (PoN) file.', required=False)
-# parser.add_argument('-nb', '--normal_bam', type=str, help='Method of normalisation (self, pon, or norm; default = self).', required=False)
+parser.add_argument('-m', '--normalisation_method', type=str, choices=['self', 'pon', 'norm'], help='Method of normalisation (self, pon, or norm; default = self).', required=False)
 parser.add_argument('-s', '--sample_prefix', default='bam', type=str, help='Sample name of prefix to use for out files.', required=False)
 parser.add_argument('-a', '--bin_annotations', type=str, help='Path to bed file with bin annotations (need to be generated prior to this). ', required=True)
 parser.add_argument('-q', '--mapping_quality', type=int,  default=20, help='Mapping quality threshold used for read counting', required=False)
@@ -67,18 +68,16 @@ else:
 #----
 # 2. Define functions
 #----
+
 def binned_read_counting(chr, bam, bed):
 # def binned_read_counting(chrom, bam, type):
 
     print(f"    Read counting {chr} ...")
     # Open the BAM file using pysam
     bam_file = pysam.AlignmentFile(bam, "rb")
-    outfile = open(f"{outdir}/{prefix}_read_counts.tsv", "w") # this will need updating for normals! 
-    # outfile = open(f"{outdir}/{prefix}_{type}_read_counts.tsv", "w") # this will need updating for normals! 
 
     # Read the BED file to get regions and start/end positions for each chromosome
     bed_file =  pybedtools.BedTool(bed).filter(lambda b: b.chrom == chr)
-    # with open(bed_file_path, "r") as bed_file:
 
     List_of_read_counts = []
         
@@ -127,12 +126,11 @@ def binned_read_counting(chr, bam, bed):
     bam_file.close()
     return(List_of_read_counts)
 
-######################################## BUILDING SITE ########################################
-
 
 #----    
 # 3. Perform binned read counting on bam file/files per chromosome
 #----
+
 # Define contig names from annotation bed file
 chr_names = list(dict.fromkeys([x[0] for x in pybedtools.BedTool(bed_file_path)]))
 chr_in = [[chr,bam_file_path,bed_file_path] for chr in chr_names]
@@ -151,63 +149,11 @@ else:
     with Pool(processes=threads) as pool:
         countData = list(pool.starmap(binned_read_counting, chr_in)) 
 
-
-
-
-#### results ####
-
-outfile = open(f"{outdir}/{prefix}_read_counts.tsv", "w")
-
-# # Read the BED file to get regions and start/end positions 
-# with open(bed_file_path, "r") as bed_file:
-    
-#     List_of_read_counts = []
-#     chunk_read_incrementer = {}
-    
-#     for line in bed_file:
-#         fields = line.strip().split("\t")
-#         chrom, start, end, bases = fields[0], int(fields[1]), int(fields[2]), float(fields[3])
-#         bin_name = f"{chrom}:{start}_{end}"
-        
-#         # Read Counting - Iterate through the BAM file and count reads in each bin
-#         chunk_read_count = 0
-#         for read in bam_file.fetch(chrom, start, end):
-#             if read.is_secondary or read.is_supplementary or read.mapping_quality < mapq:
-#                 continue
-#             else: 
-#                 read_start = read.reference_start
-#                 read_end = read.reference_end
-            
-#                 if read_start >= start and read_start <= end:
-#                         chunk_read_count += 1
-#                 elif read_end >= start and read_end <= end:
-#                         chunk_read_count += 1
-            
-#         # Filtering of bins by assigning each bin to boolean 'use' variable
-#         if blacklisting == False:
-#             if bases_filter == False:
-#                 use = True
-#             elif bases_filter == True:
-#                 if bases >= bases_threshold:
-#                     use = True
-#                 else:
-#                     use = False
-#             List_of_read_counts.append([bin_name, chrom, str(start), str(end), str(bases), str(use), str(chunk_read_count)])
-#         elif blacklisting == True:
-#             blacklist = float(fields[4])
-#             if bases_filter == False:
-#                 if blacklist <= bl_threshold:
-#                     use = True
-#                 else:
-#                     use = False
-#             elif bases_filter == True:
-#                 if blacklist <= bl_threshold and bases >= bases_threshold:
-#                     use = True
-#                 else:
-#                     use = False
-#             List_of_read_counts.append([bin_name, chrom, str(start), str(end), str(bases), str(blacklist), str(use), str(chunk_read_count)])
-# # Close the BAM file
-# bam_file.close()
+## countData is now a list of lists of lists.... Need to unnest by one level
+countData2 = []
+for obj in countData:
+    for r in obj:
+        countData2.append(r)
 
 
 #----
@@ -215,49 +161,56 @@ outfile = open(f"{outdir}/{prefix}_read_counts.tsv", "w")
 #----
 
 # write output
-for obj in countData:
-    for r in obj:
-        Line = '\t'.join(r) + '\n'
-        outfile.write(Line)
+outfile = open(f"{outdir}/{prefix}_read_counts.tsv", "w")
+# outfile = open(f"{outdir}/{prefix}_{type}_read_counts.tsv", "w") # this will need updating for normals! 
+
+for r in countData2:
+    Line = '\t'.join(r) + '\n'
+    outfile.write(Line)
 outfile.close()            
+
+print((countData2))
 
 
 ## HASHED out from here ##
-# # Remove bins with 0 reads (no sequencing data in this region). - need to be excluded for segmentation and log2 transformation
-# # If blacklisting == True or bases_filter == True this will also filter the results to exclude blacklisted regions.
-# outfile2 = open(f"{outdir}/{prefix}_read_counts_filtered.tsv", "w")
-# filtered_counts = [x for x in List_of_read_counts if x[-2] == 'True' and int(x[-1]) != 0]
-# for r in filtered_counts:
-#     Line = '\t'.join(r) + '\n'
-#     outfile2.write(Line)        
-# outfile2.close()
+# Remove bins with 0 reads (no sequencing data in this region). - need to be excluded for segmentation and log2 transformation
+# If blacklisting == True or bases_filter == True this will also filter the results to exclude blacklisted regions.
+outfile2 = open(f"{outdir}/{prefix}_read_counts_filtered.tsv", "w")
+filtered_counts = [x for x in countData2 if x[-2] == 'True' and int(x[-1]) != 0]
+for r in filtered_counts:
+    Line = '\t'.join(r) + '\n'
+    outfile2.write(Line)        
+outfile2.close()
 
-# # Normalise reads by median
-# med = statistics.median([int(x[-1]) for x in filtered_counts])
-# std = statistics.stdev([int(x[-1]) for x in filtered_counts])
+# Normalise reads by median
+med = statistics.median([int(x[-1]) for x in filtered_counts])
+std = statistics.stdev([int(x[-1]) for x in filtered_counts])
 
-# outfile3 = open(f"{outdir}/{prefix}_read_counts_mednorm.tsv", "w")
-# normalised_counts = filtered_counts
-# for r in normalised_counts:
-#     r[-1] = str(int(r[-1])/med) # median normalise readcounts
-#     # r[-1] = str(math.sqrt((int(r[-1])/med) + 3/8)) #anscombe sqrt transform
-#     # might want to change this to normalis to PoN or make that an option...
-#     Line = '\t'.join(r) + '\n'
-#     outfile3.write(Line)
-# outfile3.close()
+outfile3 = open(f"{outdir}/{prefix}_read_counts_mednorm.tsv", "w")
+normalised_counts = filtered_counts
+for r in normalised_counts:
+    r[-1] = str(int(r[-1])/med) # median normalise readcounts
+    # r[-1] = str(math.sqrt((int(r[-1])/med) + 3/8)) #anscombe sqrt transform
+    # might want to change this to normalise to PoN/matched normals or make that an option...
+    Line = '\t'.join(r) + '\n'
+    outfile3.write(Line)
+outfile3.close()
 
-# # Log2 transform data (prior to smoothening) 
-# outfile4 = open(f"{outdir}/{prefix}_read_counts_log2r.tsv", "w")
-# log2r_counts = normalised_counts
-# for r in log2r_counts:
-#     r[-1] = str(math.log2(float(r[-1])))
-#     Line = '\t'.join(r) + '\n'
-#     outfile4.write(Line)
-# outfile4.close()
+# Log2 transform data (prior to smoothening) 
+outfile4 = open(f"{outdir}/{prefix}_read_counts_log2r.tsv", "w")
+log2r_counts = normalised_counts
+for r in log2r_counts:
+    r[-1] = str(math.log2(float(r[-1])))
+    Line = '\t'.join(r) + '\n'
+    outfile4.write(Line)
+outfile4.close()
 
 ## HASHED out until here ##
 ##############################
 
+stop = timeit.default_timer()
+Seconds = round(stop - start_t)
+print(f"Computation time: {Seconds} seconds\n") 
 
 # Log transform
 # outfile4 = open(f"{outdir}/{prefix}_read_counts_normalised_log.tsv", "w")
@@ -300,6 +253,4 @@ outfile.close()
 #     outfile4.write(Line)
 # outfile4.close()
 
-stop = timeit.default_timer()
-Seconds = round(stop - start_t)
-print(f"Computation time: {Seconds} seconds\n") 
+
