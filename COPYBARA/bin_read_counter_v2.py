@@ -27,9 +27,11 @@ start_t = timeit.default_timer()
 
 parser = argparse.ArgumentParser(description="Count reads in given bam files across bins (using bin annotation bed file).")
 parser.add_argument('-b', '--bam', type=str, help='Path to bam file.', required=True)
-# parser.add_argument('-nb', '--normal_bam', type=str, help='Path to matched normal bam file.', required=False)
-# parser.add_argument('-np', '--normal_panel', type=str, help='Path to panel-of-normals (PoN) file.', required=False)
-parser.add_argument('-m', '--normalisation_method', type=str, choices=['self', 'pon', 'norm'], help='Method of normalisation (self, pon, or norm; default = self).', required=False)
+
+normalisation_group = parser.add_mutually_exclusive_group()
+normalisation_group.add_argument('-nb', '--normal_bam', type=str, help='Path to matched normal bam file.', required=False)
+normalisation_group.add_argument('-pon', '--panel_of_normals', type=str, help='Path to panel-of-normals (PoN) file.', required=False)
+
 parser.add_argument('-s', '--sample_prefix', default='bam', type=str, help='Sample name of prefix to use for out files.', required=False)
 parser.add_argument('-a', '--bin_annotations', type=str, help='Path to bed file with bin annotations (need to be generated prior to this). ', required=True)
 parser.add_argument('-q', '--mapping_quality', type=int,  default=20, help='Mapping quality threshold used for read counting', required=False)
@@ -39,12 +41,13 @@ parser.add_argument('-blt', '--bl_threshold', type=int,  default='0', help='Perc
 parser.add_argument('--no_basesfilter', dest='bases_filter', action='store_false')
 parser.set_defaults(bases_filter=True)
 parser.add_argument('-bt', '--bases_threshold', type=int,  default='95', help='Percentage of known bases per bin required for read counting (default = 0, i.e. no filtering). Please specify percentage threshold as integer, e.g. "-bt 95" ', required=False)
-# parser.add_argument('-sm', '--smoothing_level', type=int,  default='3', help='Number of bases (window size) used to smooth outlier bins (default = 3). Set to "-sm 0" to skip smoothening.', required=False)
 parser.add_argument('-t', '--threads', type=int,  default=24, help='number of threads to be used for multiprocessing of chromosomes. Use threads = 1 to avoid multiprocessing.', required=False)
 parser.add_argument('-o', '--out_dir', type=str, default='.', help='Path to out directory. Default is working directory', required=False)
 args = parser.parse_args()
 
 bam_file_path = args.bam
+nbam_file_path = args.normal_bam
+pon_file_path = args.panel_of_normals
 prefix = args.sample_prefix
 bed_file_path = args.bin_annotations
 mapq = args.mapping_quality
@@ -52,7 +55,6 @@ blacklisting = args.blacklisting
 bl_threshold = args.bl_threshold
 bases_filter = args.bases_filter
 bases_threshold = args.bases_threshold
-# smoothing_level = args.smoothing_level
 threads = args.threads
 outdir = args.out_dir
 
@@ -64,30 +66,50 @@ if outdir != '.':
 else:
     pass
 
+# Define mode of normalisation and assign list of alignment files
+if args.normal_bam is not None:
+    nmode = "mnorm" #matched normal will be used for logR normalisation
+    aln_files = {
+			'tumour': bam_file_path,
+			'normal': nbam_file_path
+		}
+elif args.panel_of_normals is not None:
+    nmode = "pon" #panel of normals will be used for logR normalisation
+    aln_files = {
+			'tumour': bam_file_path
+		}
+elif args.normal_bam is None and args.panel_of_normals is None:
+    nmode = "self"
+    aln_files = {
+			'tumour': bam_file_path
+		}
+print(f"Normalisation mode: {nmode}")
+
+print(aln_files)
+
 
 #----
 # 2. Define functions
 #----
 
-def binned_read_counting(chr, bam, bed):
-# def binned_read_counting(chrom, bam, type):
-
+def binned_read_counting(chr, label, bam_file, bed):
+    
     print(f"    Read counting {chr} ...")
     # Open the BAM file using pysam
-    bam_file = pysam.AlignmentFile(bam, "rb")
+    bam = pysam.AlignmentFile(bam_file, "rb")
 
     # Read the BED file to get regions and start/end positions for each chromosome
     bed_file =  pybedtools.BedTool(bed).filter(lambda b: b.chrom == chr)
 
-    List_of_read_counts = []
-        
-    for line in bed_file:
-        chrom, start, end, bases = line[0], int(line[1]), int(line[2]), float(line[3])
+    chr_read_counts = []
+              
+    for bin in bed_file:
+        chrom, start, end, bases = bin[0], int(bin[1]), int(bin[2]), float(bin[3])
         bin_name = f"{chrom}:{start}_{end}"
-            
+
         # Read Counting - Iterate through the BAM file and count reads in each bin
         chunk_read_count = 0
-        for read in bam_file.fetch(chrom, start, end):
+        for read in bam.fetch(chrom, start, end):
             if read.is_secondary or read.is_supplementary or read.mapping_quality < mapq:
                 continue
             else: 
@@ -108,9 +130,9 @@ def binned_read_counting(chr, bam, bed):
                     use = True
                 else:
                     use = False
-            List_of_read_counts.append([bin_name, chrom, str(start), str(end), str(bases), str(use), str(chunk_read_count)])
+            chr_read_counts.append([bin_name, chrom, label, str(start), str(end), str(bases), str(use), str(chunk_read_count)])
         elif blacklisting == True:
-            blacklist = float(line[4])
+            blacklist = float(bin[4])
             if bases_filter == False:
                 if blacklist <= bl_threshold:
                     use = True
@@ -121,10 +143,14 @@ def binned_read_counting(chr, bam, bed):
                     use = True
                 else:
                     use = False
-            List_of_read_counts.append([bin_name, chrom, str(start), str(end), str(bases), str(blacklist), str(use), str(chunk_read_count)])
+            chr_read_counts.append([bin_name, chrom, label, str(start), str(end), str(bases), str(blacklist), str(use), str(chunk_read_count)])
+        
+        # bams_out[idx].append(chr_read_counts)
+            
     # Close the bed and BAM file
-    bam_file.close()
-    return(List_of_read_counts)
+    # bam.close()
+    return(chr_read_counts)
+    # return(bams_out)
 
 
 #----    
@@ -133,77 +159,104 @@ def binned_read_counting(chr, bam, bed):
 
 # Define contig names from annotation bed file
 chr_names = list(dict.fromkeys([x[0] for x in pybedtools.BedTool(bed_file_path)]))
-chr_in = [[chr,bam_file_path,bed_file_path] for chr in chr_names]
+# for label, bam in aln_files.items():
+#     chr_in = [[chr,label,bam,bed_file_path] for chr in chr_names]
+# print(chr_in)
 
 # only use multiprocessing if more than 1 thread available/being used. 
 if threads == 1:
     # loop through chromosomes
     print("multithreading skipped.")
     countData = []
-    for contig in chr_in:
-        chr, bam, bed = contig[0], contig[1], contig[2]
-        counts_binned_chr = binned_read_counting(chr, bam, bed)
-        countData.append(counts_binned_chr)
+    # countData = [[] for _ in range(len(aln_files))]
+    for label, bam_file in aln_files.items():
+        print(f"    processing {label} bam ...")
+        for chr in chr_names:
+            counts_binned_chr = binned_read_counting(chr, label, bam_file, bed_file_path)
+            countData.append(counts_binned_chr)
+    # make lists more accessible and separate tumour and normal data
+    T_countData = []
+    if nmode == "mnorm" and len(aln_files) == 2:
+        N_countData = []
+    for obj in countData:
+        for r in obj:
+            if r[2] == 'tumour':
+                T_countData.append(r)
+            elif nmode == "mnorm" and r[2] == 'normal':
+                N_countData.append(r)
+
 else:
     print(f"multithreading using {threads} threads.")
+    t_args_in = [[chr,'tumour',aln_files['tumour'],bed_file_path] for chr in chr_names]
+    print(f"    processing tumour bam ...")
     with Pool(processes=threads) as pool:
-        countData = list(pool.starmap(binned_read_counting, chr_in)) 
+        T_countData = [x for xs in list(pool.starmap(binned_read_counting, t_args_in)) for x in xs]
+    if nmode == "mnorm" and len(aln_files) == 2:
+        n_args_in = [[chr,'normal',aln_files['normal'],bed_file_path] for chr in chr_names]
+        print(f"    processing normal bam ...")
+        with Pool(processes=threads) as pool:
+            N_countData = [x for xs in list(pool.starmap(binned_read_counting, n_args_in)) for x in xs]
 
-## countData is now a list of lists of lists.... Need to unnest by one level
-countData2 = []
-for obj in countData:
-    for r in obj:
-        countData2.append(r)
-
+# print(countData)
+# print(nmode)
+# if nmode == 'mnorm':
+#     print(T_countData)
+#     print(N_countData)
+# else:
+#     print(T_countData)
 
 #----
 # 5. Get results and write out
 #----
-
 # write output
 outfile = open(f"{outdir}/{prefix}_read_counts.tsv", "w")
-# outfile = open(f"{outdir}/{prefix}_{type}_read_counts.tsv", "w") # this will need updating for normals! 
-
-for r in countData2:
+for r in T_countData:
     Line = '\t'.join(r) + '\n'
     outfile.write(Line)
 outfile.close()            
 
-print((countData2))
+# write normal output (read counts only)
+if nmode == "mnorm" and len(aln_files) == 2:
+    outfile_n = open(f"{outdir}/{prefix}_normal_read_counts.tsv", "w")
+    for nr in N_countData:
+        nLine = '\t'.join(nr) + '\n'
+        outfile_n.write(nLine)
+    outfile_n.close()  
+
 
 
 ## HASHED out from here ##
-# Remove bins with 0 reads (no sequencing data in this region). - need to be excluded for segmentation and log2 transformation
-# If blacklisting == True or bases_filter == True this will also filter the results to exclude blacklisted regions.
-outfile2 = open(f"{outdir}/{prefix}_read_counts_filtered.tsv", "w")
-filtered_counts = [x for x in countData2 if x[-2] == 'True' and int(x[-1]) != 0]
-for r in filtered_counts:
-    Line = '\t'.join(r) + '\n'
-    outfile2.write(Line)        
-outfile2.close()
+# # Remove bins with 0 reads (no sequencing data in this region). - need to be excluded for segmentation and log2 transformation
+# # If blacklisting == True or bases_filter == True this will also filter the results to exclude blacklisted regions.
+# outfile2 = open(f"{outdir}/{prefix}_read_counts_filtered.tsv", "w")
+# filtered_counts = [x for x in T_countData if x[-2] == 'True' and int(x[-1]) != 0]
+# for r in filtered_counts:
+#     Line = '\t'.join(r) + '\n'
+#     outfile2.write(Line)        
+# outfile2.close()
 
-# Normalise reads by median
-med = statistics.median([int(x[-1]) for x in filtered_counts])
-std = statistics.stdev([int(x[-1]) for x in filtered_counts])
+# # Normalise reads by median
+# med = statistics.median([int(x[-1]) for x in filtered_counts])
+# std = statistics.stdev([int(x[-1]) for x in filtered_counts])
 
-outfile3 = open(f"{outdir}/{prefix}_read_counts_mednorm.tsv", "w")
-normalised_counts = filtered_counts
-for r in normalised_counts:
-    r[-1] = str(int(r[-1])/med) # median normalise readcounts
-    # r[-1] = str(math.sqrt((int(r[-1])/med) + 3/8)) #anscombe sqrt transform
-    # might want to change this to normalise to PoN/matched normals or make that an option...
-    Line = '\t'.join(r) + '\n'
-    outfile3.write(Line)
-outfile3.close()
+# outfile3 = open(f"{outdir}/{prefix}_read_counts_mednorm.tsv", "w")
+# normalised_counts = filtered_counts
+# for r in normalised_counts:
+#     r[-1] = str(int(r[-1])/med) # median normalise readcounts
+#     # r[-1] = str(math.sqrt((int(r[-1])/med) + 3/8)) #anscombe sqrt transform
+#     # might want to change this to normalise to PoN/matched normals or make that an option...
+#     Line = '\t'.join(r) + '\n'
+#     outfile3.write(Line)
+# outfile3.close()
 
-# Log2 transform data (prior to smoothening) 
-outfile4 = open(f"{outdir}/{prefix}_read_counts_log2r.tsv", "w")
-log2r_counts = normalised_counts
-for r in log2r_counts:
-    r[-1] = str(math.log2(float(r[-1])))
-    Line = '\t'.join(r) + '\n'
-    outfile4.write(Line)
-outfile4.close()
+# # Log2 transform data (prior to smoothening) 
+# outfile4 = open(f"{outdir}/{prefix}_read_counts_log2r.tsv", "w")
+# log2r_counts = normalised_counts
+# for r in log2r_counts:
+#     r[-1] = str(math.log2(float(r[-1])))
+#     Line = '\t'.join(r) + '\n'
+#     outfile4.write(Line)
+# outfile4.close()
 
 ## HASHED out until here ##
 ##############################
