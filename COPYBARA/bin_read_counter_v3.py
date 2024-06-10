@@ -4,9 +4,9 @@ import argparse
 import os
 import timeit
 import pybedtools
+import copy
 import statistics
 import math
-
 
 start_t = timeit.default_timer()
 
@@ -14,7 +14,7 @@ start_t = timeit.default_timer()
 # TO DO
 ##############
 
-# STEP 2 - normalisation [self,pon,norm] 
+# STEP 2 - normalisation [self,pon,norm] - add PON! (especially for cfDNA)
 
 # THEN... smoothening | segmentation | tMAD | rascal fitting?? ploidy/purity | --> test on real samples and longitudinal!
 # Also add gene mapper? 
@@ -177,6 +177,31 @@ def binned_read_counting(chr, alns, bed):
         bam_N.close()    
     return(chr_read_counts)
 
+
+def filter_and_normalise(nmode, countData):
+    # perform filtering, normalisation and transformation
+    # ## filtering: Remove bins with 0 reads (no sequencing data in this region). - need to be excluded for segmentation and log2 transformation
+    if nmode == "self":
+        filtered_counts = [x for x in countData if x[-3] == 'True' and int(x[-2]) != 0]
+        med_self = statistics.median([int(x[-2]) for x in filtered_counts]) #estimate genome wide median for selfnormalisation
+        # Normalise and log2 transform
+        normalised_counts = copy.deepcopy(filtered_counts)
+        for r in normalised_counts:
+            r[-2] = str(math.log2(int(r[-2])/med_self)) # median normalise readcounts
+            del r[-1]
+    elif nmode == "pon":
+        print("This function is yet to be implemented...")
+    elif nmode == "mnorm":
+        filtered_counts = [x for x in countData if x[-3] == 'True' and int(x[-2]) != 0 and int(x[-1]) != 0]
+        normalised_counts = copy.deepcopy(filtered_counts)
+        for r in normalised_counts:
+            n = str(math.log2(int(r[-2])/int(r[-1])))
+            del r[-2:]
+            r.append(n)
+    # return out        
+    return filtered_counts, normalised_counts
+    
+
 #----    
 # 3. Perform binned read counting on bam file/files per chromosome
 #----
@@ -201,27 +226,57 @@ else:
     with Pool(processes=threads) as pool:
         countData = [x for xs in list(pool.starmap(binned_read_counting, args_in)) for x in xs]
 
-print(countData)
-print(nmode)
+filtered_counts, normalised_counts = filter_and_normalise(nmode=nmode, countData=countData)
+
+# print(countData)
+# print(nmode)
 
 
-# #----
-# # 5. Get results and write out
-# #----
-# # write output
-# outfile = open(f"{outdir}/{prefix}_read_counts.tsv", "w")
-# for r in T_countData:
-#     Line = '\t'.join(r) + '\n'
-#     outfile.write(Line)
-# outfile.close()            
+#----
+# 5. Get results and write out
+#----
 
-# # write normal output (read counts only)
-# if nmode == "mnorm" and len(aln_files) == 2:
-#     outfile_n = open(f"{outdir}/{prefix}_normal_read_counts.tsv", "w")
-#     for nr in N_countData:
-#         nLine = '\t'.join(nr) + '\n'
-#         outfile_n.write(nLine)
-#     outfile_n.close()  
+# perform filtering, normalisation and transformation
+## filtering: Remove bins with 0 reads (no sequencing data in this region). - need to be excluded for segmentation and log2 transformation
+
+# if nmode == "self":
+#     filtered_counts = [x for x in countData if x[-3] == 'True' and int(x[-2]) != 0]
+#     med_self = statistics.median([int(x[-2]) for x in filtered_counts]) #estimate genome wide median for selfnormalisation
+#     # Normalise and log2 transform
+#     normalised_counts = copy.deepcopy(filtered_counts)
+#     for r in normalised_counts:
+#         r[-2] = str(math.log2(int(r[-2])/med_self)) # median normalise readcounts
+#         del r[-1]
+# elif nmode == "pon":
+#     print("This function is yet to be implemented...")
+# elif nmode == "mnorm":
+#     filtered_counts = [x for x in countData if x[-3] == 'True' and int(x[-2]) != 0 and int(x[-1]) != 0]
+#     normalised_counts = copy.deepcopy(filtered_counts)
+#     for r in normalised_counts:
+#         n = str(math.log2(int(r[-2])/int(r[-1])))
+#         del r[-2:]
+#         r.append(n)
+
+
+
+# write output
+outfile = open(f"{outdir}/{prefix}_read_counts.tsv", "w")
+for r in countData:
+    Line = '\t'.join(r) + '\n'
+    outfile.write(Line)
+outfile.close()           
+
+outfile2 = open(f"{outdir}/{prefix}_read_counts_filtered.tsv", "w")
+for r in filtered_counts:
+    Line = '\t'.join(r) + '\n'
+    outfile2.write(Line)
+outfile2.close()    
+
+outfile3 = open(f"{outdir}/{prefix}_read_counts_{nmode}_log2r.tsv", "w")
+for r in normalised_counts:
+    Line = '\t'.join(r) + '\n'
+    outfile3.write(Line)
+outfile3.close()    
 
 
 
@@ -249,7 +304,7 @@ print(nmode)
 #     outfile3.write(Line)
 # outfile3.close()
 
-# # Log2 transform data (prior to smoothening) 
+# Log2 transform data (prior to smoothening) 
 # outfile4 = open(f"{outdir}/{prefix}_read_counts_log2r.tsv", "w")
 # log2r_counts = normalised_counts
 # for r in log2r_counts:
@@ -264,6 +319,10 @@ print(nmode)
 stop = timeit.default_timer()
 Seconds = round(stop - start_t)
 print(f"Computation time: {Seconds} seconds\n") 
+
+
+### OLD STUFF - keep for now delete later ###
+
 
 # Log transform
 # outfile4 = open(f"{outdir}/{prefix}_read_counts_normalised_log.tsv", "w")
