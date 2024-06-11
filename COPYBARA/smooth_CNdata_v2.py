@@ -1,4 +1,3 @@
-from multiprocessing import Pool
 import argparse
 import copy
 from math import sqrt

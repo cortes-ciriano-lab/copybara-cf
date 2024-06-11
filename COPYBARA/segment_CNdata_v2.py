@@ -1,4 +1,4 @@
-
+# from multiprocessing import Pool
 import argparse
 import numpy as np
 import seaborn as sns
@@ -88,9 +88,17 @@ def rsegment(x, start, end, L=[], min_segment_size=5, shuffles=1000, p=.05):
     return L
 
 
-def segment(x, min_segment_size=5, shuffles=1000, p=.05):
+def segment(chr, in_data, min_segment_size=5, shuffles=1000, p=.05):
     '''Segment the array x, using significance test based on shuffles rearrangements and significance level p
     '''
+    # slice out chromosome
+    chr_in_data = [x for x in in_data if x[1] == chr]
+    # get values and anscombe transform to stabilise variance
+    x = []
+    for bin in chr_in_data:
+        val = float(bin[-1])
+        val_ansc = sqrt((2**val) + 3/8)
+        x.append(val_ansc)
     start = 0
     end = len(x)
     L = []
@@ -323,15 +331,13 @@ def draw_segmented_data(data, M, chr_positions, title=None):
     return j
 
 
-#########################
-# DEFINE INPUT
-#########################
+#----
+# 2. Define Input
+#----
 parser = argparse.ArgumentParser(description="segment copy number count data... edit (add anscombe optional etc). Also add parameters (optional) for permutation number, pvalues, min_seg size and merging threshold. Also add functionality to include and exclude y and sex chr in general. Also plotting title with info and stats..")
 parser.add_argument('-i', '--input_path', type=str, help='Path to prepared (transformed and smoothened) copy number count data file.', required=True)
 parser.add_argument('-s', '--sample_prefix', type=str, help='Sample name or prefix to use for out files.', required=True)
 parser.add_argument('-o', '--out_dir', type=str, default='.', help='Path to out directory. Default is working directory', required=False)
-# parser.add_argument('-sl', '--smoothing_level', type=int, default='10', help='Size of neighbourhood for smoothing.', required=False)
-# parser.add_argument('-t', '--trim', type=float, default='0.025', help='Trimming percentage to be used.', required=False)
 
 args = parser.parse_args()
 
@@ -340,49 +346,42 @@ prefix = args.sample_prefix
 outdir = args.out_dir
 
 
-
-
-
 if __name__ == '__main__':
 
     log.setLevel(logging.INFO)
-    # sample = generate_normal_time_series(5)
-    # sample = np.array([-0.663, -0.725, -0.666, -0.752, -0.688, -0.598, -0.721, 0.491, 0.468, 0.512, 0.517, 0.463])
-    # path = 'OUT2/smooth_test_s2_20231019_full_level10_sd4-2_t0.025_anscombe.tsv'
-    # path = 'DEV_20240220/out_test_20240220/CCSBEST325_read_counts_log2r_normalised_smoothened_level10_sd4-2_t0.025.tsv'
     
-    # path = 'DEV_20240220/out_test_20240220/CCSBEST325_read_counts_anscombe_normalised_smoothened_level10_sd4-2_t0.025.tsv'
-    # path = 'DEV_20240220/out_test2_20240227/CCSBEST328_read_counts_anscombe_normalised_smoothened_level10_sd4-2_t0.025.tsv'
-    # path = 'DEV_20240220/out_test3_colo829_20240228/colo829_reads0.5mio_TF0.75_read_counts_anscombe_normalised_smoothened_level10_sd4-2_t0.025.tsv'
-    # path = 'DEV_20240220/out_test_20240229/CCSBEST325_read_counts_log2r_smoothened_level10_sd4-2_t0.025_invlog2_anscombe.tsv'
+    # original_data = []
+    # input_ansc = []
+    # input_log2 = []
     
-    # path = 'CNAPS_presentation/cn_out/smo0206/SMO0206_read_counts_log2r_smoothened_level10_sd4-2_t0.025_v2.tsv'
+    # with open(input_path, "r") as file:
+        
+    #     for line in file:
+
+    #         fields = line.strip().split("\t")
+    #         original_data.append(fields)
+
+    #         val = float(fields[-1])
+    #         input_log2.append(val)
+    #         # anscombe transform to stabilise variance!
+    #         val_ansc = sqrt((2**val) + 3/8) # inverse log2 then anscombe transform
+    #         input_ansc.append(val_ansc)
+
+    in_data = []
     with open(input_path, "r") as file:
-        original_data = []
-        input_ansc = []
-        input_log2 = []
         for line in file:
-
             fields = line.strip().split("\t")
-            original_data.append(fields)
-
-            val = float(fields[-1])
-            input_log2.append(val)
-            # anscombe transform to stabilise variance!
-            val_ansc = sqrt((2**val) + 3/8) # inverse log2 then anscombe transform
-            input_ansc.append(val_ansc)
+            in_data.append(fields)
            
-            # print(fields)
-            # print(val_ansc)
-    # print(original_data)
-    # print(type(original_data))
-    # print(input)
+    # Define contig names from input log2r read count file
+    chr_names = list(dict.fromkeys([x[1] for x in original_data]))
 
-    # shuf = 10000
+    
 
-    ### VARIANCE STABILISATION --> ANSCOMBE
 
-    L = segment(input_ansc, shuffles=1000, p = 0.1)
+    
+
+    L = segment(in_data, shuffles=1000, p = 0.1)
     # print(L)
     
     S, Sse = validate(input_ansc, L, shuffles=1000, p = 0.05)
