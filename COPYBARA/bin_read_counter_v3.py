@@ -12,7 +12,7 @@ import math
 # TO DO
 ##############
 
-# STEP 2 - normalisation [self,pon,norm] - add PON! (especially for cfDNA)
+# STEP 2 - normalisation [self,pon,mnorm] - add PON! (especially for cfDNA) (mnorm and self done!)
 
 # also add messages (print) to log, ie. which parameters used etc
 
@@ -208,7 +208,7 @@ def main():
     else:
         print(f"multithreading using {threads} threads.")
         args_in = [[chr, aln_files, bed_file_path] for chr in chr_names]
-        print(args_in)
+        # print(args_in)
         with Pool(processes=threads) as pool:
             countData = [x for xs in list(pool.starmap(binned_read_counting, args_in)) for x in xs]
 
