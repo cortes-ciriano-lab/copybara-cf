@@ -6,13 +6,32 @@ from math import log2
 from scipy.stats import norm
 from statistics import median
 import os
-
 import timeit
 
-start_t = timeit.default_timer()
 
 #----
-# 1. Define functions
+# 1. Parse command line arguments
+#----
+parser = argparse.ArgumentParser(description="smoothen copy number count data (Log2R)")
+parser.add_argument('-rc', '--read_counts', type=str, help='Path to read_counts_log2r.tsv file.', required=True)
+parser.add_argument('-o', '--out_dir', type=str, default='.', help='Path to out directory. Default is working directory', required=False)
+parser.add_argument('-sl', '--smoothing_level', type=int, default='10', help='Size of neighbourhood for smoothing.', required=False)
+parser.add_argument('-tr', '--trim', type=float, default='0.025', help='Trimming percentage to be used.', required=False)
+# parser.add_argument('-s', '--sample_prefix', type=str, help='Sample name or prefix to use for out files.', required=True)
+# parser.add_argument('-t', '--threads', type=int,  default=24, help='number of threads to be used for multiprocessing of chromosomes. Use threads = 1 to avoid multiprocessing.', required=False)
+
+
+args = parser.parse_args()
+
+read_counts_path = args.read_counts
+outdir = args.out_dir
+smoothing_level = args.smoothing_level
+trim = args.trim
+# prefix = args.sample_prefix
+# threads = args.threads
+
+#----
+# 2. Define functions
 #----
 
 # function to calculate an influence factor (scaling factor) used to determine outliers while using a trimming percentage (value between 0-1)
@@ -125,57 +144,51 @@ def smoothen(chr, in_data, trim, smoothing_level):
         # return smoothed_counts
         return chr_out_data
 
+# main function to run above code
+def main():
 
-#########################
-# DEFINE INPUT
-#########################
-parser = argparse.ArgumentParser(description="smoothen copy number count data (Log2R)")
-parser.add_argument('-rc', '--read_counts', type=str, help='Path to read_counts_log2r.tsv file.', required=True)
-# parser.add_argument('-s', '--sample_prefix', type=str, help='Sample name or prefix to use for out files.', required=True)
-parser.add_argument('-o', '--out_dir', type=str, default='.', help='Path to out directory. Default is working directory', required=False)
-parser.add_argument('-sl', '--smoothing_level', type=int, default='10', help='Size of neighbourhood for smoothing.', required=False)
-parser.add_argument('-tr', '--trim', type=float, default='0.025', help='Trimming percentage to be used.', required=False)
-parser.add_argument('-t', '--threads', type=int,  default=24, help='number of threads to be used for multiprocessing of chromosomes. Use threads = 1 to avoid multiprocessing.', required=False)
+    file_name = os.path.split(read_counts_path)[1].removesuffix('.tsv')
+    
+    print(f"Smoothening log2R read counts with for {file_name} sl: {smoothing_level},trim: {trim}...")       
+
+    # process input data
+    in_data = []
+    with open(read_counts_path, "r") as file:
+        for line in file:
+            fields = line.strip().split("\t")
+            in_data.append(fields)
+
+    # Define contig names from input log2r read count file
+    chr_names = list(dict.fromkeys([x[1] for x in in_data]))
+
+    # This code only takes 1s to run - no multiprocessing needed. 
+    # loop through chromosomes to not smooth across different chromosomes
+    smoothedData = []
+    for chr in chr_names:
+        smoothed_chr = smoothen(chr, in_data, trim, smoothing_level)
+        smoothedData.append(smoothed_chr)
+    smoothedData = [x for xs in smoothedData for x in xs] 
+
+    # Get results and write out
+    outfile = open(f"{outdir}/{file_name}_smoothened_sl{smoothing_level}_t{trim}.tsv", "w")
+    for r in smoothedData:
+        Line = '\t'.join(r) + '\n'
+        outfile.write(Line)        
+    outfile.close()
+
+#----
+# 3. Run smoothening
+#----
+if __name__ == "__main__":
+    start_t = timeit.default_timer()
+    main()
+    stop = timeit.default_timer()
+    Seconds = round(stop - start_t)
+    print(f"Computation time: {Seconds} seconds\n") 
 
 
-args = parser.parse_args()
 
-read_counts_path = args.read_counts
-# prefix = args.sample_prefix
-outdir = args.out_dir
-smoothing_level = args.smoothing_level
-trim = args.trim
-threads = args.threads
 
-file_name = os.path.split(read_counts_path)[1].removesuffix('.tsv')
-print(file_name)
-
-### TESTING ###
-
-# path = 'OUT/smooth_test_full_data2_read_counts_normalised.tsv'
-# path = 'OUT/smooth_test_full_data_read_counts_normalised_log.tsv'
-# path = 'OUT2/sample2_test_read_counts_normalised.tsv'
-# path = 'DEV_20240220/out_test_20240220/CCSBEST325_read_counts_anscombe_with0s_normalised.tsv'
-# path = 'DEV_20240220/out_test2_20240227/CCSBEST328_read_counts_anscombe_normalised.tsv'
-# path = 'DEV_20240220/out_test3_colo829_20240228/colo829_reads0.5mio_TF0.75_read_counts_anscombe_normalised.tsv'
-# path = 'DEV_20240220/out_test_20240229/CCSBEST325_read_counts_log2r.tsv'
-# path = 'CNAPS_presentation/cn_out/smo0206/SMO0206_read_counts_log2r.tsv'
-
-# Define contig names from input log2r read count file
-
-in_data = []
-with open(read_counts_path, "r") as file:
-    # input = []
-    for line in file:
-        fields = line.strip().split("\t")
-        # val = float(fields[-1])
-        # print(val)
-        in_data.append(fields)
-        # input.append(val)
-        
-chr_names = list(dict.fromkeys([x[1] for x in in_data]))
-
-print(f"sl: {smoothing_level},trim: {trim}")
 
 # only use multiprocessing if more than 1 thread available/being used. 
 # if threads == 1:
@@ -188,76 +201,12 @@ print(f"sl: {smoothing_level},trim: {trim}")
 #     smoothedData = [x for xs in smoothedData for x in xs]
 # print(smoothedData)
 
-# This script only takes 1s to run - no multiprocessing needed. 
-# loop through chromosomes to not smooth across different chromosomes
-smoothedData = []
-for chr in chr_names:
-    smoothed_chr = smoothen(chr, in_data, trim, smoothing_level)
-    smoothedData.append(smoothed_chr)
-smoothedData = [x for xs in smoothedData for x in xs]
-
-outfile = open(f"{outdir}/{file_name}_smoothened_sl{smoothing_level}_t{trim}.tsv", "w")
-for r in smoothedData:
-    Line = '\t'.join(r) + '\n'
-    outfile.write(Line)        
-outfile.close()
-
-
-stop = timeit.default_timer()
-Seconds = round(stop - start_t)
-print(f"Computation time: {Seconds} seconds\n") 
-
-
-# print(input)
-
-# run 
-        
-# smoothing_level = 10
-# trim = 0.025
-
-
-# smoothed = smoothen(input, trim, smoothing_level)
-
-
-# for i in range(len(input)):
-#     if float(in_data[i][-1]) == float(smoothed[i]):
-#         continue
-#     else:
-#         print(f"old: {in_data[i][-1]}\tnew: {smoothed[i]}")
-
-# out data
-# output = copy.deepcopy(in_data)
-
-#check if output smoothed and input values are all the same length!
-# if len(in_data) != len(smoothed):
-#     print(f"length of input data ({len(in_data)} does not equal length of smoothed data ({len(smoothed)}))")
-#     exit
-# else:
-#     # generate output data and print smoothing results for smoothed bins
-#     for i in range(len(input)): 
-#         # print smoothing results to out    
-#         if float(in_data[i][-1]) == float(smoothed[i]):
-#             continue
-#         else:
-#             print(f"bin {i} at position {in_data[i][0]} smoothed from {in_data[i][-1]} to {smoothed[i]}")
-#         # output data
-#         output[i][-1] = str(smoothed[i])
-
-# outfile = open(f"DEV_20240220/out_test_20240220/CCSBEST325_read_counts_log2r_normalised_smoothened_level10_sd4-2_t0.025.tsv", "w")
-# outfile = open(f"DEV_20240220/out_test2_20240227/CCSBEST328_read_counts_anscombe_normalised_smoothened_level10_sd4-2_t0.025.tsv", "w")
-# outfile = open(f"DEV_20240220/out_test_20240229/CCSBEST325_read_counts_log2r_smoothened_level10_sd4-2_t0.025.tsv", "w")
-
-# print(f"{outdir}/{prefix}_read_counts_log2r_smoothened_sl{smoothing_level}_t{trim}.tsv")
-# outfile = open(f"{outdir}/{prefix}_read_counts_log2r_smoothened_sl10_t0.025.tsv", "w")
-# for r in output:
-#     Line = '\t'.join(r) + '\n'
-#     # Line = str(r) + '\n'
-#     # print(Line)
-#     outfile.write(Line)        
-# outfile.close()
 
 
 
+
+
+####################### OLD STUFF - delete late #######################
 
 
 # anscombe sqrt transform
