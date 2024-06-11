@@ -21,6 +21,7 @@ args = parser.parse_args()
 
 bin_size = args.bin_size * int(1000)
 fasta_file_path = args.fasta_file
+print(fasta_file_path)
 blacklist_file = args.black_list
 contigs = args.chromosomes
 threads = args.threads
@@ -34,6 +35,7 @@ if outdir != '.':
 else:
     pass
 
+
 #----
 # 2. Define functions
 #----
@@ -43,8 +45,7 @@ def overlaps(a, b):
 
 # Function to process each chromosome of interest to run in parallel
 def process_chromosome(chrom, chr_length, fasta_file_path):
-# def process_chromosome(chr_in):
-    # chrom, chr_length, fasta_file_path = chr_in
+
     print(f"    Processing {chrom} ...")
 
     fasta_file = pysam.FastaFile(fasta_file_path)
@@ -107,55 +108,56 @@ def process_chromosome(chrom, chr_length, fasta_file_path):
     # return(temp_outfile_name)
     return(List_of_bins)
 
-#----    
-# 3. Extract chormosome info and pass fasta file into chr_in list
-#----
-fasta = pysam.FastaFile(fasta_file_path)
-if contigs != 'all':
-    chr_names = [fasta.references[(int(x)-1)] for x in contigs]     
-else:
-    chr_names = fasta.references[0:24]
-chr_in = [[chr,fasta.get_reference_length(chr),fasta_file_path] for chr in chr_names]
-fasta.close()
+def main(fasta_file_path):  
+
+    # b. Extract chormosome info and pass fasta file into chr_in list
+    fasta = pysam.FastaFile(fasta_file_path)
+    if contigs != 'all':
+        chr_names = [fasta.references[(int(x)-1)] for x in contigs]     
+    else:
+        chr_names = fasta.references[0:24]
+    chr_in = [[chr,fasta.get_reference_length(chr),fasta_file_path] for chr in chr_names]
+    fasta.close()
+
+    
+    # c. Generate bins and count bases per bins for each chrom in parallel (run function using multithreader)
+    ## only use multiprocessing if more than 1 thread available/being used. 
+    if threads == 1:
+        # loop through chromosomes
+        print("multithreading skipped.")
+        chrData = []
+        for contig in chr_in:
+            chrom, chr_length, fasta_file_path = contig[0], contig[1], contig[2]
+            binned_chr = process_chromosome(chrom, chr_length, fasta_file_path)
+            chrData.append(binned_chr)
+    else:
+        print(f"multithreading using {threads} threads.")
+        # with ThreadPoolExecutor(max_workers=24) as executor:
+        # chrData = list(executor.map(process_chromosome, chr_in))
+        with Pool(processes=threads) as pool:
+            chrData = list(pool.starmap(process_chromosome, chr_in))
+
+    # c. Concat results into a single bed file
+    if contigs != 'all':
+        outfile_name = f"{outdir}/{int(bin_size/1000)}kbp_bin_ref_subset.bed"
+    else:
+        outfile_name = f"{outdir}/{int(bin_size/1000)}kbp_bin_ref_all.bed"
+
+    outfile = open(outfile_name, "w")
+
+    for obj in chrData:
+        for r in obj:
+            Line = '\t'.join(r) + '\n'
+            outfile.write(Line)
+            
+    outfile.close()
 
 #----
-# 4. Generate bins and count bases per bins for each chrom in parallel (run function using multithreader)
+# 3. Run binned annotation reference generator
 #----
-
-# only use multiprocessing if more than 1 thread available/being used. 
-if threads == 1:
-    # loop through chromosomes
-    print("multithreading skipped.")
-    chrData = []
-    for contig in chr_in:
-        chrom, chr_length, fasta_file_path = contig[0], contig[1], contig[2]
-        binned_chr = process_chromosome(chrom, chr_length, fasta_file_path)
-        chrData.append(binned_chr)
-else:
-    print(f"multithreading using {threads} threads.")
-    # with ThreadPoolExecutor(max_workers=24) as executor:
-    # chrData = list(executor.map(process_chromosome, chr_in))
-    with Pool(processes=threads) as pool:
-        chrData = list(pool.starmap(process_chromosome, chr_in))
-
-#----
-# 5. Concat results into a single bed file
-#----
-if contigs != 'all':
-    outfile_name = f"{outdir}/{int(bin_size/1000)}kbp_bin_ref_subset.bed"
-else:
-    outfile_name = f"{outdir}/{int(bin_size/1000)}kbp_bin_ref_all.bed"
-
-outfile = open(outfile_name, "w")
-
-for obj in chrData:
-    for r in obj:
-        Line = '\t'.join(r) + '\n'
-        outfile.write(Line)
-        
-outfile.close()
-
-#--------
-stop = timeit.default_timer()
-Seconds = round(stop - start_t)
-print(f"Computation time (bin_ref_generator): {Seconds} seconds\n") 
+if __name__ == "__main__":
+    start_t = timeit.default_timer()
+    main(fasta_file_path)
+    stop = timeit.default_timer()
+    Seconds = round(stop - start_t)
+    print(f"Computation time (bin_ref_generator): {Seconds} seconds\n") 
