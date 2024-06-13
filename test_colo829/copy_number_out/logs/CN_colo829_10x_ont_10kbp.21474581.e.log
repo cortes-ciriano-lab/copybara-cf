@@ -1,0 +1,2175 @@
+INFO:root:Proposed partition of 0 to 22248 from 21 to 12046 with t value 296.5814489691568 is True
+INFO:root:Proposed partition of 0 to 21 from 0 to 14 with t value 0.4163666512756707 is False
+INFO:root:Proposed partition of 0 to 19349 from 2431 to 19349 with t value 264.67047177156593 is True
+INFO:root:Proposed partition of 0 to 23624 from 4740 to 20697 with t value 1.7512516592507326 is True
+INFO:root:Proposed partition of 0 to 2431 from 183 to 2072 with t value 0.9602302033672783 is True
+INFO:root:Proposed partition of 0 to 183 from 78 to 127 with t value 0.4237520868250395 is False
+INFO:root:Proposed partition of 0 to 18525 from 10814 to 13986 with t value 1.0041452357189307 is True
+INFO:root:Proposed partition of 183 to 2072 from 510 to 972 with t value 0.37713734443719377 is True
+INFO:root:Proposed partition of 183 to 510 from 295 to 488 with t value 0.1424935787720078 is False
+INFO:root:Proposed partition of 510 to 972 from 782 to 914 with t value 0.38113278305269604 is True
+INFO:root:Proposed partition of 0 to 17360 from 1934 to 10004 with t value 1.134557924444367 is True
+INFO:root:Proposed partition of 0 to 1934 from 405 to 1825 with t value 0.27026292793980805 is False
+INFO:root:Proposed partition of 510 to 782 from 526 to 692 with t value 0.4077259633949858 is True
+INFO:root:Proposed partition of 510 to 526 from 510 to 526 with t value 0.08807640277441756 is False
+INFO:root:Proposed partition of 526 to 692 from 591 to 640 with t value 0.11049295864950397 is False
+INFO:root:Proposed partition of 692 to 782 from 703 to 766 with t value 0.3611704096846598 is False
+INFO:root:Proposed partition of 782 to 914 from 818 to 909 with t value 0.08248809400821053 is False
+INFO:root:Proposed partition of 914 to 972 from 932 to 972 with t value 0.39181198168810044 is True
+INFO:root:Proposed partition of 914 to 932 from 914 to 932 with t value 0.22693015839565014 is False
+INFO:root:Proposed partition of 932 to 972 from 932 to 950 with t value 0.10617127828356426 is False
+INFO:root:Proposed partition of 972 to 2072 from 1368 to 1984 with t value 0.16300702426695485 is False
+INFO:root:Proposed partition of 0 to 4740 from 2361 to 3172 with t value 0.9744875185485996 is True
+INFO:root:Proposed partition of 2072 to 2431 from 2120 to 2372 with t value 0.7826108055522136 is True
+INFO:root:Proposed partition of 2072 to 2120 from 2072 to 2101 with t value 0.4182244008051979 is False
+INFO:root:Proposed partition of 2120 to 2372 from 2207 to 2291 with t value 0.22818088768723252 is False
+INFO:root:Proposed partition of 2372 to 2431 from 2405 to 2426 with t value 0.3359214916673373 is False
+INFO:root:Proposed partition of 0 to 2361 from 81 to 998 with t value 0.4566263969077627 is False
+INFO:root:Proposed partition of 2361 to 3172 from 2388 to 2934 with t value 0.33584423605258407 is False
+INFO:root:Proposed partition of 3172 to 4740 from 3229 to 4123 with t value 0.40325384761974703 is False
+INFO:root:Proposed partition of 0 to 16204 from 9 to 5768 with t value 64.03299455424283 is True
+INFO:root:Proposed partition of 0 to 9 from 0 to 2 with t value 0.07099971085981098 is False
+INFO:root:Proposed partition of 21 to 12046 from 5355 to 10541 with t value 2.5357565777700506 is True
+INFO:root:Proposed partition of 21 to 5355 from 1393 to 4868 with t value 0.34033992677745095 is False
+INFO:root:Proposed partition of 1934 to 10004 from 5556 to 9260 with t value 0.7515047266475077 is True
+INFO:root:Proposed partition of 0 to 10814 from 1807 to 9967 with t value 0.785302568267666 is True
+INFO:root:Proposed partition of 0 to 1807 from 969 to 1777 with t value 0.22041805192890304 is False
+INFO:root:Proposed partition of 9 to 5768 from 1116 to 1690 with t value 1.2311186074928104 is True
+INFO:root:Proposed partition of 0 to 13984 from 4175 to 13984 with t value 235.18187349371547 is True
+INFO:root:Proposed partition of 1934 to 5556 from 2940 to 5351 with t value 0.3868251649423663 is False
+INFO:root:Proposed partition of 0 to 4175 from 1820 to 4075 with t value 0.16098640074581108 is False
+INFO:root:Proposed partition of 0 to 11663 from 3014 to 11647 with t value 75.19322252471363 is True
+INFO:root:Proposed partition of 9 to 1116 from 103 to 856 with t value 2.508815158814274 is True
+INFO:root:Proposed partition of 9 to 103 from 81 to 93 with t value 0.788594507490636 is True
+INFO:root:Proposed partition of 9 to 81 from 32 to 55 with t value 0.17959249317365297 is False
+INFO:root:Proposed partition of 81 to 93 from 81 to 93 with t value 0.2757262604748093 is False
+INFO:root:Proposed partition of 93 to 103 from 93 to 103 with t value 0.0716039652797165 is False
+INFO:root:Proposed partition of 103 to 856 from 462 to 575 with t value 0.6589082178342737 is True
+INFO:root:Proposed partition of 103 to 462 from 154 to 401 with t value 0.4952376573306918 is True
+INFO:root:Proposed partition of 103 to 154 from 110 to 134 with t value 0.06358940007096198 is False
+INFO:root:Proposed partition of 154 to 401 from 281 to 322 with t value 0.20238816274681248 is False
+INFO:root:Proposed partition of 5355 to 10541 from 9730 to 10155 with t value 1.1051845307181352 is True
+INFO:root:Proposed partition of 401 to 462 from 415 to 462 with t value 0.35929420325518946 is True
+INFO:root:Proposed partition of 401 to 415 from 410 to 415 with t value 0.026166703516089972 is False
+INFO:root:Proposed partition of 415 to 462 from 431 to 451 with t value 0.12752617053139065 is False
+INFO:root:Proposed partition of 462 to 575 from 511 to 535 with t value 0.3410997266395071 is False
+INFO:root:Proposed partition of 5355 to 9730 from 5364 to 7029 with t value 0.2113065163045726 is False
+INFO:root:Proposed partition of 575 to 856 from 781 to 842 with t value 0.32117307310995763 is False
+INFO:root:Proposed partition of 5556 to 9260 from 7408 to 8722 with t value 1.1038094487586474 is True
+INFO:root:Proposed partition of 0 to 3014 from 863 to 1948 with t value 0.6614510991271338 is True
+INFO:root:Proposed partition of 856 to 1116 from 891 to 1009 with t value 1.194038228727274 is True
+INFO:root:Proposed partition of 9730 to 10155 from 9864 to 10070 with t value 0.3417776592528039 is True
+INFO:root:Proposed partition of 856 to 891 from 868 to 885 with t value 0.1265377813514171 is False
+INFO:root:Proposed partition of 891 to 1009 from 972 to 995 with t value 0.4295251697852811 is False
+INFO:root:Proposed partition of 9730 to 9864 from 9812 to 9864 with t value 0.12548587775519904 is False
+INFO:root:Proposed partition of 9864 to 10070 from 9881 to 10010 with t value 0.11646441277037184 is False
+INFO:root:Proposed partition of 1009 to 1116 from 1060 to 1101 with t value 0.3849692399142514 is False
+INFO:root:Proposed partition of 5556 to 7408 from 6211 to 7304 with t value 0.45988938275600677 is False
+INFO:root:Proposed partition of 1116 to 1690 from 1208 to 1459 with t value 0.1720365097732463 is False
+INFO:root:Proposed partition of 10070 to 10155 from 10116 to 10131 with t value 0.3001681515654966 is False
+INFO:root:Proposed partition of 10155 to 10541 from 10236 to 10279 with t value 0.46196233685508503 is False
+INFO:root:Proposed partition of 0 to 863 from 219 to 416 with t value 0.5659940412037133 is True
+INFO:root:Proposed partition of 0 to 219 from 42 to 117 with t value 0.06673197073911279 is False
+INFO:root:Proposed partition of 219 to 416 from 256 to 352 with t value 0.5267319395899963 is True
+INFO:root:Proposed partition of 219 to 256 from 225 to 244 with t value 0.34354858941735045 is False
+INFO:root:Proposed partition of 7408 to 8722 from 8182 to 8337 with t value 1.358840734674796 is True
+INFO:root:Proposed partition of 256 to 352 from 299 to 316 with t value 0.29305537701597406 is False
+INFO:root:Proposed partition of 352 to 416 from 377 to 408 with t value 0.12481124350385629 is False
+INFO:root:Proposed partition of 7408 to 8182 from 7716 to 8063 with t value 0.3509851510109987 is False
+INFO:root:Proposed partition of 416 to 863 from 611 to 815 with t value 0.2253480342993294 is False
+INFO:root:Proposed partition of 8182 to 8337 from 8204 to 8289 with t value 0.24927366789692826 is False
+INFO:root:Proposed partition of 8337 to 8722 from 8366 to 8495 with t value 0.5317332180903916 is False
+INFO:root:Proposed partition of 0 to 12947 from 2798 to 6477 with t value 0.8282524397991395 is True
+INFO:root:Proposed partition of 8722 to 9260 from 8936 to 9199 with t value 0.25180289117392474 is False
+INFO:root:Proposed partition of 10541 to 12046 from 11332 to 12029 with t value 1.1036723833005828 is True
+INFO:root:Proposed partition of 10541 to 11332 from 10602 to 10912 with t value 0.09403843629779782 is False
+INFO:root:Proposed partition of 9260 to 10004 from 9594 to 9853 with t value 0.34835707925960896 is False
+INFO:root:Proposed partition of 11332 to 12029 from 11471 to 11905 with t value 1.0909971516613433 is True
+INFO:root:Proposed partition of 11332 to 11471 from 11363 to 11463 with t value 0.252852661058426 is False
+INFO:root:Proposed partition of 863 to 1948 from 955 to 1115 with t value 0.45541218902961206 is True
+INFO:root:Proposed partition of 863 to 955 from 869 to 931 with t value 0.26589074835560683 is False
+INFO:root:Proposed partition of 1807 to 9967 from 3504 to 5503 with t value 0.5772720890601201 is True
+INFO:root:Proposed partition of 955 to 1115 from 965 to 1024 with t value 0.6651712005204069 is True
+INFO:root:Proposed partition of 955 to 965 from 955 to 965 with t value 0.11895293726543872 is False
+INFO:root:Proposed partition of 965 to 1024 from 965 to 993 with t value 0.19826338980851946 is False
+INFO:root:Proposed partition of 1024 to 1115 from 1036 to 1070 with t value 0.09797214815387233 is False
+INFO:root:Proposed partition of 11471 to 11905 from 11570 to 11671 with t value 0.6098891580112835 is True
+INFO:root:Proposed partition of 1690 to 5768 from 2588 to 4201 with t value 0.6269857139678913 is False
+INFO:root:Proposed partition of 1115 to 1948 from 1339 to 1928 with t value 0.24721077261411725 is False
+INFO:root:Proposed partition of 11471 to 11570 from 11489 to 11518 with t value 0.18652464934438132 is False
+INFO:root:Proposed partition of 11570 to 11671 from 11591 to 11609 with t value 0.2330726526026965 is False
+INFO:root:Proposed partition of 1948 to 3014 from 2160 to 2919 with t value 0.3051265849152281 is False
+INFO:root:Proposed partition of 11671 to 11905 from 11766 to 11877 with t value 0.33045436848119475 is False
+INFO:root:Proposed partition of 11905 to 12029 from 11950 to 12018 with t value 2.348150633810151 is True
+INFO:root:Proposed partition of 11905 to 11950 from 11905 to 11926 with t value 1.946786958018997 is True
+INFO:root:Proposed partition of 11905 to 11926 from 11905 to 11926 with t value 0.6407432837730277 is True
+INFO:root:Proposed partition of 0 to 2798 from 1459 to 2115 with t value 0.5412896308261365 is True
+INFO:root:Proposed partition of 11926 to 11950 from 11941 to 11950 with t value 0.7773602333973955 is False
+INFO:root:Proposed partition of 11950 to 12018 from 11987 to 11997 with t value 0.26012939186562073 is False
+INFO:root:Proposed partition of 1807 to 3504 from 2052 to 2964 with t value 0.9639629335093736 is True
+INFO:root:Proposed partition of 12018 to 12029 from 12018 to 12029 with t value 0.21277532667362362 is True
+INFO:root:Proposed partition of 12029 to 12046 from 12029 to 12038 with t value 0.16998095798305854 is False
+INFO:root:Proposed partition of 4175 to 13984 from 6972 to 12757 with t value 1.3857714850881693 is True
+INFO:root:Proposed partition of 1807 to 2052 from 1831 to 1893 with t value 0.5368677654008175 is True
+INFO:root:Proposed partition of 1807 to 1831 from 1818 to 1825 with t value 0.1771807594416657 is False
+INFO:root:Proposed partition of 4740 to 20697 from 8883 to 17658 with t value 1.2941277585500701 is True
+INFO:root:Proposed partition of 1831 to 1893 from 1860 to 1882 with t value 0.3147875820889299 is True
+INFO:root:Proposed partition of 2431 to 19349 from 10449 to 19250 with t value 4.654401521307617 is True
+INFO:root:Proposed partition of 0 to 1459 from 396 to 1040 with t value 0.345110128047401 is False
+INFO:root:Proposed partition of 0 to 12934 from 1950 to 5991 with t value 1.190793258964034 is True
+INFO:root:Proposed partition of 1459 to 2115 from 1795 to 2078 with t value 0.24638209020729276 is False
+INFO:root:Proposed partition of 1831 to 1860 from 1843 to 1854 with t value 0.11659554906164482 is True
+INFO:root:Proposed partition of 1831 to 1843 from 1838 to 1843 with t value 0.030059491640919502 is False
+INFO:root:Proposed partition of 1843 to 1854 from 1843 to 1854 with t value 0.03904956018461199 is False
+INFO:root:Proposed partition of 1854 to 1860 from 1854 to 1860 with t value 0.008074346333704435 is False
+INFO:root:Proposed partition of 1860 to 1882 from 1866 to 1871 with t value 0.07724080013606788 is False
+INFO:root:Proposed partition of 1882 to 1893 from 1887 to 1893 with t value 0.010625847742504618 is False
+INFO:root:Proposed partition of 1893 to 2052 from 1914 to 2052 with t value 0.32511172650780373 is False
+INFO:root:Proposed partition of 0 to 1950 from 901 to 1554 with t value 0.390233629267813 is False
+INFO:root:Proposed partition of 2115 to 2798 from 2257 to 2567 with t value 0.30456093309114196 is False
+INFO:root:Proposed partition of 4175 to 6972 from 5420 to 6358 with t value 0.5404532631010537 is False
+INFO:root:Proposed partition of 2052 to 2964 from 2293 to 2448 with t value 0.35396519563254003 is False
+INFO:root:Proposed partition of 2964 to 3504 from 3004 to 3292 with t value 0.4735102074898184 is False
+INFO:root:Proposed partition of 3504 to 5503 from 4025 to 4643 with t value 0.3346637204820852 is False
+INFO:root:Proposed partition of 10004 to 17360 from 10583 to 16039 with t value 0.839792967458051 is True
+INFO:root:Proposed partition of 5503 to 9967 from 6103 to 8824 with t value 0.3404492912717004 is False
+INFO:root:Proposed partition of 10004 to 10583 from 10192 to 10523 with t value 0.40744002811450786 is False
+INFO:root:Proposed partition of 0 to 12915 from 1102 to 8771 with t value 2.7784930438761015 is True
+INFO:root:Proposed partition of 4740 to 8883 from 5056 to 8765 with t value 7.495320353059581 is True
+INFO:root:Proposed partition of 4740 to 5056 from 4801 to 4974 with t value 0.31481875924425373 is False
+INFO:root:Proposed partition of 2798 to 6477 from 2966 to 4607 with t value 0.6670537657712307 is True
+INFO:root:Proposed partition of 2798 to 2966 from 2807 to 2868 with t value 0.2325309714152765 is False
+INFO:root:Proposed partition of 0 to 9510 from 109 to 3506 with t value 0.7452158539100061 is True
+INFO:root:Proposed partition of 9967 to 10814 from 10133 to 10601 with t value 0.4935869743728554 is True
+INFO:root:Proposed partition of 9967 to 10133 from 9974 to 10086 with t value 0.18621711060407947 is False
+INFO:root:Proposed partition of 1950 to 5991 from 3184 to 5737 with t value 1.3123469997328672 is True
+INFO:root:Proposed partition of 10133 to 10601 from 10208 to 10560 with t value 0.2697610257014953 is False
+INFO:root:Proposed partition of 1950 to 3184 from 2602 to 3165 with t value 0.3070976659063209 is False
+INFO:root:Proposed partition of 0 to 109 from 11 to 94 with t value 1.520632621208385 is True
+INFO:root:Proposed partition of 0 to 11 from 1 to 3 with t value 0.9518301266511929 is False
+INFO:root:Proposed partition of 11 to 94 from 38 to 64 with t value 0.10908995266889457 is False
+INFO:root:Proposed partition of 94 to 109 from 105 to 108 with t value 0.2521416505466452 is False
+INFO:root:Proposed partition of 10601 to 10814 from 10660 to 10784 with t value 0.46327951621732394 is True
+INFO:root:Proposed partition of 10601 to 10660 from 10629 to 10660 with t value 0.03684601898584137 is False
+INFO:root:Proposed partition of 0 to 1102 from 13 to 933 with t value 0.8484576452858758 is True
+INFO:root:Proposed partition of 0 to 13 from 1 to 5 with t value 0.21510532121680104 is False
+INFO:root:Proposed partition of 10660 to 10784 from 10697 to 10739 with t value 0.31765250678325446 is False
+INFO:root:Proposed partition of 10784 to 10814 from 10790 to 10805 with t value 0.04260118729237319 is False
+INFO:root:Proposed partition of 2966 to 4607 from 3362 to 4441 with t value 0.5134879081727912 is True
+INFO:root:Proposed partition of 2966 to 3362 from 3121 to 3217 with t value 0.16529571599924478 is False
+INFO:root:Proposed partition of 10814 to 13986 from 11669 to 13685 with t value 0.3419105130010796 is False
+INFO:root:Proposed partition of 13 to 933 from 177 to 687 with t value 0.7279891575172523 is True
+INFO:root:Proposed partition of 13 to 177 from 93 to 156 with t value 0.14567750052295647 is False
+INFO:root:Proposed partition of 3014 to 11647 from 4562 to 11625 with t value 22.219827597156502 is True
+INFO:root:Proposed partition of 6972 to 12757 from 8502 to 11002 with t value 1.6417898438456677 is True
+INFO:root:Proposed partition of 177 to 687 from 417 to 606 with t value 0.4826411384954486 is False
+INFO:root:Proposed partition of 3362 to 4441 from 3615 to 4154 with t value 0.40299369780394423 is False
+INFO:root:Proposed partition of 4441 to 4607 from 4521 to 4589 with t value 0.19785658251395113 is False
+INFO:root:Proposed partition of 687 to 933 from 829 to 910 with t value 0.6423722374395939 is True
+INFO:root:Proposed partition of 687 to 829 from 712 to 785 with t value 0.3692643413043053 is False
+INFO:root:Proposed partition of 3184 to 5737 from 4859 to 5352 with t value 0.5895174482930489 is True
+INFO:root:Proposed partition of 0 to 8518 from 3416 to 7985 with t value 2.3703967029437143 is True
+INFO:root:Proposed partition of 829 to 910 from 854 to 889 with t value 0.26217424770806014 is False
+INFO:root:Proposed partition of 910 to 933 from 910 to 920 with t value 0.21207014957357428 is False
+INFO:root:Proposed partition of 4607 to 6477 from 4878 to 5569 with t value 0.3858395302880744 is False
+INFO:root:Proposed partition of 933 to 1102 from 943 to 1048 with t value 0.43491817827838875 is True
+INFO:root:Proposed partition of 5056 to 8765 from 7493 to 8346 with t value 0.9919434633444602 is True
+INFO:root:Proposed partition of 933 to 943 from 933 to 943 with t value 0.05038116831718984 is False
+INFO:root:Proposed partition of 943 to 1048 from 989 to 1041 with t value 0.3057965594380046 is False
+INFO:root:Proposed partition of 1048 to 1102 from 1080 to 1102 with t value 0.10801954353639007 is False
+INFO:root:Proposed partition of 2431 to 10449 from 2731 to 8099 with t value 11.699101714336896 is True
+INFO:root:Proposed partition of 3184 to 4859 from 3530 to 4427 with t value 0.441684903760155 is False
+INFO:root:Proposed partition of 5768 to 16204 from 5780 to 12772 with t value 0.6481834167917991 is True
+INFO:root:Proposed partition of 5768 to 5780 from 5768 to 5780 with t value 0.04322229751450813 is False
+INFO:root:Proposed partition of 3014 to 4562 from 3119 to 3739 with t value 1.8817558030864896 is True
+INFO:root:Proposed partition of 4859 to 5352 from 5134 to 5290 with t value 0.5426738297037504 is False
+INFO:root:Proposed partition of 109 to 3506 from 1027 to 2756 with t value 0.8091001796418164 is True
+INFO:root:Proposed partition of 6972 to 8502 from 8023 to 8267 with t value 1.18295948292583 is True
+INFO:root:Proposed partition of 109 to 1027 from 170 to 751 with t value 0.1565992217219622 is False
+INFO:root:Proposed partition of 2431 to 2731 from 2431 to 2640 with t value 18.144231209157425 is True
+INFO:root:Proposed partition of 5352 to 5737 from 5369 to 5695 with t value 0.3796201229694133 is False
+INFO:root:Proposed partition of 3014 to 3119 from 3061 to 3083 with t value 0.4436160903118351 is True
+INFO:root:Proposed partition of 3014 to 3061 from 3024 to 3041 with t value 0.15979451382117105 is False
+INFO:root:Proposed partition of 3061 to 3083 from 3061 to 3069 with t value 0.07586729975080554 is False
+INFO:root:Proposed partition of 5737 to 5991 from 5817 to 5991 with t value 0.4274067880306453 is False
+INFO:root:Proposed partition of 3083 to 3119 from 3093 to 3119 with t value 0.18032213701413125 is False
+INFO:root:Proposed partition of 6477 to 12947 from 10147 to 12375 with t value 0.25199907686695533 is False
+INFO:root:Testing validity of 1459 in interval from 0 to 2115 yields statistic 0.40386349747408556
+INFO:root:Proposed partition of 2431 to 2640 from 2492 to 2595 with t value 4.658136634514897 is True
+INFO:root:Proposed partition of 2431 to 2492 from 2452 to 2478 with t value 1.7085757061678073 is True
+INFO:root:Proposed partition of 3119 to 3739 from 3190 to 3295 with t value 0.629583135347582 is False
+INFO:root:Proposed partition of 2431 to 2452 from 2431 to 2443 with t value 0.1419007648587018 is False
+INFO:root:Proposed partition of 2452 to 2478 from 2457 to 2469 with t value 0.6782807916142378 is False
+INFO:root:Proposed partition of 3739 to 4562 from 4062 to 4482 with t value 0.4615052283309322 is False
+INFO:root:Proposed partition of 2478 to 2492 from 2483 to 2492 with t value 0.4215989644940398 is False
+INFO:root:Proposed partition of 10583 to 16039 from 12319 to 15648 with t value 1.1474505339544818 is True
+INFO:root:Proposed partition of 6972 to 8023 from 7277 to 7676 with t value 1.0715411470294596 is True
+INFO:root:Proposed partition of 6972 to 7277 from 7043 to 7214 with t value 0.3884761706079918 is False
+INFO:root:Proposed partition of 2492 to 2595 from 2551 to 2595 with t value 0.7799722312451132 is True
+INFO:root:Proposed partition of 2492 to 2551 from 2514 to 2545 with t value 0.49795552317445735 is False
+INFO:root:Proposed partition of 7277 to 7676 from 7403 to 7574 with t value 0.33571593559499896 is False
+INFO:root:Proposed partition of 2551 to 2595 from 2571 to 2585 with t value 0.2932814167986404 is False
+INFO:root:Proposed partition of 12046 to 22248 from 12125 to 15225 with t value 45.63082641302484 is True
+INFO:root:Proposed partition of 7676 to 8023 from 7856 to 7991 with t value 0.6419294015036979 is False
+INFO:root:Proposed partition of 12046 to 12125 from 12077 to 12115 with t value 0.36544672085207786 is False
+INFO:root:Proposed partition of 1027 to 2756 from 1968 to 2303 with t value 0.4373909236672525 is False
+INFO:root:Proposed partition of 2595 to 2640 from 2615 to 2640 with t value 1.3654590688440698 is True
+INFO:root:Proposed partition of 2595 to 2615 from 2600 to 2610 with t value 0.32065997424427245 is False
+INFO:root:Proposed partition of 8023 to 8267 from 8113 to 8232 with t value 0.5432443390304211 is False
+INFO:root:Proposed partition of 8267 to 8502 from 8362 to 8489 with t value 0.43524346528625607 is False
+INFO:root:Proposed partition of 2756 to 3506 from 2863 to 3436 with t value 0.2225819948296154 is False
+INFO:root:Proposed partition of 2615 to 2640 from 2625 to 2640 with t value 0.17748361040193983 is False
+INFO:root:Proposed partition of 2640 to 2731 from 2653 to 2723 with t value 0.22291829358700613 is False
+INFO:root:Breakpoint 1459 accepted
+INFO:root:Testing validity of 2115 in interval from 1459 to 2798 yields statistic 0.48956191907066865
+INFO:root:Proposed partition of 5056 to 7493 from 6401 to 7230 with t value 0.7283699726293027 is True
+INFO:root:Proposed partition of 10583 to 12319 from 10966 to 11764 with t value 0.45947983484252114 is False
+INFO:root:Proposed partition of 0 to 7704 from 297 to 5933 with t value 314.9380760541934 is True
+INFO:root:Proposed partition of 0 to 3416 from 5 to 818 with t value 3.699133485036155 is True
+INFO:root:Proposed partition of 0 to 5 from 0 to 3 with t value 0.08280511704460625 is False
+INFO:root:Proposed partition of 13986 to 18525 from 15132 to 17477 with t value 0.5431912059585331 is True
+INFO:root:Proposed partition of 0 to 297 from 91 to 279 with t value 3.686508663607021 is True
+INFO:root:Breakpoint 2115 accepted
+INFO:root:Testing validity of 2798 in interval from 2115 to 2966 yields statistic 0.8616300660818804
+INFO:root:Proposed partition of 0 to 91 from 39 to 81 with t value 1.6768510691407787 is True
+INFO:root:Proposed partition of 0 to 39 from 13 to 39 with t value 0.2724169674798575 is True
+INFO:root:Proposed partition of 0 to 13 from 0 to 13 with t value 0.042298904796852645 is False
+INFO:root:Proposed partition of 13 to 39 from 15 to 19 with t value 0.07192711163126157 is False
+INFO:root:Breakpoint 2798 accepted
+INFO:root:Testing validity of 2966 in interval from 2798 to 3362 yields statistic 0.6406497186223605
+INFO:root:Proposed partition of 39 to 81 from 61 to 70 with t value 1.1953888939340536 is True
+INFO:root:Proposed partition of 39 to 61 from 39 to 54 with t value 0.05498012909458097 is False
+INFO:root:Proposed partition of 61 to 70 from 66 to 70 with t value 0.22787197080948227 is False
+INFO:root:Proposed partition of 5 to 818 from 35 to 156 with t value 6.071294729469579 is True
+INFO:root:Proposed partition of 5 to 35 from 23 to 29 with t value 0.10319315838235762 is False
+INFO:root:Proposed partition of 5056 to 6401 from 5098 to 5884 with t value 0.7106710987465351 is True
+INFO:root:Proposed partition of 8502 to 11002 from 8821 to 10060 with t value 0.630435531720458 is False
+INFO:root:Proposed partition of 70 to 81 from 75 to 81 with t value 0.37146251681470405 is True
+INFO:root:Proposed partition of 70 to 75 from 71 to 73 with t value 0.024569091888379857 is False
+INFO:root:Proposed partition of 75 to 81 from 78 to 81 with t value 0.06416334183703779 is False
+INFO:root:Proposed partition of 81 to 91 from 85 to 89 with t value 0.07481328304415277 is False
+INFO:root:Proposed partition of 13986 to 15132 from 14398 to 15093 with t value 0.485629216090511 is True
+INFO:root:Proposed partition of 5056 to 5098 from 5066 to 5083 with t value 0.39568727656609315 is True
+INFO:root:Proposed partition of 35 to 156 from 54 to 103 with t value 0.8662845554201024 is True
+INFO:root:Breakpoint 2966 accepted
+INFO:root:Testing validity of 3362 in interval from 2966 to 4441 yields statistic 0.17481173210277962
+INFO:root:Proposed partition of 91 to 279 from 109 to 180 with t value 2.113419692976201 is False
+INFO:root:Proposed partition of 5056 to 5066 from 5056 to 5066 with t value 0.16052111153424503 is True
+INFO:root:Proposed partition of 35 to 54 from 35 to 48 with t value 0.751941913065754 is True
+INFO:root:Proposed partition of 35 to 48 from 35 to 48 with t value 0.35875536684958403 is False
+INFO:root:Proposed partition of 48 to 54 from 52 to 54 with t value 0.07503823769129243 is False
+INFO:root:Proposed partition of 13986 to 14398 from 14073 to 14345 with t value 0.29866569115281233 is False
+INFO:root:Proposed partition of 5066 to 5083 from 5074 to 5083 with t value 0.18481580300120126 is False
+INFO:root:Proposed partition of 54 to 103 from 73 to 103 with t value 0.3928852224935722 is False
+INFO:root:Proposed partition of 14398 to 15093 from 14668 to 15067 with t value 0.16998883847233262 is False
+INFO:root:Proposed partition of 279 to 297 from 290 to 297 with t value 0.17377687596776906 is False
+INFO:root:Proposed partition of 5083 to 5098 from 5083 to 5098 with t value 0.0975927081942882 is False
+INFO:root:Proposed partition of 15093 to 15132 from 15106 to 15123 with t value 0.1698659447204427 is False
+INFO:root:Proposed partition of 103 to 156 from 103 to 123 with t value 0.12140609570393747 is False
+INFO:root:Proposed partition of 5098 to 5884 from 5275 to 5806 with t value 0.3685789634567529 is False
+INFO:root:Proposed partition of 12125 to 15225 from 13418 to 14476 with t value 1.4635411664671947 is True
+INFO:root:Proposed partition of 156 to 818 from 360 to 468 with t value 0.4212190320601353 is False
+INFO:root:Breakpoint 3362 rejected
+INFO:root:Testing validity of 4441 in interval from 2966 to 4607 yields statistic 0.5302678032563785
+INFO:root:Proposed partition of 5884 to 6401 from 6043 to 6288 with t value 0.4493183999325698 is False
+INFO:root:Proposed partition of 6401 to 7230 from 6418 to 6927 with t value 0.31761034518352016 is False
+INFO:root:Proposed partition of 11002 to 12757 from 11741 to 12641 with t value 1.2940299460185374 is True
+INFO:root:Proposed partition of 12319 to 15648 from 13052 to 14578 with t value 0.7052859312096064 is True
+INFO:root:Proposed partition of 7230 to 7493 from 7261 to 7434 with t value 0.6164094275390868 is True
+INFO:root:Proposed partition of 7230 to 7261 from 7230 to 7250 with t value 0.11781267827801307 is True
+INFO:root:Proposed partition of 7230 to 7250 from 7230 to 7240 with t value 0.029106010638643928 is False
+INFO:root:Proposed partition of 7250 to 7261 from 7250 to 7261 with t value 0.011906136970400822 is False
+INFO:root:Proposed partition of 7261 to 7434 from 7314 to 7371 with t value 0.1644277687272182 is False
+INFO:root:Breakpoint 4441 accepted
+INFO:root:Testing validity of 4607 in interval from 3362 to 6477 yields statistic 0.3039043640663841
+INFO:root:Proposed partition of 7434 to 7493 from 7459 to 7485 with t value 0.15893468302351232 is False
+INFO:root:Proposed partition of 11002 to 11741 from 11289 to 11558 with t value 0.6226398359803497 is False
+INFO:root:Proposed partition of 0 to 7597 from 3011 to 7597 with t value 51.35787194903093 is True
+INFO:root:Proposed partition of 12125 to 13418 from 12209 to 12540 with t value 0.9338191404918632 is True
+INFO:root:Proposed partition of 297 to 5933 from 1802 to 5492 with t value 0.3496767057126348 is False
+INFO:root:Proposed partition of 12319 to 13052 from 12453 to 12980 with t value 0.5814486458751412 is True
+INFO:root:Proposed partition of 12125 to 12209 from 12125 to 12189 with t value 0.7892073478536936 is True
+INFO:root:Proposed partition of 12125 to 12189 from 12133 to 12144 with t value 0.39487072423250624 is False
+INFO:root:Proposed partition of 12189 to 12209 from 12189 to 12198 with t value 0.36988424818652726 is False
+INFO:root:Proposed partition of 15132 to 17477 from 15417 to 16752 with t value 0.6705598183009999 is True
+INFO:root:Proposed partition of 12209 to 12540 from 12237 to 12427 with t value 0.7953100340904707 is False
+INFO:root:Proposed partition of 5780 to 12772 from 6054 to 11412 with t value 0.7002140136832045 is True
+INFO:root:Proposed partition of 12319 to 12453 from 12325 to 12434 with t value 0.5666702928614576 is True
+INFO:root:Proposed partition of 12319 to 12325 from 12322 to 12325 with t value 0.11954393354773592 is False
+INFO:root:Proposed partition of 12325 to 12434 from 12383 to 12424 with t value 0.21989250636458454 is False
+INFO:root:Proposed partition of 12434 to 12453 from 12434 to 12442 with t value 0.034942784889970296 is False
+INFO:root:Proposed partition of 15132 to 15417 from 15233 to 15286 with t value 0.3547980637030056 is False
+INFO:root:Proposed partition of 7493 to 8346 from 7803 to 8217 with t value 0.5838328963692222 is False
+INFO:root:Proposed partition of 8346 to 8765 from 8534 to 8743 with t value 0.18493019201914268 is False
+INFO:root:Proposed partition of 11741 to 12641 from 11904 to 12492 with t value 0.9436273814681874 is True
+INFO:root:Proposed partition of 1102 to 8771 from 2858 to 6671 with t value 1.2028293141325357 is True
+INFO:root:Proposed partition of 2731 to 8099 from 3073 to 5571 with t value 1.2022223692564233 is True
+INFO:root:Proposed partition of 5991 to 12934 from 7904 to 10558 with t value 1.4724583703757745 is True
+INFO:root:Proposed partition of 5780 to 6054 from 5794 to 5959 with t value 0.8309692847544764 is True
+INFO:root:Proposed partition of 5780 to 5794 from 5780 to 5784 with t value 0.21943202501902062 is False
+INFO:root:Proposed partition of 8765 to 8883 from 8831 to 8861 with t value 44.52734068431002 is True
+INFO:root:Proposed partition of 8765 to 8831 from 8778 to 8811 with t value 0.2909823340804524 is False
+INFO:root:Proposed partition of 8831 to 8861 from 8844 to 8848 with t value 4.437379984945898 is False
+INFO:root:Proposed partition of 8861 to 8883 from 8861 to 8878 with t value 0.09747342238333495 is False
+INFO:root:Proposed partition of 2731 to 3073 from 2731 to 2820 with t value 0.5145108284594472 is False
+INFO:root:Proposed partition of 818 to 3416 from 1098 to 2211 with t value 1.5179723400656644 is True
+INFO:root:Proposed partition of 11741 to 11904 from 11756 to 11785 with t value 0.5220782703061717 is True
+INFO:root:Proposed partition of 5991 to 7904 from 6341 to 7501 with t value 0.23936233385264993 is False
+INFO:root:Proposed partition of 818 to 1098 from 825 to 934 with t value 0.2844268827136902 is False
+INFO:root:Proposed partition of 12453 to 12980 from 12482 to 12905 with t value 0.45722462496671323 is True
+INFO:root:Proposed partition of 5794 to 5959 from 5808 to 5877 with t value 0.5205287114497071 is True
+INFO:root:Proposed partition of 12453 to 12482 from 12469 to 12477 with t value 0.11018920411649674 is False
+INFO:root:Proposed partition of 12482 to 12905 from 12510 to 12796 with t value 0.17614983935353018 is False
+INFO:root:Proposed partition of 15417 to 16752 from 15560 to 16570 with t value 0.33880954609494135 is False
+INFO:root:Proposed partition of 11741 to 11756 from 11741 to 11756 with t value 0.27169736160902824 is True
+INFO:root:Proposed partition of 11756 to 11785 from 11756 to 11772 with t value 0.15170238887710938 is False
+INFO:root:Proposed partition of 5794 to 5808 from 5794 to 5803 with t value 0.06252933352874326 is False
+INFO:root:Proposed partition of 5808 to 5877 from 5850 to 5869 with t value 0.223449958949331 is False
+INFO:root:Proposed partition of 12905 to 12980 from 12944 to 12964 with t value 0.18908849039639594 is False
+INFO:root:Proposed partition of 12980 to 13052 from 13001 to 13038 with t value 0.1498252888700094 is False
+INFO:root:Proposed partition of 11785 to 11904 from 11809 to 11898 with t value 0.24240758363325637 is False
+INFO:root:Proposed partition of 5877 to 5959 from 5883 to 5932 with t value 0.16729252153615984 is False
+INFO:root:Proposed partition of 12540 to 13418 from 12982 to 13263 with t value 0.5905679016254459 is True
+INFO:root:Proposed partition of 3506 to 9510 from 3903 to 8783 with t value 0.5651682636374924 is True
+INFO:root:Breakpoint 4607 accepted
+INFO:root:Testing validity of 6477 in interval from 4441 to 12947 yields statistic 0.579005585604774
+INFO:root:Proposed partition of 4562 to 11625 from 4671 to 6556 with t value 0.7214316287822766 is True
+INFO:root:Proposed partition of 4562 to 4671 from 4589 to 4671 with t value 0.28660275373864225 is False
+INFO:root:Proposed partition of 5959 to 6054 from 5986 to 6022 with t value 0.52208249257417 is True
+INFO:root:Proposed partition of 5933 to 7704 from 6873 to 7237 with t value 0.9766548194240541 is True
+INFO:root:Proposed partition of 5959 to 5986 from 5959 to 5975 with t value 0.4373346324593631 is True
+INFO:root:Proposed partition of 5959 to 5975 from 5964 to 5975 with t value 0.24812125356531586 is False
+INFO:root:Proposed partition of 16752 to 17477 from 16888 to 17449 with t value 0.4664441977397238 is False
+INFO:root:Proposed partition of 3506 to 3903 from 3578 to 3893 with t value 0.6473191437216217 is False
+INFO:root:Proposed partition of 12540 to 12982 from 12580 to 12946 with t value 0.7461628457735885 is True
+INFO:root:Proposed partition of 5975 to 5986 from 5975 to 5986 with t value 0.10444284264987667 is False
+INFO:root:Proposed partition of 5986 to 6022 from 5991 to 6008 with t value 0.14170018575362764 is False
+INFO:root:Proposed partition of 0 to 3011 from 1566 to 2187 with t value 0.5418083639359864 is False
+INFO:root:Proposed partition of 17477 to 18525 from 18210 to 18525 with t value 0.27271744015296023 is False
+INFO:root:Testing validity of 1807 in interval from 0 to 1831 yields statistic 0.2926333389611339
+INFO:root:Proposed partition of 4671 to 6556 from 4691 to 5449 with t value 0.45153273861866705 is False
+INFO:root:Proposed partition of 12540 to 12580 from 12554 to 12566 with t value 0.33107601417592214 is False
+INFO:root:Proposed partition of 11904 to 12492 from 11926 to 12356 with t value 1.077922837337613 is True
+INFO:root:Proposed partition of 11904 to 11926 from 11904 to 11909 with t value 0.9244733586293126 is False
+INFO:root:Proposed partition of 6022 to 6054 from 6029 to 6054 with t value 0.5691326112536779 is True
+INFO:root:Proposed partition of 6022 to 6029 from 6026 to 6029 with t value 0.09479080112853723 is False
+INFO:root:Proposed partition of 6029 to 6054 from 6029 to 6054 with t value 0.22563581390210277 is False
+INFO:root:Proposed partition of 1098 to 2211 from 1328 to 1590 with t value 0.9480045261983929 is True
+INFO:root:Proposed partition of 11926 to 12356 from 11958 to 12225 with t value 0.5074598280901683 is False
+INFO:root:Proposed partition of 1102 to 2858 from 1215 to 1675 with t value 0.5725294660307362 is False
+INFO:root:Proposed partition of 1098 to 1328 from 1204 to 1249 with t value 0.4312654893024528 is False
+INFO:root:Proposed partition of 12580 to 12946 from 12620 to 12921 with t value 0.8247367802407118 is True
+INFO:root:Proposed partition of 12356 to 12492 from 12411 to 12473 with t value 0.6714025072697625 is True
+INFO:root:Proposed partition of 1328 to 1590 from 1387 to 1548 with t value 0.22637678946530868 is False
+INFO:root:Proposed partition of 12356 to 12411 from 12362 to 12388 with t value 0.35864263013177095 is False
+INFO:root:Proposed partition of 5933 to 6873 from 6063 to 6787 with t value 1.5371767038114663 is True
+INFO:root:Proposed partition of 5933 to 6063 from 5952 to 6039 with t value 0.18784247061190484 is False
+INFO:root:Proposed partition of 12411 to 12473 from 12434 to 12445 with t value 0.35512663687672275 is False
+INFO:root:Proposed partition of 12580 to 12620 from 12598 to 12613 with t value 0.44278053052859007 is True
+INFO:root:Proposed partition of 12580 to 12598 from 12580 to 12598 with t value 0.10193243728457574 is False
+INFO:root:Proposed partition of 12598 to 12613 from 12598 to 12607 with t value 0.11613701501814816 is False
+INFO:root:Proposed partition of 12613 to 12620 from 12614 to 12618 with t value 0.009505261002823997 is False
+INFO:root:Proposed partition of 6063 to 6787 from 6273 to 6629 with t value 0.3092305533287954 is False
+INFO:root:Proposed partition of 13052 to 14578 from 13138 to 13772 with t value 0.8299719108276976 is True
+INFO:root:Proposed partition of 13052 to 13138 from 13069 to 13104 with t value 0.3810515879824623 is False
+INFO:root:Proposed partition of 12620 to 12921 from 12646 to 12800 with t value 0.25144020579379556 is False
+INFO:root:Proposed partition of 1590 to 2211 from 1794 to 1944 with t value 0.4117891095681788 is False
+INFO:root:Proposed partition of 6787 to 6873 from 6851 to 6868 with t value 0.3575847834759944 is False
+INFO:root:Proposed partition of 12473 to 12492 from 12480 to 12492 with t value 0.34276501824223105 is True
+INFO:root:Proposed partition of 12473 to 12480 from 12476 to 12480 with t value 0.08629173371680261 is False
+INFO:root:Proposed partition of 12480 to 12492 from 12484 to 12487 with t value 0.0873743831016091 is False
+INFO:root:Proposed partition of 12492 to 12641 from 12539 to 12598 with t value 0.2782616350980096 is False
+INFO:root:Proposed partition of 12921 to 12946 from 12928 to 12946 with t value 0.6317442318073038 is True
+INFO:root:Proposed partition of 12921 to 12928 from 12922 to 12924 with t value 0.023256798078535888 is False
+INFO:root:Breakpoint 1807 accepted
+INFO:root:Testing validity of 1831 in interval from 1807 to 1843 yields statistic 0.23401581064479546
+INFO:root:Breakpoint 1831 accepted
+INFO:root:Testing validity of 1843 in interval from 1831 to 1854 yields statistic 0.04948683718685203
+INFO:root:Proposed partition of 12928 to 12946 from 12928 to 12946 with t value 0.578326105707508 is True
+INFO:root:Proposed partition of 12641 to 12757 from 12687 to 12743 with t value 1.319440643903366 is True
+INFO:root:Breakpoint 1843 rejected
+INFO:root:Testing validity of 1854 in interval from 1831 to 1860 yields statistic 0.06932847147008206
+INFO:root:Proposed partition of 3073 to 5571 from 3150 to 4429 with t value 1.0015142431035542 is True
+INFO:root:Proposed partition of 12946 to 12982 from 12952 to 12982 with t value 0.1642388516101599 is False
+INFO:root:Proposed partition of 6873 to 7237 from 6965 to 7190 with t value 1.262140045407428 is True
+INFO:root:Breakpoint 1854 rejected
+INFO:root:Testing validity of 1860 in interval from 1831 to 1882 yields statistic 0.1494873368775817
+INFO:root:Proposed partition of 6873 to 6965 from 6896 to 6924 with t value 0.59268492495785 is False
+INFO:root:Proposed partition of 12641 to 12687 from 12651 to 12678 with t value 0.7805646072192017 is False
+INFO:root:Proposed partition of 12687 to 12743 from 12720 to 12743 with t value 0.18065602400179348 is False
+INFO:root:Proposed partition of 12982 to 13263 from 13089 to 13195 with t value 0.45926125157574366 is False
+INFO:root:Proposed partition of 0 to 7406 from 77 to 3804 with t value 1.0530749934127142 is True
+INFO:root:Proposed partition of 7904 to 10558 from 8432 to 8830 with t value 1.1912706852056463 is True
+INFO:root:Proposed partition of 12743 to 12757 from 12743 to 12752 with t value 0.1305112394667699 is False
+INFO:root:Breakpoint 1860 accepted
+INFO:root:Testing validity of 1882 in interval from 1843 to 1893 yields statistic 0.3160831673332922
+INFO:root:Proposed partition of 13138 to 13772 from 13350 to 13671 with t value 0.6111071202013235 is True
+INFO:root:Proposed partition of 3073 to 3150 from 3095 to 3124 with t value 1.1172057543254956 is True
+INFO:root:Proposed partition of 6965 to 7190 from 7016 to 7047 with t value 0.5185211115950928 is False
+INFO:root:Proposed partition of 7190 to 7237 from 7204 to 7217 with t value 0.29955255566714833 is False
+INFO:root:Proposed partition of 13138 to 13350 from 13242 to 13328 with t value 0.10406978299315557 is False
+INFO:root:Proposed partition of 0 to 77 from 22 to 38 with t value 0.5060391580611243 is False
+INFO:root:Proposed partition of 3073 to 3095 from 3085 to 3095 with t value 0.18435013460134236 is False
+INFO:root:Proposed partition of 3095 to 3124 from 3105 to 3124 with t value 0.25718797875809535 is False
+INFO:root:Proposed partition of 6054 to 11412 from 6530 to 9466 with t value 0.34932911318636467 is False
+INFO:root:Breakpoint 1882 accepted
+INFO:root:Testing validity of 1893 in interval from 1854 to 2052 yields statistic 0.3660489217458454
+INFO:root:Proposed partition of 13263 to 13418 from 13332 to 13400 with t value 0.33480326170463803 is False
+INFO:root:Proposed partition of 13350 to 13671 from 13453 to 13639 with t value 0.3211619566691137 is False
+INFO:root:Proposed partition of 3124 to 3150 from 3124 to 3134 with t value 0.3576604849199966 is True
+INFO:root:Proposed partition of 13671 to 13772 from 13729 to 13761 with t value 0.3502309176042491 is False
+INFO:root:Proposed partition of 3124 to 3134 from 3124 to 3129 with t value 0.24324648289395734 is False
+INFO:root:Proposed partition of 3134 to 3150 from 3142 to 3146 with t value 0.04426664419955973 is False
+INFO:root:Breakpoint 1893 accepted
+INFO:root:Testing validity of 2052 in interval from 1860 to 2964 yields statistic 0.510012125815386
+INFO:root:Proposed partition of 2211 to 3416 from 2558 to 3382 with t value 1.1028430795447708 is True
+INFO:root:Proposed partition of 7237 to 7704 from 7523 to 7674 with t value 1.0997586377979616 is True
+INFO:root:Proposed partition of 8883 to 17658 from 11537 to 16335 with t value 0.5457951529132797 is False
+INFO:root:Proposed partition of 7904 to 8432 from 8028 to 8341 with t value 0.8988600282573296 is True
+INFO:root:Proposed partition of 13772 to 14578 from 13854 to 14405 with t value 0.42049587000034416 is False
+INFO:root:Proposed partition of 7237 to 7523 from 7311 to 7476 with t value 0.3347006107749274 is False
+INFO:root:Proposed partition of 7904 to 8028 from 7915 to 8007 with t value 0.7185729901841897 is True
+INFO:root:Proposed partition of 14578 to 15648 from 15030 to 15616 with t value 0.41488217986710196 is False
+INFO:root:Proposed partition of 7523 to 7674 from 7565 to 7629 with t value 0.6314418526353899 is True
+INFO:root:Proposed partition of 7523 to 7565 from 7523 to 7548 with t value 0.273335174523401 is False
+INFO:root:Proposed partition of 7904 to 7915 from 7904 to 7909 with t value 0.21717395383790716 is False
+INFO:root:Proposed partition of 7915 to 8007 from 7921 to 7956 with t value 0.2368212942801413 is False
+INFO:root:Breakpoint 2052 accepted
+INFO:root:Testing validity of 2964 in interval from 1882 to 3504 yields statistic 0.5254755897202689
+INFO:root:Proposed partition of 7565 to 7629 from 7597 to 7629 with t value 0.29016889280785074 is False
+INFO:root:Proposed partition of 7629 to 7674 from 7648 to 7666 with t value 0.15067842216759395 is False
+INFO:root:Proposed partition of 7674 to 7704 from 7683 to 7704 with t value 0.10021674793823543 is False
+INFO:root:Testing validity of 13 in interval from 0 to 39 yields statistic 0.25632205953658044
+INFO:root:Proposed partition of 2211 to 2558 from 2226 to 2458 with t value 1.236405214223682 is True
+INFO:root:Proposed partition of 2211 to 2226 from 2211 to 2226 with t value 0.7976569631852899 is False
+INFO:root:Proposed partition of 8007 to 8028 from 8007 to 8017 with t value 0.3620041916292121 is False
+INFO:root:Proposed partition of 13418 to 14476 from 13940 to 14422 with t value 0.8069679627300964 is True
+INFO:root:Proposed partition of 17658 to 20697 from 18335 to 20309 with t value 0.4419112056210988 is False
+INFO:root:Proposed partition of 2226 to 2458 from 2323 to 2431 with t value 0.4233210742961665 is False
+INFO:root:Proposed partition of 12757 to 13984 from 13166 to 13919 with t value 0.7877909907433102 is True
+INFO:root:Proposed partition of 12757 to 13166 from 12891 to 13085 with t value 0.2729921540227644 is False
+INFO:root:Breakpoint 13 accepted
+INFO:root:Testing validity of 39 in interval from 13 to 61 yields statistic 0.6207981105713288
+INFO:root:Breakpoint 39 accepted
+INFO:root:Testing validity of 61 in interval from 39 to 70 yields statistic 1.0051614207784727
+INFO:root:Proposed partition of 11412 to 12772 from 11837 to 12651 with t value 0.8789694171379917 is True
+INFO:root:Proposed partition of 15648 to 16039 from 15860 to 16033 with t value 0.8840941175520751 is True
+INFO:root:Proposed partition of 2458 to 2558 from 2508 to 2550 with t value 0.8985370938115372 is True
+INFO:root:Proposed partition of 8028 to 8341 from 8072 to 8244 with t value 0.8363703036508175 is True
+INFO:root:Breakpoint 61 accepted
+INFO:root:Testing validity of 70 in interval from 61 to 75 yields statistic 1.5375611035749956
+INFO:root:Proposed partition of 2458 to 2508 from 2458 to 2469 with t value 0.28155134675374344 is False
+INFO:root:Proposed partition of 2508 to 2550 from 2529 to 2545 with t value 0.1351806556199327 is False
+INFO:root:Proposed partition of 2550 to 2558 from 2550 to 2558 with t value 0.05403808113135711 is False
+INFO:root:Proposed partition of 8028 to 8072 from 8033 to 8051 with t value 0.0817569960635488 is False
+INFO:root:Proposed partition of 8072 to 8244 from 8098 to 8170 with t value 0.1556953936333203 is False
+INFO:root:Proposed partition of 8244 to 8341 from 8263 to 8308 with t value 0.08237806253130565 is False
+INFO:root:Proposed partition of 11412 to 11837 from 11682 to 11797 with t value 0.3674242385678998 is False
+INFO:root:Proposed partition of 15648 to 15860 from 15648 to 15805 with t value 0.7263233172568577 is False
+INFO:root:Proposed partition of 15860 to 16033 from 15872 to 15998 with t value 0.10022392812620452 is False
+INFO:root:Proposed partition of 16033 to 16039 from 16033 to 16035 with t value 0.019880130140523453 is False
+INFO:root:Proposed partition of 3150 to 4429 from 3197 to 4230 with t value 1.0522724751979218 is True
+INFO:root:Proposed partition of 8341 to 8432 from 8381 to 8396 with t value 0.20815586702705544 is False
+INFO:root:Proposed partition of 13166 to 13919 from 13307 to 13739 with t value 0.6598594421164705 is False
+INFO:root:Proposed partition of 13919 to 13984 from 13957 to 13984 with t value 0.36254105169972234 is False
+INFO:root:Testing validity of 4175 in interval from 0 to 6972 yields statistic 117.62357391730208
+INFO:root:Breakpoint 70 accepted
+INFO:root:Testing validity of 75 in interval from 70 to 81 yields statistic 0.5181398653104915
+INFO:root:Proposed partition of 16039 to 17360 from 16826 to 17353 with t value 0.28940306315484754 is False
+INFO:root:Testing validity of 1934 in interval from 0 to 5556 yields statistic 0.5751775335034105
+INFO:root:Proposed partition of 13418 to 13940 from 13540 to 13860 with t value 0.8086612493771498 is True
+INFO:root:Proposed partition of 13418 to 13540 from 13440 to 13522 with t value 0.20269496395276915 is False
+INFO:root:Proposed partition of 3150 to 3197 from 3160 to 3189 with t value 0.7830198448438148 is True
+INFO:root:Proposed partition of 3150 to 3160 from 3150 to 3155 with t value 0.08053310063999704 is False
+INFO:root:Proposed partition of 3160 to 3189 from 3165 to 3181 with t value 0.21461392859477696 is False
+INFO:root:Breakpoint 75 accepted
+INFO:root:Testing validity of 81 in interval from 75 to 91 yields statistic 0.7747080050978742
+INFO:root:Proposed partition of 3189 to 3197 from 3189 to 3197 with t value 0.08364270764392845 is False
+INFO:root:Breakpoint 81 accepted
+INFO:root:Testing validity of 91 in interval from 81 to 279 yields statistic 2.186750546788031
+INFO:root:Proposed partition of 13540 to 13860 from 13733 to 13809 with t value 0.5735369003688561 is False
+INFO:root:Breakpoint 2964 accepted
+INFO:root:Testing validity of 3504 in interval from 1893 to 5503 yields statistic 0.6025790657429776
+INFO:root:Proposed partition of 8432 to 8830 from 8476 to 8676 with t value 1.1015000511856876 is True
+INFO:root:Proposed partition of 13860 to 13940 from 13869 to 13929 with t value 0.9279607754490897 is False
+INFO:root:Proposed partition of 8432 to 8476 from 8432 to 8454 with t value 0.24248474111388257 is False
+INFO:root:Proposed partition of 13940 to 14422 from 14067 to 14293 with t value 0.3687346520123282 is False
+INFO:root:Proposed partition of 14422 to 14476 from 14438 to 14476 with t value 0.49490766560020355 is False
+INFO:root:Proposed partition of 2858 to 6671 from 5108 to 6054 with t value 0.5432989631554337 is False
+INFO:root:Proposed partition of 8476 to 8676 from 8509 to 8608 with t value 0.38804969163113356 is False
+INFO:root:Breakpoint 91 accepted
+INFO:root:Testing validity of 279 in interval from 91 to 297 yields statistic 0.47230094463931865
+INFO:root:Breakpoint 279 rejected
+INFO:root:Testing validity of 297 in interval from 91 to 5933 yields statistic 26.97525999708229
+INFO:root:Proposed partition of 8676 to 8830 from 8689 to 8762 with t value 0.22014198928828818 is False
+INFO:root:Breakpoint 6477 accepted
+INFO:root:Proposed partition of 3197 to 4230 from 3295 to 3807 with t value 0.49324709020420016 is False
+INFO:root:Proposed partition of 4230 to 4429 from 4293 to 4401 with t value 0.3926557330874076 is False
+INFO:root:Proposed partition of 2558 to 3382 from 2691 to 2976 with t value 0.9416439616795684 is True
+INFO:root:Proposed partition of 11837 to 12651 from 12322 to 12529 with t value 0.415133493823201 is False
+INFO:root:Proposed partition of 6671 to 8771 from 7287 to 8232 with t value 0.3739671782926797 is False
+INFO:root:Proposed partition of 3011 to 7597 from 4119 to 5373 with t value 1.2417943703624728 is True
+INFO:root:Proposed partition of 3903 to 8783 from 4416 to 8015 with t value 0.639389735647437 is True
+INFO:root:Proposed partition of 3903 to 4416 from 3987 to 4212 with t value 0.13326163764606125 is False
+INFO:root:Proposed partition of 12651 to 12772 from 12656 to 12738 with t value 0.35537456368092785 is False
+INFO:root:Proposed partition of 2558 to 2691 from 2597 to 2640 with t value 0.5152004776702779 is True
+INFO:root:Proposed partition of 2558 to 2597 from 2563 to 2579 with t value 0.18046428708784856 is False
+INFO:root:Proposed partition of 2597 to 2640 from 2614 to 2633 with t value 0.17529773128929074 is False
+INFO:root:Proposed partition of 2640 to 2691 from 2651 to 2678 with t value 0.07792876080882968 is False
+INFO:root:Proposed partition of 2691 to 2976 from 2789 to 2851 with t value 0.39444758046508765 is False
+INFO:root:Proposed partition of 6556 to 11625 from 6999 to 10323 with t value 0.6933798716772666 is True
+INFO:root:Proposed partition of 14476 to 15225 from 14573 to 14972 with t value 1.0563875035967127 is True
+INFO:root:Proposed partition of 8830 to 10558 from 9050 to 9834 with t value 0.5123853409614857 is False
+INFO:root:Proposed partition of 14476 to 14573 from 14495 to 14512 with t value 0.7189879674576426 is True
+INFO:root:Proposed partition of 14476 to 14495 from 14481 to 14485 with t value 0.5371725544858976 is False
+INFO:root:Proposed partition of 14495 to 14512 from 14495 to 14503 with t value 0.1383932878663345 is False
+INFO:root:Proposed partition of 77 to 3804 from 244 to 2860 with t value 0.6147494984531755 is True
+INFO:root:Proposed partition of 6556 to 6999 from 6723 to 6894 with t value 0.5032506314280928 is False
+INFO:root:Proposed partition of 0 to 7388 from 430 to 1862 with t value 0.5084019294212682 is True
+INFO:root:Proposed partition of 2976 to 3382 from 3168 to 3334 with t value 0.5698521523528188 is True
+INFO:root:Proposed partition of 14512 to 14573 from 14552 to 14573 with t value 0.3701700861857127 is False
+INFO:root:Proposed partition of 2976 to 3168 from 2988 to 3067 with t value 0.3192131942567504 is False
+INFO:root:Proposed partition of 12772 to 16204 from 13188 to 14529 with t value 0.3455062736641848 is False
+INFO:root:Testing validity of 9 in interval from 0 to 81 yields statistic 0.2521961899131487
+INFO:root:Proposed partition of 4429 to 5571 from 4723 to 5297 with t value 0.9795515507488435 is True
+INFO:root:Proposed partition of 4429 to 4723 from 4440 to 4588 with t value 0.26274187796754606 is False
+INFO:root:Proposed partition of 3168 to 3334 from 3229 to 3303 with t value 0.23380973752351153 is False
+INFO:root:Proposed partition of 3334 to 3382 from 3351 to 3376 with t value 0.3364484178885544 is False
+INFO:root:Proposed partition of 3382 to 3416 from 3387 to 3404 with t value 0.06487756785794216 is False
+INFO:root:Proposed partition of 3011 to 4119 from 3017 to 3126 with t value 0.4433059508594314 is True
+INFO:root:Proposed partition of 3011 to 3017 from 3014 to 3017 with t value 0.039300243927860704 is False
+INFO:root:Proposed partition of 3017 to 3126 from 3045 to 3088 with t value 0.17046277545363783 is False
+INFO:root:Proposed partition of 77 to 244 from 109 to 197 with t value 0.6168295047105317 is True
+INFO:root:Breakpoint 9 accepted
+INFO:root:Testing validity of 81 in interval from 9 to 93 yields statistic 0.6727024688506247
+INFO:root:Proposed partition of 0 to 430 from 140 to 325 with t value 0.33761645418672853 is False
+INFO:root:Proposed partition of 77 to 109 from 90 to 103 with t value 0.22906433639608723 is False
+INFO:root:Proposed partition of 0 to 15250 from 12052 to 14439 with t value 219.37210001697886 is True
+INFO:root:Proposed partition of 20697 to 23624 from 21411 to 22349 with t value 0.6966421458726235 is True
+INFO:root:Breakpoint 81 accepted
+INFO:root:Testing validity of 93 in interval from 81 to 103 yields statistic 0.3264433484670854
+INFO:root:Proposed partition of 109 to 197 from 133 to 197 with t value 0.520228888664199 is False
+INFO:root:Breakpoint 3504 accepted
+INFO:root:Testing validity of 5503 in interval from 2052 to 9967 yields statistic 0.14797877741612991
+INFO:root:Breakpoint 93 rejected
+INFO:root:Testing validity of 103 in interval from 81 to 154 yields statistic 0.7744746234105953
+INFO:root:Proposed partition of 14573 to 14972 from 14616 to 14765 with t value 0.7296997820678348 is True
+INFO:root:Proposed partition of 14573 to 14616 from 14595 to 14616 with t value 0.17106072425956376 is False
+INFO:root:Proposed partition of 197 to 244 from 219 to 230 with t value 0.4294745299155602 is True
+INFO:root:Proposed partition of 197 to 219 from 197 to 212 with t value 0.03627990858588194 is False
+INFO:root:Proposed partition of 219 to 230 from 219 to 230 with t value 0.12335686469281036 is False
+INFO:root:Proposed partition of 14616 to 14765 from 14680 to 14742 with t value 0.27599345220896804 is False
+INFO:root:Breakpoint 103 accepted
+INFO:root:Testing validity of 154 in interval from 93 to 401 yields statistic 0.13178397351664495
+INFO:root:Proposed partition of 230 to 244 from 237 to 244 with t value 0.07408652931315328 is False
+INFO:root:Proposed partition of 14765 to 14972 from 14779 to 14938 with t value 0.379477458191223 is False
+INFO:root:Breakpoint 154 rejected
+INFO:root:Testing validity of 401 in interval from 93 to 415 yields statistic 0.6531919939958832
+INFO:root:Proposed partition of 4723 to 5297 from 4744 to 5131 with t value 0.7133761961479603 is True
+INFO:root:Proposed partition of 4723 to 4744 from 4733 to 4744 with t value 0.6144999485114195 is False
+INFO:root:Proposed partition of 3126 to 4119 from 3406 to 4027 with t value 0.353666122867897 is False
+INFO:root:Breakpoint 401 accepted
+INFO:root:Testing validity of 415 in interval from 103 to 462 yields statistic 0.033281102588106556
+INFO:root:Breakpoint 415 rejected
+INFO:root:Testing validity of 462 in interval from 103 to 575 yields statistic 0.54922983858745
+INFO:root:Proposed partition of 14972 to 15225 from 15169 to 15225 with t value 0.9775985210671131 is True
+INFO:root:Proposed partition of 14972 to 15169 from 15083 to 15150 with t value 0.2553591395478338 is False
+INFO:root:Proposed partition of 15169 to 15225 from 15178 to 15215 with t value 0.43830000101456856 is False
+INFO:root:Proposed partition of 20697 to 21411 from 20750 to 20996 with t value 0.8252262009219719 is True
+INFO:root:Breakpoint 1934 accepted
+INFO:root:Testing validity of 5556 in interval from 1934 to 7408 yields statistic 0.797454304906913
+INFO:root:Proposed partition of 6999 to 10323 from 7534 to 9943 with t value 0.4767364508506605 is False
+INFO:root:Breakpoint 462 accepted
+INFO:root:Testing validity of 575 in interval from 154 to 856 yields statistic 0.16471585096919597
+INFO:root:Proposed partition of 4744 to 5131 from 4852 to 4969 with t value 0.6851889550034711 is True
+INFO:root:Proposed partition of 20697 to 20750 from 20702 to 20733 with t value 0.358150236023593 is True
+INFO:root:Proposed partition of 20697 to 20702 from 20698 to 20702 with t value 0.010934325414905433 is False
+INFO:root:Proposed partition of 4744 to 4852 from 4763 to 4809 with t value 0.2188525229504564 is False
+INFO:root:Proposed partition of 20702 to 20733 from 20719 to 20733 with t value 0.21248050028240376 is False
+INFO:root:Breakpoint 575 rejected
+INFO:root:Testing validity of 856 in interval from 154 to 891 yields statistic 0.1099169461872919
+INFO:root:Proposed partition of 20733 to 20750 from 20742 to 20750 with t value 0.0573164031064328 is False
+INFO:root:Breakpoint 856 rejected
+INFO:root:Testing validity of 891 in interval from 154 to 1009 yields statistic 3.4215123638587315
+INFO:root:Proposed partition of 430 to 1862 from 698 to 1372 with t value 0.45989597573332835 is True
+INFO:root:Proposed partition of 0 to 5393 from 4305 to 5374 with t value 0.653603594693851 is True
+INFO:root:Proposed partition of 430 to 698 from 436 to 518 with t value 0.1603906953133783 is False
+INFO:root:Proposed partition of 4852 to 4969 from 4865 to 4956 with t value 0.7387421815217362 is True
+INFO:root:Proposed partition of 4852 to 4865 from 4852 to 4865 with t value 0.13001823657770983 is False
+INFO:root:Proposed partition of 10558 to 12934 from 10571 to 12606 with t value 1.3315713779787484 is True
+INFO:root:Proposed partition of 10558 to 10571 from 10568 to 10571 with t value 0.03216483621024193 is False
+INFO:root:Proposed partition of 4865 to 4956 from 4901 to 4940 with t value 0.40175378484074326 is False
+INFO:root:Proposed partition of 4956 to 4969 from 4959 to 4963 with t value 0.22836363441132154 is False
+INFO:root:Breakpoint 4175 accepted
+INFO:root:Testing validity of 6972 in interval from 4175 to 7277 yields statistic 1.3643441516758341
+INFO:root:Proposed partition of 20750 to 20996 from 20854 to 20930 with t value 0.4753416928797931 is False
+INFO:root:Breakpoint 297 accepted
+INFO:root:Testing validity of 5933 in interval from 279 to 6063 yields statistic 19.990262342910537
+INFO:root:Proposed partition of 20996 to 21411 from 21132 to 21215 with t value 0.19142200337876997 is False
+INFO:root:Proposed partition of 4969 to 5131 from 5080 to 5100 with t value 0.4769243058666626 is True
+INFO:root:Breakpoint 5503 rejected
+INFO:root:Testing validity of 9967 in interval from 2052 to 10133 yields statistic 0.4858858906327709
+INFO:root:Proposed partition of 4119 to 5373 from 4457 to 5115 with t value 0.511955022637072 is True
+INFO:root:Breakpoint 891 accepted
+INFO:root:Testing validity of 1009 in interval from 401 to 1116 yields statistic 0.01983279312009628
+INFO:root:Breakpoint 1009 rejected
+INFO:root:Testing validity of 1116 in interval from 401 to 1690 yields statistic 0.9515054365450362
+INFO:root:Proposed partition of 4969 to 5080 from 5011 to 5055 with t value 0.16839040018598994 is False
+INFO:root:Proposed partition of 5080 to 5100 from 5085 to 5093 with t value 0.16666010248209767 is False
+INFO:root:Proposed partition of 5100 to 5131 from 5115 to 5126 with t value 0.15889535655104886 is False
+INFO:root:Proposed partition of 0 to 4305 from 2675 to 4031 with t value 0.33477189512909045 is False
+INFO:root:Proposed partition of 5131 to 5297 from 5153 to 5225 with t value 0.21599095117161235 is False
+INFO:root:Proposed partition of 5297 to 5571 from 5400 to 5481 with t value 0.1472285363154922 is False
+INFO:root:Proposed partition of 4119 to 4457 from 4202 to 4352 with t value 0.17972579728900495 is False
+INFO:root:Proposed partition of 698 to 1372 from 768 to 1243 with t value 0.44775033302535217 is True
+INFO:root:Proposed partition of 698 to 768 from 727 to 751 with t value 0.1391676258730259 is False
+INFO:root:Proposed partition of 4416 to 8015 from 4916 to 7779 with t value 0.7054842377709012 is True
+INFO:root:Proposed partition of 10323 to 11625 from 11125 to 11434 with t value 0.5519432351338297 is True
+INFO:root:Proposed partition of 4416 to 4916 from 4571 to 4760 with t value 0.23669831822854726 is False
+INFO:root:Proposed partition of 768 to 1243 from 969 to 1169 with t value 0.2705666581026878 is False
+INFO:root:Proposed partition of 1243 to 1372 from 1258 to 1356 with t value 0.18124322356901715 is False
+INFO:root:Proposed partition of 4457 to 5115 from 4602 to 4859 with t value 0.4374481859015755 is False
+INFO:root:Proposed partition of 10323 to 11125 from 10578 to 10853 with t value 0.2821096449270414 is False
+INFO:root:Proposed partition of 8771 to 12915 from 9499 to 12417 with t value 1.0539690025941024 is True
+INFO:root:Proposed partition of 8771 to 9499 from 9075 to 9355 with t value 0.2422492070326296 is False
+INFO:root:Proposed partition of 5115 to 5373 from 5201 to 5250 with t value 0.23143454353832657 is False
+INFO:root:Proposed partition of 5571 to 8099 from 5950 to 6372 with t value 0.5800248833819076 is False
+INFO:root:Proposed partition of 21411 to 22349 from 21500 to 22278 with t value 0.8889437225842406 is True
+INFO:root:Proposed partition of 1372 to 1862 from 1461 to 1838 with t value 0.2860692720321178 is False
+INFO:root:Breakpoint 1116 accepted
+INFO:root:Testing validity of 1690 in interval from 415 to 5768 yields statistic 0.22171248266891064
+INFO:root:Proposed partition of 244 to 2860 from 316 to 2571 with t value 0.5769919351919782 is True
+INFO:root:Proposed partition of 244 to 316 from 280 to 299 with t value 0.48853534643848295 is False
+INFO:root:Proposed partition of 21411 to 21500 from 21432 to 21485 with t value 0.5900972352166044 is True
+INFO:root:Proposed partition of 4305 to 5374 from 4635 to 5033 with t value 0.6046928949937189 is False
+INFO:root:Proposed partition of 11125 to 11434 from 11150 to 11379 with t value 0.640881249291763 is True
+INFO:root:Proposed partition of 11125 to 11150 from 11135 to 11150 with t value 0.09217932062291394 is False
+INFO:root:Proposed partition of 4916 to 7779 from 6046 to 7597 with t value 0.338467478639576 is False
+INFO:root:Proposed partition of 5374 to 5393 from 5382 to 5393 with t value 0.08454934105025097 is False
+INFO:root:Testing validity of 4305 in interval from 0 to 5374 yields statistic 0.6456104483542643
+INFO:root:Proposed partition of 11150 to 11379 from 11185 to 11343 with t value 0.15027494760454344 is False
+INFO:root:Proposed partition of 21411 to 21432 from 21424 to 21432 with t value 0.6384147672817053 is False
+INFO:root:Proposed partition of 21432 to 21485 from 21442 to 21462 with t value 0.24188242226480705 is False
+INFO:root:Proposed partition of 21485 to 21500 from 21492 to 21500 with t value 0.06816818688311885 is False
+INFO:root:Proposed partition of 11379 to 11434 from 11397 to 11428 with t value 0.41761069792490346 is False
+INFO:root:Proposed partition of 11434 to 11625 from 11507 to 11610 with t value 0.15360814915813678 is False
+INFO:root:Proposed partition of 11625 to 11647 from 11625 to 11647 with t value 0.25318719674837387 is False
+INFO:root:Proposed partition of 11647 to 11663 from 11656 to 11663 with t value 0.2449860225239358 is False
+INFO:root:Testing validity of 219 in interval from 0 to 256 yields statistic 0.604935168667444
+INFO:root:Breakpoint 6972 accepted
+INFO:root:Testing validity of 7277 in interval from 6972 to 7676 yields statistic 0.5399133539730616
+INFO:root:Proposed partition of 7779 to 8015 from 7818 to 7995 with t value 0.8038506326862728 is True
+INFO:root:Proposed partition of 7779 to 7818 from 7794 to 7818 with t value 0.12839360997061114 is False
+INFO:root:Breakpoint 1690 rejected
+INFO:root:Testing validity of 5768 in interval from 415 to 5780 yields statistic 0.7224899911725591
+INFO:root:Breakpoint 219 accepted
+INFO:root:Testing validity of 256 in interval from 219 to 352 yields statistic 0.4346905350218512
+INFO:root:Proposed partition of 1862 to 7388 from 3777 to 7074 with t value 0.2546756830655587 is False
+INFO:root:Testing validity of 430 in interval from 0 to 698 yields statistic 0.4046153174095722
+INFO:root:Proposed partition of 7818 to 7995 from 7933 to 7966 with t value 0.32850559771646426 is False
+INFO:root:Proposed partition of 10571 to 12606 from 11544 to 12290 with t value 0.643423256154151 is True
+INFO:root:Breakpoint 256 accepted
+INFO:root:Testing validity of 352 in interval from 256 to 416 yields statistic 0.3105809072514965
+INFO:root:Proposed partition of 7995 to 8015 from 8003 to 8015 with t value 0.23396540639220426 is False
+INFO:root:Proposed partition of 10571 to 11544 from 10936 to 11260 with t value 0.32881024907412465 is False
+INFO:root:Breakpoint 7277 accepted
+INFO:root:Testing validity of 7676 in interval from 7277 to 8023 yields statistic 1.0063616952617116
+INFO:root:Proposed partition of 316 to 2571 from 491 to 2008 with t value 0.4390514283165386 is False
+INFO:root:Breakpoint 352 accepted
+INFO:root:Testing validity of 416 in interval from 352 to 863 yields statistic 0.5175520538015039
+INFO:root:Breakpoint 5556 accepted
+INFO:root:Testing validity of 7408 in interval from 5556 to 8182 yields statistic 0.7953440572006787
+INFO:root:Breakpoint 430 accepted
+INFO:root:Testing validity of 698 in interval from 430 to 768 yields statistic 0.3973981304019215
+INFO:root:Proposed partition of 2571 to 2860 from 2670 to 2822 with t value 0.39329245874927454 is False
+INFO:root:Proposed partition of 21500 to 22278 from 21777 to 22066 with t value 0.5382136455256948 is True
+INFO:root:Proposed partition of 3416 to 7985 from 5990 to 6961 with t value 1.0921607355476242 is True
+INFO:root:Breakpoint 416 accepted
+INFO:root:Testing validity of 863 in interval from 416 to 955 yields statistic 0.6991376354946427
+INFO:root:Breakpoint 7676 accepted
+INFO:root:Testing validity of 8023 in interval from 7676 to 8267 yields statistic 1.498126052935999
+INFO:root:Breakpoint 698 accepted
+INFO:root:Testing validity of 768 in interval from 698 to 1243 yields statistic 0.26658993692964394
+INFO:root:Proposed partition of 21500 to 21777 from 21579 to 21653 with t value 0.8462468997699328 is True
+INFO:root:Proposed partition of 21500 to 21579 from 21523 to 21556 with t value 0.23730778243508313 is False
+INFO:root:Proposed partition of 21579 to 21653 from 21612 to 21643 with t value 0.296355248113172 is False
+INFO:root:Proposed partition of 3416 to 5990 from 3919 to 5519 with t value 0.31797679208161805 is False
+INFO:root:Proposed partition of 8015 to 8783 from 8315 to 8548 with t value 0.7045391550493071 is True
+INFO:root:Proposed partition of 11544 to 12290 from 11803 to 11955 with t value 0.6335890891768966 is True
+INFO:root:Proposed partition of 21653 to 21777 from 21701 to 21777 with t value 0.1868764692084835 is False
+INFO:root:Proposed partition of 21777 to 22066 from 21864 to 21977 with t value 0.23532275868907895 is False
+INFO:root:Proposed partition of 5373 to 7597 from 5740 to 6417 with t value 0.6565317987938306 is True
+INFO:root:Proposed partition of 5373 to 5740 from 5490 to 5592 with t value 0.19156523158990382 is False
+INFO:root:Breakpoint 768 accepted
+INFO:root:Testing validity of 1243 in interval from 768 to 1372 yields statistic 0.24974580469451424
+INFO:root:Breakpoint 863 accepted
+INFO:root:Testing validity of 955 in interval from 863 to 965 yields statistic 0.5980928720761958
+INFO:root:Proposed partition of 8099 to 10449 from 8205 to 10305 with t value 0.9690714539014822 is True
+INFO:root:Proposed partition of 22066 to 22278 from 22124 to 22246 with t value 0.39559104724491656 is False
+INFO:root:Proposed partition of 22278 to 22349 from 22294 to 22339 with t value 0.40467460092189844 is False
+INFO:root:Breakpoint 8023 accepted
+INFO:root:Testing validity of 8267 in interval from 8023 to 8502 yields statistic 1.120293408543141
+INFO:root:Breakpoint 5933 accepted
+INFO:root:Testing validity of 6063 in interval from 297 to 6787 yields statistic 147.9623757250542
+INFO:root:Proposed partition of 5990 to 6961 from 6083 to 6585 with t value 0.4691967753888877 is False
+INFO:root:Proposed partition of 8099 to 8205 from 8167 to 8205 with t value 0.1769844340614376 is False
+INFO:root:Breakpoint 955 accepted
+INFO:root:Testing validity of 965 in interval from 955 to 1024 yields statistic 0.5245404560446613
+INFO:root:Proposed partition of 6961 to 7985 from 7092 to 7890 with t value 0.21641779190549737 is False
+INFO:root:Proposed partition of 8015 to 8315 from 8045 to 8193 with t value 0.3970587527148233 is True
+INFO:root:Proposed partition of 8015 to 8045 from 8029 to 8036 with t value 0.031669886383723374 is False
+INFO:root:Proposed partition of 8045 to 8193 from 8128 to 8160 with t value 0.23954627230601871 is False
+INFO:root:Proposed partition of 11544 to 11803 from 11661 to 11718 with t value 0.4983317758101461 is True
+INFO:root:Breakpoint 965 accepted
+INFO:root:Testing validity of 1024 in interval from 965 to 1115 yields statistic 0.5201301336915671
+INFO:root:Proposed partition of 8193 to 8315 from 8232 to 8294 with t value 0.2085835989472153 is False
+INFO:root:Proposed partition of 11544 to 11661 from 11585 to 11617 with t value 0.1842203144181966 is False
+INFO:root:Proposed partition of 2860 to 3804 from 3163 to 3784 with t value 0.7958250625893425 is True
+INFO:root:Proposed partition of 8205 to 10305 from 8834 to 10153 with t value 0.45683713698344336 is False
+INFO:root:Proposed partition of 10305 to 10449 from 10362 to 10444 with t value 0.3528838395337601 is False
+INFO:root:Proposed partition of 11661 to 11718 from 11688 to 11703 with t value 0.2884803283956874 is False
+INFO:root:Proposed partition of 11718 to 11803 from 11741 to 11772 with t value 0.13494571926312976 is False
+INFO:root:Breakpoint 8267 accepted
+INFO:root:Testing validity of 8502 in interval from 8267 to 11002 yields statistic 1.168587056305654
+INFO:root:Proposed partition of 7985 to 8518 from 8184 to 8312 with t value 0.43875109010269964 is False
+INFO:root:Testing validity of 5 in interval from 0 to 35 yields statistic 0.1514152954424381
+INFO:root:Proposed partition of 11803 to 11955 from 11815 to 11942 with t value 0.2752958453949678 is False
+INFO:root:Proposed partition of 11955 to 12290 from 12019 to 12097 with t value 0.18076468564183834 is False
+INFO:root:Proposed partition of 12290 to 12606 from 12317 to 12427 with t value 0.09328535889455006 is False
+INFO:root:Breakpoint 1243 accepted
+INFO:root:Testing validity of 1372 in interval from 1243 to 1862 yields statistic 0.4893499320485951
+INFO:root:Breakpoint 5 rejected
+INFO:root:Testing validity of 35 in interval from 0 to 48 yields statistic 1.480375838216064
+INFO:root:Breakpoint 1024 accepted
+INFO:root:Testing validity of 1115 in interval from 1024 to 1948 yields statistic 0.6370250174306051
+INFO:root:Breakpoint 7408 accepted
+INFO:root:Testing validity of 8182 in interval from 7408 to 8337 yields statistic 1.0708784072374313
+INFO:root:Proposed partition of 9499 to 12417 from 9879 to 12199 with t value 0.7562660367714151 is True
+INFO:root:Proposed partition of 12606 to 12934 from 12655 to 12822 with t value 0.36043221319449836 is False
+INFO:root:Testing validity of 1950 in interval from 0 to 3184 yields statistic 1.5887878516286182
+INFO:root:Breakpoint 35 accepted
+INFO:root:Testing validity of 48 in interval from 5 to 54 yields statistic 0.04438574969223208
+INFO:root:Breakpoint 48 rejected
+INFO:root:Testing validity of 54 in interval from 5 to 103 yields statistic 1.1733652959837377
+INFO:root:Proposed partition of 8315 to 8548 from 8388 to 8443 with t value 0.46527359968843046 is True
+INFO:root:Proposed partition of 2860 to 3163 from 2914 to 3050 with t value 0.5759256593673193 is True
+INFO:root:Proposed partition of 2860 to 2914 from 2873 to 2889 with t value 0.20137557015522742 is False
+INFO:root:Proposed partition of 8315 to 8388 from 8321 to 8344 with t value 0.14533684867462784 is False
+INFO:root:Proposed partition of 8388 to 8443 from 8415 to 8443 with t value 0.05886600259330069 is False
+INFO:root:Proposed partition of 22349 to 23624 from 22754 to 23473 with t value 0.4403811843035127 is False
+INFO:root:Testing validity of 2361 in interval from 0 to 3172 yields statistic 0.8215676673796446
+INFO:root:Proposed partition of 5740 to 6417 from 5889 to 6175 with t value 0.7036704402960974 is True
+INFO:root:Proposed partition of 9499 to 9879 from 9534 to 9802 with t value 0.5219095716689633 is False
+INFO:root:Proposed partition of 0 to 6063 from 1851 to 4773 with t value 1.2974880703114153 is True
+INFO:root:Breakpoint 1372 accepted
+INFO:root:Testing validity of 1862 in interval from 1372 to 7388 yields statistic 0.6194215768793758
+INFO:root:Breakpoint 54 accepted
+INFO:root:Testing validity of 103 in interval from 35 to 156 yields statistic 0.6674446274811756
+INFO:root:Proposed partition of 8443 to 8548 from 8467 to 8548 with t value 0.44589524082632487 is True
+INFO:root:Proposed partition of 5740 to 5889 from 5781 to 5865 with t value 0.43498803229462984 is False
+INFO:root:Breakpoint 103 accepted
+INFO:root:Testing validity of 156 in interval from 48 to 818 yields statistic 4.714501239688413
+INFO:root:Breakpoint 4305 accepted
+INFO:root:Testing validity of 5374 in interval from 4305 to 5393 yields statistic 0.0382464423326976
+INFO:root:Proposed partition of 8443 to 8467 from 8443 to 8456 with t value 0.3125241381710529 is False
+INFO:root:Breakpoint 1115 accepted
+INFO:root:Testing validity of 1948 in interval from 1115 to 3014 yields statistic 0.4132008971996474
+INFO:root:Proposed partition of 2914 to 3050 from 2989 to 3024 with t value 0.439990914719718 is True
+INFO:root:Proposed partition of 2914 to 2989 from 2932 to 2963 with t value 0.13375216975390494 is False
+INFO:root:Breakpoint 5374 rejected
+INFO:root:Breakpoint 8182 accepted
+INFO:root:Testing validity of 8337 in interval from 8182 to 8722 yields statistic 1.3651661660783294
+INFO:root:Proposed partition of 2989 to 3024 from 3001 to 3024 with t value 0.4781007726050195 is True
+INFO:root:Proposed partition of 2989 to 3001 from 2989 to 3001 with t value 0.028270934156905698 is False
+INFO:root:Proposed partition of 8467 to 8548 from 8467 to 8486 with t value 0.30267338597421295 is True
+INFO:root:Proposed partition of 8467 to 8486 from 8467 to 8486 with t value 0.042777379969623885 is False
+INFO:root:Proposed partition of 8486 to 8548 from 8506 to 8523 with t value 0.09290922450187199 is False
+INFO:root:Breakpoint 9967 accepted
+INFO:root:Testing validity of 10133 in interval from 2964 to 10601 yields statistic 0.0009849808825065278
+INFO:root:Breakpoint 5768 accepted
+INFO:root:Testing validity of 5780 in interval from 462 to 5794 yields statistic 0.028132811631955884
+INFO:root:Proposed partition of 3001 to 3024 from 3010 to 3024 with t value 0.1264112040991076 is False
+INFO:root:Proposed partition of 3024 to 3050 from 3037 to 3050 with t value 0.08116632437420052 is False
+INFO:root:Proposed partition of 3050 to 3163 from 3101 to 3148 with t value 0.24146480331490694 is False
+INFO:root:Proposed partition of 3163 to 3784 from 3211 to 3520 with t value 0.17223985755853236 is False
+INFO:root:Proposed partition of 5889 to 6175 from 5958 to 6124 with t value 0.26996575629621 is True
+INFO:root:Proposed partition of 5889 to 5958 from 5925 to 5945 with t value 0.046223181292993895 is False
+INFO:root:Proposed partition of 9879 to 12199 from 10066 to 11246 with t value 0.4118948409752038 is False
+INFO:root:Breakpoint 10133 rejected
+INFO:root:Testing validity of 10601 in interval from 2964 to 10660 yields statistic 0.4590846268966485
+INFO:root:Breakpoint 156 accepted
+INFO:root:Testing validity of 818 in interval from 54 to 1098 yields statistic 1.9351341883667674
+INFO:root:Breakpoint 5780 rejected
+INFO:root:Testing validity of 5794 in interval from 462 to 5808 yields statistic 0.8503870366495991
+INFO:root:Proposed partition of 3784 to 3804 from 3784 to 3796 with t value 0.2994508496248966 is False
+INFO:root:Proposed partition of 5958 to 6124 from 5999 to 6100 with t value 0.2504649595948226 is False
+INFO:root:Breakpoint 8337 accepted
+INFO:root:Testing validity of 8722 in interval from 8337 to 9260 yields statistic 1.0979499203476415
+INFO:root:Proposed partition of 6124 to 6175 from 6140 to 6165 with t value 0.1483983002339188 is False
+INFO:root:Proposed partition of 8548 to 8783 from 8629 to 8743 with t value 0.48262008690743546 is True
+INFO:root:Proposed partition of 8548 to 8629 from 8548 to 8593 with t value 0.12912715491039545 is False
+INFO:root:Proposed partition of 8629 to 8743 from 8666 to 8743 with t value 0.22065594669715027 is False
+INFO:root:Proposed partition of 8743 to 8783 from 8768 to 8783 with t value 0.12806215415550645 is False
+INFO:root:Proposed partition of 12199 to 12417 from 12226 to 12358 with t value 0.8377731700131065 is True
+INFO:root:Proposed partition of 12199 to 12226 from 12209 to 12226 with t value 0.41147621744942026 is False
+INFO:root:Breakpoint 8502 accepted
+INFO:root:Testing validity of 11002 in interval from 8502 to 11741 yields statistic 1.546092946203962
+INFO:root:Proposed partition of 12226 to 12358 from 12245 to 12315 with t value 0.346826523724737 is False
+INFO:root:Proposed partition of 6175 to 6417 from 6224 to 6332 with t value 0.36696386046754986 is True
+INFO:root:Proposed partition of 8783 to 9510 from 9161 to 9510 with t value 0.3499765075833982 is False
+INFO:root:Testing validity of 11 in interval from 0 to 94 yields statistic 1.6153764433808333
+INFO:root:Proposed partition of 12358 to 12417 from 12371 to 12417 with t value 0.4506880631324547 is False
+INFO:root:Proposed partition of 0 to 3504 from 704 to 2820 with t value 0.7624855603567727 is True
+INFO:root:Breakpoint 8722 accepted
+INFO:root:Testing validity of 9260 in interval from 8722 to 10004 yields statistic 1.0945381455390966
+INFO:root:Breakpoint 1948 accepted
+INFO:root:Testing validity of 3014 in interval from 1948 to 3061 yields statistic 4.422783832771988
+INFO:root:Breakpoint 11 accepted
+INFO:root:Testing validity of 94 in interval from 11 to 109 yields statistic 0.4218580559489752
+INFO:root:Breakpoint 818 accepted
+INFO:root:Testing validity of 1098 in interval from 103 to 1328 yields statistic 0.04510825881931115
+INFO:root:Breakpoint 1098 rejected
+INFO:root:Testing validity of 1328 in interval from 103 to 1590 yields statistic 0.7406039707249277
+INFO:root:Breakpoint 1950 accepted
+INFO:root:Testing validity of 3184 in interval from 1950 to 4859 yields statistic 1.1507282147392066
+INFO:root:Proposed partition of 6175 to 6224 from 6181 to 6208 with t value 0.28963926894304964 is True
+INFO:root:Proposed partition of 6175 to 6181 from 6175 to 6179 with t value 0.08946817809791681 is False
+INFO:root:Proposed partition of 6181 to 6208 from 6194 to 6208 with t value 0.1005117417690308 is False
+INFO:root:Proposed partition of 6208 to 6224 from 6208 to 6218 with t value 0.09528379520351325 is False
+INFO:root:Proposed partition of 15225 to 22248 from 16101 to 17151 with t value 2.024755692168638 is True
+INFO:root:Proposed partition of 15225 to 16101 from 15289 to 15644 with t value 0.24041675002298274 is False
+INFO:root:Breakpoint 94 accepted
+INFO:root:Testing validity of 109 in interval from 94 to 1027 yields statistic 0.51230905399971
+INFO:root:Proposed partition of 6224 to 6332 from 6254 to 6304 with t value 0.2110414425644058 is False
+INFO:root:Breakpoint 2361 accepted
+INFO:root:Testing validity of 3172 in interval from 2361 to 4740 yields statistic 0.826190255246162
+INFO:root:Proposed partition of 0 to 1851 from 630 to 1154 with t value 1.197980749617513 is True
+INFO:root:Proposed partition of 12417 to 12915 from 12488 to 12915 with t value 0.6144400161681018 is True
+INFO:root:Proposed partition of 12417 to 12488 from 12417 to 12460 with t value 0.0965376072351787 is False
+INFO:root:Proposed partition of 6332 to 6417 from 6351 to 6390 with t value 0.43632625196435687 is True
+INFO:root:Proposed partition of 0 to 630 from 345 to 568 with t value 0.45345807922634124 is False
+INFO:root:Proposed partition of 6332 to 6351 from 6339 to 6345 with t value 0.28505001434841404 is False
+INFO:root:Breakpoint 3014 accepted
+INFO:root:Testing validity of 3061 in interval from 3014 to 3083 yields statistic 0.45520494181679855
+INFO:root:Proposed partition of 16101 to 17151 from 16145 to 16368 with t value 0.6142991942657174 is False
+INFO:root:Proposed partition of 0 to 704 from 32 to 127 with t value 1.16189138463374 is True
+INFO:root:Proposed partition of 6351 to 6390 from 6365 to 6371 with t value 0.11674370350942177 is False
+INFO:root:Proposed partition of 6390 to 6417 from 6407 to 6417 with t value 0.1806270434345524 is False
+INFO:root:Breakpoint 9260 accepted
+INFO:root:Testing validity of 10004 in interval from 9260 to 10583 yields statistic 1.3433960310368565
+INFO:root:Breakpoint 109 accepted
+INFO:root:Testing validity of 1027 in interval from 109 to 2756 yields statistic 0.5164405127591787
+INFO:root:Proposed partition of 0 to 32 from 0 to 32 with t value 0.9221193127406551 is True
+INFO:root:Breakpoint 3061 accepted
+INFO:root:Testing validity of 3083 in interval from 3061 to 3119 yields statistic 0.24142057958960236
+INFO:root:Breakpoint 1328 accepted
+INFO:root:Testing validity of 1590 in interval from 156 to 2211 yields statistic 0.29737341348032026
+INFO:root:Proposed partition of 32 to 127 from 38 to 108 with t value 0.8860730120301291 is False
+INFO:root:Breakpoint 3083 accepted
+INFO:root:Testing validity of 3119 in interval from 3083 to 3739 yields statistic 0.1550312200232149
+INFO:root:Breakpoint 3119 rejected
+INFO:root:Testing validity of 3739 in interval from 3083 to 4562 yields statistic 1.607246261728075
+INFO:root:Proposed partition of 12488 to 12915 from 12611 to 12832 with t value 0.5611990746959297 is True
+INFO:root:Proposed partition of 12488 to 12611 from 12493 to 12573 with t value 0.3405064243361005 is False
+INFO:root:Proposed partition of 12611 to 12832 from 12752 to 12827 with t value 0.15403317460216084 is False
+INFO:root:Breakpoint 6063 accepted
+INFO:root:Testing validity of 6787 in interval from 5933 to 6873 yields statistic 0.588271280647647
+INFO:root:Proposed partition of 12832 to 12915 from 12842 to 12886 with t value 0.41600919012588067 is False
+INFO:root:Testing validity of 13 in interval from 0 to 177 yields statistic 0.6013584728064565
+INFO:root:Proposed partition of 630 to 1154 from 820 to 1029 with t value 0.9529671266662186 is True
+INFO:root:Breakpoint 11002 accepted
+INFO:root:Testing validity of 11741 in interval from 11002 to 11756 yields statistic 0.7892260937524147
+INFO:root:Proposed partition of 630 to 820 from 630 to 775 with t value 0.7651417953147459 is False
+INFO:root:Breakpoint 13 accepted
+INFO:root:Testing validity of 177 in interval from 13 to 687 yields statistic 0.72929933742001
+INFO:root:Proposed partition of 127 to 704 from 241 to 683 with t value 0.518928444381901 is True
+INFO:root:Breakpoint 10004 accepted
+INFO:root:Testing validity of 10583 in interval from 10004 to 12319 yields statistic 0.5878371145021264
+INFO:root:Breakpoint 3184 accepted
+INFO:root:Testing validity of 4859 in interval from 3184 to 5352 yields statistic 0.45098805280498716
+INFO:root:Breakpoint 3172 accepted
+INFO:root:Testing validity of 4740 in interval from 3172 to 5056 yields statistic 0.40896360826033246
+INFO:root:Breakpoint 6787 accepted
+INFO:root:Testing validity of 6873 in interval from 6063 to 6965 yields statistic 1.230865122329372
+INFO:root:Breakpoint 1862 accepted
+INFO:root:Proposed partition of 127 to 241 from 139 to 174 with t value 0.4716147436152785 is True
+INFO:root:Proposed partition of 820 to 1029 from 872 to 1008 with t value 1.2186416516837077 is True
+INFO:root:Proposed partition of 820 to 872 from 840 to 864 with t value 0.09028175311028477 is False
+INFO:root:Breakpoint 3739 accepted
+INFO:root:Testing validity of 4562 in interval from 3119 to 4671 yields statistic 3.9950338642682075
+INFO:root:Breakpoint 1590 accepted
+INFO:root:Testing validity of 2211 in interval from 818 to 2226 yields statistic 1.1251882797383401
+INFO:root:Proposed partition of 127 to 139 from 127 to 132 with t value 0.03049560078041537 is False
+INFO:root:Proposed partition of 139 to 174 from 146 to 156 with t value 0.0426917800173778 is False
+INFO:root:Proposed partition of 174 to 241 from 210 to 232 with t value 0.08496251511611536 is False
+INFO:root:Proposed partition of 872 to 1008 from 925 to 963 with t value 0.5791066631025847 is False
+INFO:root:Breakpoint 11741 accepted
+INFO:root:Testing validity of 11756 in interval from 11741 to 11785 yields statistic 0.5861297572681033
+INFO:root:Breakpoint 177 accepted
+INFO:root:Testing validity of 687 in interval from 177 to 829 yields statistic 0.43882448083427184
+INFO:root:Proposed partition of 6417 to 7597 from 6928 to 7429 with t value 0.5620210628278802 is True
+INFO:root:Proposed partition of 241 to 683 from 310 to 484 with t value 0.42278079306583166 is False
+INFO:root:Breakpoint 11756 accepted
+INFO:root:Testing validity of 11785 in interval from 11756 to 11904 yields statistic 0.3631586246226128
+INFO:root:Breakpoint 5794 accepted
+INFO:root:Testing validity of 5808 in interval from 575 to 5877 yields statistic 0.2537530601135939
+INFO:root:Proposed partition of 683 to 704 from 692 to 699 with t value 0.07509811896041384 is False
+INFO:root:Proposed partition of 1008 to 1029 from 1008 to 1021 with t value 0.2724392139362601 is True
+INFO:root:Breakpoint 1027 accepted
+INFO:root:Testing validity of 2756 in interval from 1027 to 3506 yields statistic 0.5387946271633773
+INFO:root:Proposed partition of 1008 to 1021 from 1014 to 1021 with t value 0.15714723585125934 is False
+INFO:root:Proposed partition of 1021 to 1029 from 1021 to 1024 with t value 0.031609508563794395 is False
+INFO:root:Breakpoint 11785 accepted
+INFO:root:Testing validity of 11904 in interval from 11785 to 11926 yields statistic 1.1539554568811266
+INFO:root:Proposed partition of 1029 to 1154 from 1046 to 1145 with t value 0.40824726531757716 is False
+INFO:root:Breakpoint 6873 accepted
+INFO:root:Testing validity of 6965 in interval from 6787 to 7190 yields statistic 0.01574078256906415
+INFO:root:Breakpoint 6965 rejected
+INFO:root:Testing validity of 7190 in interval from 6787 to 7237 yields statistic 0.4816831850967662
+INFO:root:Breakpoint 687 accepted
+INFO:root:Testing validity of 829 in interval from 687 to 910 yields statistic 0.42183959940891597
+INFO:root:Breakpoint 11904 accepted
+INFO:root:Testing validity of 11926 in interval from 11904 to 12356 yields statistic 0.7376680699924355
+INFO:root:Proposed partition of 3804 to 7406 from 4633 to 5732 with t value 0.6776543315899533 is True
+INFO:root:Proposed partition of 6417 to 6928 from 6508 to 6873 with t value 0.9253749814338856 is True
+INFO:root:Breakpoint 4740 accepted
+INFO:root:Testing validity of 5056 in interval from 4740 to 5066 yields statistic 0.33674160376693535
+INFO:root:Breakpoint 829 accepted
+INFO:root:Testing validity of 910 in interval from 829 to 933 yields statistic 0.6959653918154637
+INFO:root:Breakpoint 7190 accepted
+INFO:root:Testing validity of 7237 in interval from 6873 to 7523 yields statistic 1.0242162743701315
+INFO:root:Breakpoint 4562 accepted
+INFO:root:Testing validity of 4671 in interval from 3739 to 6556 yields statistic 2.8308924314739023
+INFO:root:Breakpoint 10583 accepted
+INFO:root:Testing validity of 12319 in interval from 10583 to 12325 yields statistic 0.14870131419126226
+INFO:root:Breakpoint 4859 accepted
+INFO:root:Testing validity of 5352 in interval from 4859 to 5737 yields statistic 0.5899922671475724
+INFO:root:Breakpoint 2211 accepted
+INFO:root:Testing validity of 2226 in interval from 1098 to 2458 yields statistic 0.4467737492328835
+INFO:root:Breakpoint 910 accepted
+INFO:root:Testing validity of 933 in interval from 910 to 943 yields statistic 0.8648180462148668
+INFO:root:Proposed partition of 6417 to 6508 from 6461 to 6483 with t value 0.6651067527796829 is True
+INFO:root:Proposed partition of 1154 to 1851 from 1419 to 1734 with t value 0.6311556568326105 is False
+INFO:root:Breakpoint 11926 accepted
+INFO:root:Testing validity of 12356 in interval from 11926 to 12411 yields statistic 0.5704475662290425
+INFO:root:Breakpoint 5056 accepted
+INFO:root:Testing validity of 5066 in interval from 5056 to 5083 yields statistic 0.2750857890007835
+INFO:root:Breakpoint 933 accepted
+INFO:root:Testing validity of 943 in interval from 933 to 1048 yields statistic 0.30176166425154916
+INFO:root:Proposed partition of 6417 to 6461 from 6436 to 6441 with t value 0.48279052007359086 is True
+INFO:root:Breakpoint 12319 rejected
+INFO:root:Testing validity of 12325 in interval from 10583 to 12434 yields statistic 0.19891268031741138
+INFO:root:Proposed partition of 6417 to 6436 from 6423 to 6436 with t value 0.03089999817652639 is False
+INFO:root:Proposed partition of 6436 to 6441 from 6439 to 6441 with t value 0.13166273922901292 is False
+INFO:root:Breakpoint 5066 rejected
+INFO:root:Testing validity of 5083 in interval from 5056 to 5098 yields statistic 0.10218888474069011
+INFO:root:Breakpoint 5083 rejected
+INFO:root:Testing validity of 5098 in interval from 5056 to 5884 yields statistic 0.1732937735869374
+INFO:root:Breakpoint 7237 accepted
+INFO:root:Testing validity of 7523 in interval from 6965 to 7565 yields statistic 0.0054240480972790155
+INFO:root:Breakpoint 10601 accepted
+INFO:root:Testing validity of 10660 in interval from 3504 to 10784 yields statistic 0.0014076531483855604
+INFO:root:Breakpoint 10660 rejected
+INFO:root:Testing validity of 10784 in interval from 3504 to 10814 yields statistic 0.3169127884407353
+INFO:root:Breakpoint 943 accepted
+INFO:root:Testing validity of 1048 in interval from 943 to 1102 yields statistic 0.29100824113023244
+INFO:root:Proposed partition of 6441 to 6461 from 6448 to 6455 with t value 0.11969332948788948 is False
+INFO:root:Breakpoint 7523 rejected
+INFO:root:Testing validity of 7565 in interval from 6965 to 7629 yields statistic 1.2404961102756211
+INFO:root:Breakpoint 5098 rejected
+INFO:root:Testing validity of 5884 in interval from 5056 to 6401 yields statistic 0.5495441702695552
+INFO:root:Breakpoint 12356 accepted
+INFO:root:Testing validity of 12411 in interval from 12356 to 12473 yields statistic 0.30881510532817413
+INFO:root:Breakpoint 5808 rejected
+INFO:root:Testing validity of 5877 in interval from 575 to 5959 yields statistic 1.9241845591680318
+INFO:root:Proposed partition of 6461 to 6483 from 6467 to 6483 with t value 0.13433007928405505 is False
+INFO:root:Proposed partition of 6483 to 6508 from 6488 to 6508 with t value 0.06976913060889449 is False
+INFO:root:Proposed partition of 0 to 3554 from 1670 to 2532 with t value 1.803597803911816 is True
+INFO:root:Proposed partition of 3804 to 4633 from 3814 to 4313 with t value 0.7105182194249227 is True
+INFO:root:Proposed partition of 3804 to 3814 from 3804 to 3814 with t value 0.5180637881339436 is False
+INFO:root:Breakpoint 5352 accepted
+INFO:root:Testing validity of 5737 in interval from 5352 to 5991 yields statistic 0.5498459159998177
+INFO:root:Proposed partition of 3814 to 4313 from 3940 to 4245 with t value 0.2860101102848114 is False
+INFO:root:Breakpoint 12411 accepted
+INFO:root:Testing validity of 12473 in interval from 12411 to 12480 yields statistic 1.154868613084069
+INFO:root:Breakpoint 1048 accepted
+INFO:root:Testing validity of 1102 in interval from 1048 to 2858 yields statistic 0.857170078850851
+INFO:root:Breakpoint 12325 rejected
+INFO:root:Testing validity of 12434 in interval from 10583 to 12453 yields statistic 0.9380721818108837
+INFO:root:Breakpoint 2756 accepted
+INFO:root:Testing validity of 3506 in interval from 2756 to 3903 yields statistic 1.5360294642866719
+INFO:root:Proposed partition of 4313 to 4633 from 4540 to 4622 with t value 0.4454494835241098 is False
+INFO:root:Breakpoint 12473 accepted
+INFO:root:Testing validity of 12480 in interval from 12473 to 12492 yields statistic 0.4061998659813157
+INFO:root:Breakpoint 2226 accepted
+INFO:root:Testing validity of 2458 in interval from 1328 to 2508 yields statistic 2.0616638089256103
+INFO:root:Breakpoint 7565 accepted
+INFO:root:Testing validity of 7629 in interval from 7190 to 7674 yields statistic 4.9374137779110466e-05
+INFO:root:Breakpoint 7629 rejected
+INFO:root:Testing validity of 7674 in interval from 7190 to 7704 yields statistic 0.09328050929904545
+INFO:root:Breakpoint 7674 rejected
+INFO:root:Breakpoint 12480 accepted
+INFO:root:Testing validity of 12492 in interval from 12480 to 12641 yields statistic 0.2974147143054859
+INFO:root:Proposed partition of 6508 to 6873 from 6588 to 6833 with t value 0.33627529564450365 is True
+INFO:root:Proposed partition of 0 to 12052 from 4325 to 7266 with t value 2.540744791806375 is True
+INFO:root:Breakpoint 5737 accepted
+INFO:root:Testing validity of 5991 in interval from 5737 to 7904 yields statistic 0.822806443508741
+INFO:root:Proposed partition of 6508 to 6588 from 6536 to 6565 with t value 0.251109343123595 is False
+INFO:root:Breakpoint 12492 accepted
+INFO:root:Testing validity of 12641 in interval from 12492 to 12687 yields statistic 1.6708983975362408
+INFO:root:Proposed partition of 6588 to 6833 from 6677 to 6753 with t value 0.22577883795805936 is False
+INFO:root:Breakpoint 5884 accepted
+INFO:root:Testing validity of 6401 in interval from 5066 to 7230 yields statistic 0.34002489602809416
+INFO:root:Proposed partition of 6833 to 6873 from 6843 to 6863 with t value 0.19155648019100655 is False
+INFO:root:Proposed partition of 6873 to 6928 from 6890 to 6918 with t value 0.12548012394383118 is False
+INFO:root:Proposed partition of 704 to 2820 from 1246 to 2709 with t value 0.7045957054019055 is True
+INFO:root:Breakpoint 12641 accepted
+INFO:root:Testing validity of 12687 in interval from 12641 to 12743 yields statistic 1.1021034164464338
+INFO:root:Proposed partition of 704 to 1246 from 715 to 1115 with t value 0.5195747699445353 is False
+INFO:root:Breakpoint 4671 accepted
+INFO:root:Testing validity of 6556 in interval from 4562 to 6999 yields statistic 0.5784308442897619
+INFO:root:Breakpoint 3506 accepted
+INFO:root:Testing validity of 3903 in interval from 3506 to 4416 yields statistic 1.1987579516008633
+INFO:root:Breakpoint 12687 accepted
+INFO:root:Testing validity of 12743 in interval from 12687 to 12757 yields statistic 0.48896042916305726
+INFO:root:Breakpoint 2458 accepted
+INFO:root:Testing validity of 2508 in interval from 1590 to 2550 yields statistic 0.04562153042607169
+INFO:root:Breakpoint 2508 rejected
+INFO:root:Testing validity of 2550 in interval from 1590 to 2558 yields statistic 0.8875073667851043
+INFO:root:Breakpoint 1102 accepted
+INFO:root:Testing validity of 2858 in interval from 1102 to 6671 yields statistic 0.34357597412307567
+INFO:root:Breakpoint 12743 accepted
+INFO:root:Testing validity of 12757 in interval from 12743 to 13166 yields statistic 0.6288318376754403
+INFO:root:Breakpoint 12434 accepted
+INFO:root:Testing validity of 12453 in interval from 12319 to 12482 yields statistic 0.16691084093868033
+INFO:root:Breakpoint 12453 rejected
+INFO:root:Testing validity of 12482 in interval from 12319 to 12905 yields statistic 0.07624376783151947
+INFO:root:Breakpoint 12482 rejected
+INFO:root:Testing validity of 12905 in interval from 12319 to 12980 yields statistic 0.5673352605823472
+INFO:root:Proposed partition of 6928 to 7429 from 7108 to 7414 with t value 0.41285274636024977 is True
+INFO:root:Proposed partition of 4633 to 5732 from 4887 to 5588 with t value 0.6158637890493488 is True
+INFO:root:Proposed partition of 6928 to 7108 from 6972 to 7007 with t value 0.30029779305749815 is False
+INFO:root:Proposed partition of 7108 to 7414 from 7174 to 7377 with t value 0.0820071996668682 is False
+INFO:root:Breakpoint 3903 accepted
+INFO:root:Testing validity of 4416 in interval from 3903 to 4916 yields statistic 1.0119111089571513
+INFO:root:Proposed partition of 0 to 1670 from 208 to 982 with t value 1.156524615514206 is True
+INFO:root:Breakpoint 12757 accepted
+INFO:root:Testing validity of 13166 in interval from 12757 to 13919 yields statistic 0.7664301051321101
+INFO:root:Proposed partition of 7414 to 7429 from 7420 to 7429 with t value 0.14167946997587 is False
+INFO:root:Proposed partition of 7429 to 7597 from 7517 to 7569 with t value 0.11509794268435007 is False
+INFO:root:Testing validity of 3011 in interval from 0 to 3017 yields statistic 0.2507523110536348
+INFO:root:Breakpoint 5991 accepted
+INFO:root:Testing validity of 7904 in interval from 5991 to 7915 yields statistic 0.23543980099349543
+INFO:root:Breakpoint 2550 accepted
+INFO:root:Testing validity of 2558 in interval from 2211 to 2597 yields statistic 0.5591120860634813
+INFO:root:Proposed partition of 17151 to 22248 from 18891 to 20750 with t value 1.3366677953918404 is True
+INFO:root:Proposed partition of 4633 to 4887 from 4761 to 4818 with t value 0.6857223609342763 is True
+INFO:root:Breakpoint 12905 accepted
+INFO:root:Testing validity of 12980 in interval from 12325 to 13052 yields statistic 0.28816278615294266
+INFO:root:Proposed partition of 1246 to 2709 from 1560 to 2633 with t value 0.5998528743602861 is False
+INFO:root:Breakpoint 6401 accepted
+INFO:root:Testing validity of 7230 in interval from 5083 to 7250 yields statistic 0.4312778718757942
+INFO:root:Proposed partition of 2709 to 2820 from 2741 to 2815 with t value 0.40369107082823735 is False
+INFO:root:Proposed partition of 0 to 208 from 0 to 131 with t value 1.9150219772578523 is True
+INFO:root:Breakpoint 2558 accepted
+INFO:root:Testing validity of 2597 in interval from 2226 to 2640 yields statistic 0.0012059828099021974
+INFO:root:Breakpoint 2597 rejected
+INFO:root:Testing validity of 2640 in interval from 2226 to 2691 yields statistic 0.9584432526386872
+INFO:root:Proposed partition of 4633 to 4761 from 4666 to 4698 with t value 0.4715560046060948 is True
+INFO:root:Breakpoint 4416 accepted
+INFO:root:Testing validity of 4916 in interval from 4416 to 7779 yields statistic 0.5855089175097759
+INFO:root:Proposed partition of 1851 to 4773 from 2902 to 4356 with t value 1.109195795208235 is True
+INFO:root:Breakpoint 3011 rejected
+INFO:root:Testing validity of 3017 in interval from 0 to 3126 yields statistic 1.4650118292461993
+INFO:root:Proposed partition of 0 to 131 from 10 to 108 with t value 1.29533634684119 is True
+INFO:root:Proposed partition of 0 to 10 from 0 to 10 with t value 0.5523164668949354 is False
+INFO:root:Proposed partition of 4633 to 4666 from 4639 to 4651 with t value 0.36067163065424807 is True
+INFO:root:Proposed partition of 4633 to 4639 from 4633 to 4639 with t value 0.04918570888523057 is False
+INFO:root:Proposed partition of 4639 to 4651 from 4639 to 4646 with t value 0.08308673040484496 is False
+INFO:root:Proposed partition of 4651 to 4666 from 4653 to 4657 with t value 0.07621207122874116 is False
+INFO:root:Breakpoint 7904 rejected
+INFO:root:Testing validity of 7915 in interval from 5991 to 8007 yields statistic 0.17717832602381592
+INFO:root:Breakpoint 13166 accepted
+INFO:root:Testing validity of 13919 in interval from 13166 to 13984 yields statistic 0.07810027989334052
+INFO:root:Breakpoint 12980 accepted
+INFO:root:Testing validity of 13052 in interval from 12434 to 13138 yields statistic 1.2325168905073236
+INFO:root:Proposed partition of 1851 to 2902 from 2293 to 2611 with t value 0.3151795305950833 is False
+INFO:root:Proposed partition of 4666 to 4698 from 4676 to 4698 with t value 0.1885488127549909 is False
+INFO:root:Breakpoint 13919 rejected
+INFO:root:Breakpoint 6556 accepted
+INFO:root:Testing validity of 6999 in interval from 4671 to 10323 yields statistic 0.026814538813911812
+INFO:root:Proposed partition of 4698 to 4761 from 4707 to 4741 with t value 0.19474012106369148 is False
+INFO:root:Proposed partition of 4761 to 4818 from 4785 to 4818 with t value 0.31908150218236836 is False
+INFO:root:Breakpoint 6999 rejected
+INFO:root:Testing validity of 10323 in interval from 4671 to 11125 yields statistic 0.8154451897604686
+INFO:root:Breakpoint 2640 accepted
+INFO:root:Testing validity of 2691 in interval from 2458 to 2976 yields statistic 0.019091199171920252
+INFO:root:Breakpoint 2691 rejected
+INFO:root:Testing validity of 2976 in interval from 2458 to 3168 yields statistic 1.1331940347143796
+INFO:root:Proposed partition of 17151 to 18891 from 17386 to 18598 with t value 0.46341857992883956 is False
+INFO:root:Proposed partition of 10449 to 19250 from 14116 to 17151 with t value 1.6726995701143472 is True
+INFO:root:Proposed partition of 4818 to 4887 from 4827 to 4853 with t value 0.16550292925102747 is False
+INFO:root:Breakpoint 7915 rejected
+INFO:root:Testing validity of 8007 in interval from 5991 to 8028 yields statistic 1.1241085543475942
+INFO:root:Proposed partition of 10 to 108 from 46 to 84 with t value 1.0897165758523648 is True
+INFO:root:Proposed partition of 10 to 46 from 18 to 46 with t value 0.1698329734237323 is False
+INFO:root:Proposed partition of 46 to 84 from 60 to 66 with t value 0.6704208654393958 is False
+INFO:root:Proposed partition of 2820 to 3504 from 3165 to 3235 with t value 1.3069766071608555 is True
+INFO:root:Proposed partition of 2820 to 3165 from 2843 to 3074 with t value 0.295337332367641 is False
+INFO:root:Proposed partition of 84 to 108 from 91 to 101 with t value 0.23448472629748157 is True
+INFO:root:Proposed partition of 84 to 91 from 87 to 91 with t value 0.00827823372234698 is False
+INFO:root:Proposed partition of 91 to 101 from 93 to 96 with t value 0.04740018722713196 is False
+INFO:root:Proposed partition of 101 to 108 from 102 to 106 with t value 0.024992241984853395 is False
+INFO:root:Breakpoint 5877 accepted
+INFO:root:Testing validity of 5959 in interval from 856 to 5975 yields statistic 0.0013694579596550697
+INFO:root:Breakpoint 5959 rejected
+INFO:root:Testing validity of 5975 in interval from 856 to 5986 yields statistic 0.25159832520822767
+INFO:root:Breakpoint 13052 accepted
+INFO:root:Testing validity of 13138 in interval from 12453 to 13350 yields statistic 0.32639445522024596
+INFO:root:Breakpoint 2976 accepted
+INFO:root:Testing validity of 3168 in interval from 2508 to 3334 yields statistic 0.06427349741688397
+INFO:root:Breakpoint 3168 rejected
+INFO:root:Testing validity of 3334 in interval from 2508 to 3382 yields statistic 0.14665779950158175
+INFO:root:Proposed partition of 108 to 131 from 108 to 123 with t value 0.2523454847792349 is False
+INFO:root:Breakpoint 3334 rejected
+INFO:root:Testing validity of 3382 in interval from 2508 to 3416 yields statistic 0.055895419502329326
+INFO:root:Breakpoint 3382 rejected
+INFO:root:Testing validity of 3416 in interval from 2508 to 5990 yields statistic 1.3282621605911438
+INFO:root:Proposed partition of 10449 to 14116 from 11289 to 13309 with t value 0.4279267514746555 is False
+INFO:root:Proposed partition of 3165 to 3235 from 3172 to 3181 with t value 4.147483628407894 is True
+INFO:root:Proposed partition of 3165 to 3172 from 3166 to 3169 with t value 0.04435650889629428 is False
+INFO:root:Proposed partition of 3172 to 3181 from 3172 to 3181 with t value 0.9599857315383741 is False
+INFO:root:Proposed partition of 3181 to 3235 from 3189 to 3214 with t value 0.19532809162199233 is False
+INFO:root:Breakpoint 7230 accepted
+INFO:root:Testing validity of 7250 in interval from 5098 to 7261 yields statistic 0.8603723733847092
+INFO:root:Proposed partition of 3235 to 3504 from 3342 to 3448 with t value 0.3961449283107295 is False
+INFO:root:Testing validity of 32 in interval from 0 to 127 yields statistic 0.7327457582018515
+INFO:root:Proposed partition of 131 to 208 from 138 to 171 with t value 0.9381745540710817 is True
+INFO:root:Proposed partition of 131 to 138 from 133 to 137 with t value 0.15213882757049504 is False
+INFO:root:Proposed partition of 138 to 171 from 155 to 165 with t value 0.10606836921456411 is False
+INFO:root:Proposed partition of 4887 to 5588 from 5307 to 5520 with t value 0.6254207974295364 is True
+INFO:root:Breakpoint 32 rejected
+INFO:root:Testing validity of 127 in interval from 0 to 139 yields statistic 0.7544936098096159
+INFO:root:Proposed partition of 171 to 208 from 191 to 203 with t value 0.3492243696816042 is False
+INFO:root:Breakpoint 13138 accepted
+INFO:root:Testing validity of 13350 in interval from 12482 to 13671 yields statistic 0.1251195432348408
+INFO:root:Breakpoint 13350 rejected
+INFO:root:Testing validity of 13671 in interval from 12482 to 13772 yields statistic 0.2532719945790039
+INFO:root:Breakpoint 127 accepted
+INFO:root:Testing validity of 139 in interval from 32 to 174 yields statistic 0.013927868283124815
+INFO:root:Breakpoint 139 rejected
+INFO:root:Testing validity of 174 in interval from 32 to 241 yields statistic 0.8504108786563835
+INFO:root:Breakpoint 8007 accepted
+INFO:root:Testing validity of 8028 in interval from 7904 to 8072 yields statistic 0.6367933993438541
+INFO:root:Breakpoint 10784 accepted
+INFO:root:Testing validity of 10814 in interval from 5503 to 13986 yields statistic 0.5248204618535767
+INFO:root:Proposed partition of 208 to 982 from 355 to 704 with t value 0.6138814597382352 is False
+INFO:root:Proposed partition of 4887 to 5307 from 4887 to 5211 with t value 0.6017113382300985 is False
+INFO:root:Proposed partition of 2902 to 4356 from 3497 to 4237 with t value 0.9475376818352647 is True
+INFO:root:Breakpoint 174 accepted
+INFO:root:Testing validity of 241 in interval from 127 to 683 yields statistic 0.31124242504233013
+INFO:root:Proposed partition of 0 to 26 from 11 to 18 with t value 0.24742063681031531 is True
+INFO:root:Breakpoint 8028 accepted
+INFO:root:Testing validity of 8072 in interval from 7915 to 8244 yields statistic 0.024871490529125507
+INFO:root:Breakpoint 8072 rejected
+INFO:root:Testing validity of 8244 in interval from 7915 to 8341 yields statistic 0.6059286946660172
+INFO:root:Breakpoint 3017 accepted
+INFO:root:Testing validity of 3126 in interval from 3011 to 4119 yields statistic 0.39492006434301624
+INFO:root:Breakpoint 4916 accepted
+INFO:root:Testing validity of 7779 in interval from 4916 to 7818 yields statistic 0.35683313153062846
+INFO:root:Proposed partition of 5307 to 5520 from 5375 to 5492 with t value 0.3116657134311961 is False
+INFO:root:Proposed partition of 0 to 11 from 0 to 6 with t value 0.08769303041407216 is True
+INFO:root:Proposed partition of 0 to 6 from 0 to 6 with t value 0.0397777914809446 is False
+INFO:root:Proposed partition of 6 to 11 from 6 to 10 with t value 0.006951440942233292 is False
+INFO:root:Proposed partition of 11 to 18 from 11 to 18 with t value 0.027281203203252075 is False
+INFO:root:Proposed partition of 18 to 26 from 20 to 23 with t value 0.012485997976076923 is False
+INFO:root:Testing validity of 6 in interval from 0 to 11 yields statistic 0.05129461615945912
+INFO:root:Breakpoint 2858 accepted
+INFO:root:Testing validity of 6671 in interval from 2858 to 8771 yields statistic 1.3606936776068943
+INFO:root:Proposed partition of 5520 to 5588 from 5546 to 5559 with t value 0.3528192097402455 is False
+INFO:root:Proposed partition of 5588 to 5732 from 5630 to 5698 with t value 0.09857303596185245 is False
+INFO:root:Breakpoint 6 rejected
+INFO:root:Testing validity of 11 in interval from 0 to 18 yields statistic 0.13868968503194323
+INFO:root:Proposed partition of 18891 to 20750 from 19337 to 20485 with t value 1.0587213863348266 is True
+INFO:root:Breakpoint 241 accepted
+INFO:root:Testing validity of 683 in interval from 139 to 704 yields statistic 0.24844084257049723
+INFO:root:Breakpoint 8244 accepted
+INFO:root:Testing validity of 8341 in interval from 8007 to 8432 yields statistic 0.5035988961161769
+INFO:root:Proposed partition of 18891 to 19337 from 18982 to 19212 with t value 0.49296155889028215 is False
+INFO:root:Breakpoint 11 rejected
+INFO:root:Testing validity of 18 in interval from 0 to 26 yields statistic 0.12175173022562065
+INFO:root:Breakpoint 13671 accepted
+INFO:root:Testing validity of 13772 in interval from 12905 to 14578 yields statistic 0.2574124075499744
+INFO:root:Breakpoint 7250 accepted
+INFO:root:Testing validity of 7261 in interval from 5884 to 7434 yields statistic 0.106690312340197
+INFO:root:Breakpoint 18 rejected
+INFO:root:Proposed partition of 0 to 4325 from 841 to 2091 with t value 2.0155937422148433 is True
+INFO:root:Breakpoint 7261 rejected
+INFO:root:Testing validity of 7434 in interval from 5884 to 7493 yields statistic 0.47219216927959706
+INFO:root:Proposed partition of 2902 to 3497 from 3166 to 3231 with t value 0.5905259992890197 is False
+INFO:root:Proposed partition of 982 to 1670 from 1255 to 1600 with t value 0.9541872243534409 is True
+INFO:root:Breakpoint 683 rejected
+INFO:root:Testing validity of 704 in interval from 139 to 1246 yields statistic 1.2806798854879287
+INFO:root:Proposed partition of 982 to 1255 from 1069 to 1153 with t value 0.2500909424144295 is False
+INFO:root:Proposed partition of 3497 to 4237 from 3590 to 3944 with t value 0.44816166884480785 is False
+INFO:root:Breakpoint 8341 accepted
+INFO:root:Testing validity of 8432 in interval from 8028 to 8476 yields statistic 1.1457344529943037
+INFO:root:Breakpoint 5975 rejected
+INFO:root:Testing validity of 5986 in interval from 856 to 6022 yields statistic 0.4632940883950256
+INFO:root:Breakpoint 3126 accepted
+INFO:root:Testing validity of 4119 in interval from 3017 to 4457 yields statistic 0.05897226213850908
+INFO:root:Breakpoint 4119 rejected
+INFO:root:Testing validity of 4457 in interval from 3017 to 5115 yields statistic 1.232613080479357
+INFO:root:Proposed partition of 4237 to 4356 from 4261 to 4335 with t value 0.335484087159546 is False
+INFO:root:Proposed partition of 4356 to 4773 from 4457 to 4586 with t value 0.3903941645291173 is False
+INFO:root:Breakpoint 3416 accepted
+INFO:root:Testing validity of 5990 in interval from 2550 to 6961 yields statistic 0.4393736791822353
+INFO:root:Proposed partition of 1255 to 1600 from 1371 to 1528 with t value 0.47532790727490803 is False
+INFO:root:Proposed partition of 1600 to 1670 from 1609 to 1628 with t value 0.17284390534762614 is False
+INFO:root:Proposed partition of 0 to 841 from 98 to 623 with t value 0.5701267234836281 is False
+INFO:root:Breakpoint 8432 accepted
+INFO:root:Testing validity of 8476 in interval from 8072 to 8676 yields statistic 0.008866598952853076
+INFO:root:Breakpoint 8476 rejected
+INFO:root:Testing validity of 8676 in interval from 8072 to 8830 yields statistic 0.7794749288028162
+INFO:root:Breakpoint 704 accepted
+INFO:root:Testing validity of 1246 in interval from 174 to 2709 yields statistic 0.001731235498423251
+INFO:root:Breakpoint 1246 rejected
+INFO:root:Testing validity of 2709 in interval from 174 to 2820 yields statistic 0.27444670876637534
+INFO:root:Proposed partition of 19337 to 20485 from 19932 to 20128 with t value 0.5010235192026363 is False
+INFO:root:Proposed partition of 1670 to 2532 from 1808 to 2376 with t value 0.5529565570433866 is False
+INFO:root:Breakpoint 13772 rejected
+INFO:root:Testing validity of 14578 in interval from 12905 to 15648 yields statistic 0.41564459087934214
+INFO:root:Proposed partition of 20485 to 20750 from 20555 to 20734 with t value 0.19949116718076867 is False
+INFO:root:Breakpoint 7434 accepted
+INFO:root:Testing validity of 7493 in interval from 6401 to 8346 yields statistic 0.46157332274576696
+INFO:root:Proposed partition of 2532 to 3554 from 2901 to 3371 with t value 0.34611691477588086 is False
+INFO:root:Testing validity of 10 in interval from 0 to 46 yields statistic 1.5447585903604706
+INFO:root:Breakpoint 10 accepted
+INFO:root:Testing validity of 46 in interval from 10 to 84 yields statistic 0.8155404724911123
+INFO:root:Breakpoint 8676 accepted
+INFO:root:Testing validity of 8830 in interval from 8244 to 10558 yields statistic 0.7480795384516785
+INFO:root:Breakpoint 7779 accepted
+INFO:root:Testing validity of 7818 in interval from 7779 to 7995 yields statistic 0.3227428791129039
+INFO:root:Breakpoint 46 accepted
+INFO:root:Testing validity of 84 in interval from 46 to 91 yields statistic 0.7184009114223162
+INFO:root:Proposed partition of 5732 to 7406 from 6298 to 6559 with t value 0.8502147699887733 is True
+INFO:root:Breakpoint 84 rejected
+INFO:root:Testing validity of 91 in interval from 46 to 101 yields statistic 0.013403493489812585
+INFO:root:Breakpoint 91 rejected
+INFO:root:Testing validity of 101 in interval from 46 to 108 yields statistic 0.23040429684887304
+INFO:root:Breakpoint 101 rejected
+INFO:root:Testing validity of 108 in interval from 46 to 131 yields statistic 0.2322465957535433
+INFO:root:Proposed partition of 14116 to 17151 from 14393 to 15659 with t value 0.8948525400043701 is True
+INFO:root:Breakpoint 10323 accepted
+INFO:root:Testing validity of 11125 in interval from 6556 to 11150 yields statistic 0.10227554368751832
+INFO:root:Breakpoint 108 rejected
+INFO:root:Testing validity of 131 in interval from 46 to 138 yields statistic 0.8915627019703489
+INFO:root:Breakpoint 7818 accepted
+INFO:root:Testing validity of 7995 in interval from 7818 to 8015 yields statistic 0.7417352897688607
+INFO:root:Breakpoint 4457 accepted
+INFO:root:Testing validity of 5115 in interval from 3126 to 5373 yields statistic 5.9086460914664925e-06
+INFO:root:Breakpoint 5115 rejected
+INFO:root:Testing validity of 5373 in interval from 3126 to 5740 yields statistic 0.7988804313621014
+INFO:root:Proposed partition of 14116 to 14393 from 14236 to 14348 with t value 0.5684531406689994 is False
+INFO:root:Breakpoint 131 accepted
+INFO:root:Testing validity of 138 in interval from 84 to 171 yields statistic 0.001861387637370737
+INFO:root:Breakpoint 11125 rejected
+INFO:root:Testing validity of 11150 in interval from 6556 to 11379 yields statistic 0.0036596466171332923
+INFO:root:Proposed partition of 4773 to 6063 from 5271 to 5843 with t value 0.7502000907850482 is True
+INFO:root:Breakpoint 138 rejected
+INFO:root:Testing validity of 171 in interval from 84 to 208 yields statistic 1.1598310338014999
+INFO:root:Breakpoint 2709 rejected
+INFO:root:Testing validity of 2820 in interval from 174 to 3165 yields statistic 0.3510595492485606
+INFO:root:Breakpoint 11150 rejected
+INFO:root:Testing validity of 11379 in interval from 6556 to 11434 yields statistic 0.7352361600652944
+INFO:root:Proposed partition of 14393 to 15659 from 14629 to 15001 with t value 0.4486369826875795 is False
+INFO:root:Breakpoint 7995 accepted
+INFO:root:Testing validity of 8015 in interval from 7995 to 8045 yields statistic 0.9721367731497152
+INFO:root:Proposed partition of 841 to 2091 from 966 to 1249 with t value 0.9136386903950827 is True
+INFO:root:Breakpoint 171 accepted
+INFO:root:Testing validity of 208 in interval from 91 to 982 yields statistic 1.5678104942227777
+INFO:root:Breakpoint 8015 accepted
+INFO:root:Testing validity of 8045 in interval from 8015 to 8193 yields statistic 0.17959177410650645
+INFO:root:Proposed partition of 841 to 966 from 847 to 935 with t value 0.6847575344397088 is False
+INFO:root:Proposed partition of 966 to 1249 from 1079 to 1128 with t value 0.3519867691943729 is False
+INFO:root:Proposed partition of 5732 to 6298 from 5783 to 6167 with t value 0.7524272909190393 is True
+INFO:root:Proposed partition of 5732 to 5783 from 5732 to 5746 with t value 0.11621992164369546 is False
+INFO:root:Proposed partition of 5783 to 6167 from 5908 to 6124 with t value 0.2401084219838219 is False
+INFO:root:Breakpoint 7493 accepted
+INFO:root:Testing validity of 8346 in interval from 7230 to 8765 yields statistic 0.5109000236863791
+INFO:root:Breakpoint 8045 rejected
+INFO:root:Testing validity of 8193 in interval from 8015 to 8315 yields statistic 0.226701266299851
+INFO:root:Proposed partition of 1249 to 2091 from 1367 to 1614 with t value 0.46947051055300965 is False
+INFO:root:Proposed partition of 4773 to 5271 from 4908 to 5164 with t value 1.7191910292005492 is True
+INFO:root:Proposed partition of 6167 to 6298 from 6188 to 6276 with t value 1.123820491910749 is True
+INFO:root:Breakpoint 14578 accepted
+INFO:root:Testing validity of 15648 in interval from 12980 to 15860 yields statistic 2.0921123589952795
+INFO:root:Proposed partition of 20750 to 22248 from 21802 to 22209 with t value 0.6794739819180728 is True
+INFO:root:Breakpoint 208 accepted
+INFO:root:Testing validity of 982 in interval from 101 to 1255 yields statistic 0.7061276819877577
+INFO:root:Proposed partition of 6167 to 6188 from 6177 to 6188 with t value 0.18803422738157127 is False
+INFO:root:Breakpoint 8193 accepted
+INFO:root:Testing validity of 8315 in interval from 8045 to 8388 yields statistic 0.4359643486763606
+INFO:root:Breakpoint 8830 accepted
+INFO:root:Testing validity of 10558 in interval from 8341 to 10571 yields statistic 0.008652040585753385
+INFO:root:Breakpoint 10558 rejected
+INFO:root:Testing validity of 10571 in interval from 8341 to 11544 yields statistic 1.272137081233636
+INFO:root:Proposed partition of 4773 to 4908 from 4780 to 4878 with t value 1.6180049698916632 is True
+INFO:root:Proposed partition of 4773 to 4780 from 4774 to 4776 with t value 0.32148442678986744 is False
+INFO:root:Proposed partition of 6188 to 6276 from 6200 to 6260 with t value 0.6799507981469624 is True
+INFO:root:Proposed partition of 6188 to 6200 from 6188 to 6200 with t value 0.09473233615599379 is False
+INFO:root:Breakpoint 8315 accepted
+INFO:root:Testing validity of 8388 in interval from 8193 to 8443 yields statistic 0.025139063422568893
+INFO:root:Proposed partition of 6200 to 6260 from 6200 to 6230 with t value 0.27157071051801307 is False
+INFO:root:Proposed partition of 6260 to 6276 from 6267 to 6276 with t value 0.20444770397039524 is False
+INFO:root:Proposed partition of 4780 to 4878 from 4810 to 4834 with t value 0.47206861197837446 is False
+INFO:root:Breakpoint 8388 rejected
+INFO:root:Testing validity of 8443 in interval from 8193 to 8467 yields statistic 0.9136785484486318
+INFO:root:Proposed partition of 4878 to 4908 from 4883 to 4903 with t value 0.43060026135947566 is False
+INFO:root:Breakpoint 6671 accepted
+INFO:root:Testing validity of 8771 in interval from 6671 to 9499 yields statistic 3.0444030705195004
+INFO:root:Breakpoint 5990 accepted
+INFO:root:Testing validity of 6961 in interval from 2558 to 7985 yields statistic 0.49778555822035714
+INFO:root:Proposed partition of 6276 to 6298 from 6281 to 6298 with t value 1.6611780158772558 is True
+INFO:root:Proposed partition of 6276 to 6281 from 6279 to 6281 with t value 0.1990663149369974 is False
+INFO:root:Proposed partition of 6281 to 6298 from 6288 to 6298 with t value 0.2853983384810675 is False
+INFO:root:Breakpoint 8443 accepted
+INFO:root:Testing validity of 8467 in interval from 8315 to 8486 yields statistic 0.23921199051537137
+INFO:root:Proposed partition of 6298 to 6559 from 6325 to 6509 with t value 0.1478708794086186 is False
+INFO:root:Breakpoint 8346 accepted
+INFO:root:Testing validity of 8765 in interval from 7250 to 8831 yields statistic 0.1666673365992388
+INFO:root:Breakpoint 5373 accepted
+INFO:root:Testing validity of 5740 in interval from 4119 to 5889 yields statistic 0.16739520691011026
+INFO:root:Proposed partition of 4908 to 5164 from 5102 to 5144 with t value 0.55274684358817 is False
+INFO:root:Proposed partition of 5164 to 5271 from 5186 to 5255 with t value 0.2664354100280909 is False
+INFO:root:Breakpoint 5986 accepted
+INFO:root:Testing validity of 6022 in interval from 891 to 6029 yields statistic 0.3202469363132326
+INFO:root:Breakpoint 8467 rejected
+INFO:root:Testing validity of 8486 in interval from 8315 to 8548 yields statistic 0.04771030516738605
+INFO:root:Proposed partition of 2091 to 4325 from 3729 to 4325 with t value 0.6040407281812771 is False
+INFO:root:Breakpoint 8765 rejected
+INFO:root:Testing validity of 8831 in interval from 7250 to 8861 yields statistic 62.91636007405099
+INFO:root:Breakpoint 982 accepted
+INFO:root:Testing validity of 1255 in interval from 108 to 1600 yields statistic 0.11434278081080634
+INFO:root:Proposed partition of 15659 to 17151 from 15771 to 16895 with t value 0.8160003142998582 is True
+INFO:root:Breakpoint 8486 rejected
+INFO:root:Testing validity of 8548 in interval from 8315 to 8629 yields statistic 0.595526182416651
+INFO:root:Breakpoint 1255 rejected
+INFO:root:Testing validity of 1600 in interval from 108 to 1670 yields statistic 0.5346222589476068
+INFO:root:Proposed partition of 15659 to 15771 from 15664 to 15751 with t value 0.49537418424074364 is False
+INFO:root:Breakpoint 2820 accepted
+INFO:root:Testing validity of 3165 in interval from 241 to 3172 yields statistic 0.0011118989412591974
+INFO:root:Breakpoint 3165 rejected
+INFO:root:Testing validity of 3172 in interval from 241 to 3181 yields statistic 4.807664753072811
+INFO:root:Breakpoint 5740 rejected
+INFO:root:Testing validity of 5889 in interval from 4119 to 5958 yields statistic 0.2696761733946439
+INFO:root:Proposed partition of 15771 to 16895 from 16124 to 16802 with t value 0.3938836631344686 is False
+INFO:root:Proposed partition of 20750 to 21802 from 20885 to 21550 with t value 0.6608424631846121 is True
+INFO:root:Proposed partition of 16895 to 17151 from 16992 to 17132 with t value 0.3276361644472425 is False
+INFO:root:Breakpoint 8548 accepted
+INFO:root:Testing validity of 8629 in interval from 8388 to 8743 yields statistic 0.05502608537209026
+INFO:root:Breakpoint 8629 rejected
+INFO:root:Testing validity of 8743 in interval from 8388 to 8783 yields statistic 0.24093740508223904
+INFO:root:Proposed partition of 5271 to 5843 from 5347 to 5642 with t value 0.6623284407605458 is True
+INFO:root:Proposed partition of 5271 to 5347 from 5312 to 5331 with t value 0.16536536437793967 is False
+INFO:root:Breakpoint 10814 accepted
+INFO:root:Testing validity of 13986 in interval from 9967 to 14398 yields statistic 1.0180633260748684
+INFO:root:Proposed partition of 20750 to 20885 from 20776 to 20865 with t value 0.6263841030266427 is True
+INFO:root:Proposed partition of 20750 to 20776 from 20750 to 20767 with t value 0.13105963628162834 is False
+INFO:root:Breakpoint 8743 accepted
+INFO:root:Testing validity of 8783 in interval from 8443 to 9510 yields statistic 0.05030334137937148
+INFO:root:Proposed partition of 20776 to 20865 from 20838 to 20850 with t value 0.29335541177173463 is False
+INFO:root:Breakpoint 8783 rejected
+INFO:root:Proposed partition of 6559 to 7406 from 6688 to 7392 with t value 0.6561537050476387 is True
+INFO:root:Proposed partition of 20865 to 20885 from 20875 to 20885 with t value 0.057157011996781436 is False
+INFO:root:Breakpoint 15648 accepted
+INFO:root:Testing validity of 15860 in interval from 13052 to 16033 yields statistic 0.0031097225167795407
+INFO:root:Breakpoint 15860 rejected
+INFO:root:Testing validity of 16033 in interval from 13052 to 16039 yields statistic 0.1921583323556572
+INFO:root:Breakpoint 8831 accepted
+INFO:root:Testing validity of 8861 in interval from 7261 to 8883 yields statistic 0.01292261430418179
+INFO:root:Breakpoint 8861 rejected
+INFO:root:Testing validity of 8883 in interval from 7261 to 17658 yields statistic 1.424836527549219
+INFO:root:Breakpoint 1600 accepted
+INFO:root:Testing validity of 1670 in interval from 131 to 2532 yields statistic 1.427794982441761
+INFO:root:Proposed partition of 6559 to 6688 from 6579 to 6654 with t value 0.5948548561786672 is True
+INFO:root:Proposed partition of 5347 to 5642 from 5473 to 5586 with t value 0.5452375010767722 is True
+INFO:root:Proposed partition of 5347 to 5473 from 5361 to 5422 with t value 0.23712761458034573 is False
+INFO:root:Breakpoint 16033 rejected
+INFO:root:Testing validity of 16039 in interval from 13052 to 17360 yields statistic 0.543773372698201
+INFO:root:Proposed partition of 6559 to 6579 from 6559 to 6574 with t value 0.5293523658160121 is False
+INFO:root:Breakpoint 10571 accepted
+INFO:root:Testing validity of 11544 in interval from 8432 to 11661 yields statistic 0.015148525526409646
+INFO:root:Breakpoint 11544 rejected
+INFO:root:Testing validity of 11661 in interval from 8432 to 11718 yields statistic 0.30303695052364626
+INFO:root:Breakpoint 11379 accepted
+INFO:root:Testing validity of 11434 in interval from 6999 to 11625 yields statistic 0.2167653908597313
+INFO:root:Proposed partition of 5473 to 5586 from 5515 to 5544 with t value 0.2732198245472518 is False
+INFO:root:Proposed partition of 6579 to 6654 from 6599 to 6623 with t value 0.13068045957648916 is False
+INFO:root:Proposed partition of 6654 to 6688 from 6675 to 6688 with t value 0.19113837268768483 is False
+INFO:root:Proposed partition of 6688 to 7392 from 6908 to 7250 with t value 0.17041058641117862 is False
+INFO:root:Proposed partition of 7392 to 7406 from 7392 to 7406 with t value 0.28345899847104006 is False
+INFO:root:Testing validity of 77 in interval from 0 to 109 yields statistic 0.5006551477592526
+INFO:root:Breakpoint 5889 accepted
+INFO:root:Testing validity of 5958 in interval from 4457 to 6124 yields statistic 0.010578094811359061
+INFO:root:Proposed partition of 5586 to 5642 from 5586 to 5606 with t value 0.5627033879504929 is False
+INFO:root:Proposed partition of 5642 to 5843 from 5747 to 5835 with t value 0.24016661290687846 is False
+INFO:root:Breakpoint 8771 accepted
+INFO:root:Testing validity of 9499 in interval from 8771 to 9879 yields statistic 1.0257309370774343
+INFO:root:Breakpoint 5958 rejected
+INFO:root:Testing validity of 6124 in interval from 4457 to 6175 yields statistic 0.2888425503832722
+INFO:root:Proposed partition of 5843 to 6063 from 5917 to 6023 with t value 0.3903787010838896 is False
+INFO:root:Testing validity of 630 in interval from 0 to 820 yields statistic 1.5496624175061957
+INFO:root:Breakpoint 77 accepted
+INFO:root:Testing validity of 109 in interval from 77 to 197 yields statistic 0.5209102717009418
+INFO:root:Proposed partition of 20885 to 21550 from 21040 to 21337 with t value 0.6743206092842455 is True
+INFO:root:Proposed partition of 20885 to 21040 from 20930 to 20994 with t value 0.25142485273347903 is False
+INFO:root:Proposed partition of 21040 to 21337 from 21091 to 21295 with t value 0.17333977665055558 is False
+INFO:root:Breakpoint 109 accepted
+INFO:root:Testing validity of 197 in interval from 109 to 219 yields statistic 0.2545673654631255
+INFO:root:Breakpoint 197 rejected
+INFO:root:Testing validity of 219 in interval from 109 to 230 yields statistic 0.05996320831944322
+INFO:root:Breakpoint 219 rejected
+INFO:root:Testing validity of 230 in interval from 109 to 244 yields statistic 0.34302568243370857
+INFO:root:Proposed partition of 21337 to 21550 from 21366 to 21533 with t value 0.44490926880389225 is False
+INFO:root:Breakpoint 3172 accepted
+INFO:root:Testing validity of 3181 in interval from 683 to 3235 yields statistic 0.020344546470861896
+INFO:root:Breakpoint 3181 rejected
+INFO:root:Testing validity of 3235 in interval from 683 to 3504 yields statistic 0.22496604438285708
+INFO:root:Breakpoint 630 accepted
+INFO:root:Testing validity of 820 in interval from 630 to 872 yields statistic 1.5934112409872034
+INFO:root:Breakpoint 230 rejected
+INFO:root:Testing validity of 244 in interval from 109 to 316 yields statistic 0.33215955120656
+INFO:root:Breakpoint 9499 accepted
+INFO:root:Testing validity of 9879 in interval from 9499 to 12199 yields statistic 0.4887260077710631
+INFO:root:Breakpoint 244 rejected
+INFO:root:Testing validity of 316 in interval from 109 to 2571 yields statistic 0.0924765324358856
+INFO:root:Proposed partition of 21550 to 21802 from 21561 to 21652 with t value 0.3297245003441989 is False
+INFO:root:Breakpoint 820 accepted
+INFO:root:Testing validity of 872 in interval from 820 to 1008 yields statistic 0.996086314883816
+INFO:root:Breakpoint 316 rejected
+INFO:root:Testing validity of 2571 in interval from 109 to 2860 yields statistic 0.26289585645655333
+INFO:root:Proposed partition of 17151 to 19250 from 17658 to 18843 with t value 0.8817699627265174 is True
+INFO:root:Breakpoint 6124 accepted
+INFO:root:Testing validity of 6175 in interval from 5115 to 6181 yields statistic 0.24101133405169534
+INFO:root:Breakpoint 3235 rejected
+INFO:root:Breakpoint 1670 accepted
+INFO:root:Testing validity of 2532 in interval from 138 to 3554 yields statistic 0.527712025605824
+INFO:root:Breakpoint 872 accepted
+INFO:root:Testing validity of 1008 in interval from 872 to 1021 yields statistic 0.04929337169124447
+INFO:root:Breakpoint 1008 rejected
+INFO:root:Testing validity of 1021 in interval from 872 to 1029 yields statistic 0.5032831055231385
+INFO:root:Proposed partition of 21802 to 22209 from 21891 to 22162 with t value 1.0404185016479734 is True
+INFO:root:Breakpoint 6022 rejected
+INFO:root:Testing validity of 6029 in interval from 891 to 6054 yields statistic 0.01368274851344479
+INFO:root:Breakpoint 6029 rejected
+INFO:root:Testing validity of 6054 in interval from 891 to 11412 yields statistic 44.45631333741309
+INFO:root:Breakpoint 6961 accepted
+INFO:root:Testing validity of 7985 in interval from 2597 to 8518 yields statistic 9.628580856150817
+INFO:root:Breakpoint 1021 accepted
+INFO:root:Testing validity of 1029 in interval from 1008 to 1154 yields statistic 0.5131539740616637
+INFO:root:Proposed partition of 21802 to 21891 from 21827 to 21886 with t value 0.43445848108787877 is False
+INFO:root:Proposed partition of 4325 to 7266 from 4583 to 5398 with t value 1.6248965309113772 is True
+INFO:root:Breakpoint 11434 rejected
+INFO:root:Testing validity of 11625 in interval from 6999 to 11647 yields statistic 0.3372086304315744
+INFO:root:Proposed partition of 4325 to 4583 from 4385 to 4554 with t value 0.4242995597819053 is False
+INFO:root:Breakpoint 1029 accepted
+INFO:root:Testing validity of 1154 in interval from 1021 to 1851 yields statistic 0.4177093979059307
+INFO:root:Proposed partition of 17151 to 17658 from 17222 to 17464 with t value 0.7477451390430847 is True
+INFO:root:Breakpoint 11661 accepted
+INFO:root:Testing validity of 11718 in interval from 8476 to 11803 yields statistic 0.28600713261793226
+INFO:root:Breakpoint 13986 accepted
+INFO:root:Testing validity of 14398 in interval from 10133 to 15093 yields statistic 0.06218226549979247
+INFO:root:Proposed partition of 17151 to 17222 from 17168 to 17206 with t value 0.37241336748322723 is False
+INFO:root:Breakpoint 6175 accepted
+INFO:root:Testing validity of 6181 in interval from 5373 to 6208 yields statistic 0.018289931508363277
+INFO:root:Breakpoint 6181 rejected
+INFO:root:Testing validity of 6208 in interval from 5373 to 6224 yields statistic 0.41349362676267487
+INFO:root:Proposed partition of 21891 to 22162 from 21987 to 22115 with t value 0.5956616880719333 is True
+INFO:root:Breakpoint 14398 rejected
+INFO:root:Testing validity of 15093 in interval from 10133 to 15132 yields statistic 0.2045889942555378
+INFO:root:Proposed partition of 21891 to 21987 from 21925 to 21958 with t value 0.6516710654521775 is True
+INFO:root:Proposed partition of 21891 to 21925 from 21901 to 21925 with t value 0.06001826084913191 is False
+INFO:root:Proposed partition of 17222 to 17464 from 17263 to 17428 with t value 1.1450137745748157 is True
+INFO:root:Proposed partition of 17222 to 17263 from 17241 to 17263 with t value 0.13484722970858504 is False
+INFO:root:Proposed partition of 21925 to 21958 from 21925 to 21939 with t value 0.40333932769431696 is False
+INFO:root:Breakpoint 9879 accepted
+INFO:root:Testing validity of 12199 in interval from 9879 to 12226 yields statistic 0.915272910981343
+INFO:root:Breakpoint 1154 accepted
+INFO:root:Testing validity of 1851 in interval from 1029 to 2902 yields statistic 0.8973482442077073
+INFO:root:Breakpoint 16039 accepted
+INFO:root:Proposed partition of 17263 to 17428 from 17362 to 17412 with t value 0.36786595245628 is False
+INFO:root:Proposed partition of 17428 to 17464 from 17428 to 17451 with t value 0.32667346940569314 is False
+INFO:root:Proposed partition of 4583 to 5398 from 4687 to 5287 with t value 0.6630781143650466 is False
+INFO:root:Proposed partition of 21958 to 21987 from 21967 to 21977 with t value 0.13342786318165997 is False
+INFO:root:Proposed partition of 17464 to 17658 from 17541 to 17637 with t value 0.41932827381530985 is False
+INFO:root:Breakpoint 6208 accepted
+INFO:root:Testing validity of 6224 in interval from 5740 to 6332 yields statistic 0.013407289715969757
+INFO:root:Breakpoint 6224 rejected
+INFO:root:Testing validity of 6332 in interval from 5740 to 6351 yields statistic 0.40691016086600607
+INFO:root:Proposed partition of 21987 to 22115 from 22029 to 22106 with t value 0.3761192563727879 is False
+INFO:root:Breakpoint 2571 accepted
+INFO:root:Testing validity of 2860 in interval from 197 to 2914 yields statistic 0.2861842967785145
+INFO:root:Proposed partition of 22115 to 22162 from 22123 to 22136 with t value 0.2517087235481651 is True
+INFO:root:Proposed partition of 22115 to 22123 from 22115 to 22123 with t value 0.033580220031953385 is False
+INFO:root:Proposed partition of 22123 to 22136 from 22123 to 22136 with t value 0.038414056137563435 is False
+INFO:root:Breakpoint 6332 accepted
+INFO:root:Testing validity of 6351 in interval from 5889 to 6390 yields statistic 0.00034173653973973027
+INFO:root:Breakpoint 6351 rejected
+INFO:root:Testing validity of 6390 in interval from 5889 to 6417 yields statistic 0.3772307762061074
+INFO:root:Proposed partition of 22136 to 22162 from 22148 to 22157 with t value 0.17082808498153298 is True
+INFO:root:Proposed partition of 22136 to 22148 from 22141 to 22144 with t value 0.023987171485132065 is False
+INFO:root:Proposed partition of 22148 to 22157 from 22148 to 22157 with t value 0.0525247599783645 is False
+INFO:root:Proposed partition of 22157 to 22162 from 22159 to 22161 with t value 0.010092606604359636 is False
+INFO:root:Breakpoint 2532 accepted
+INFO:root:Proposed partition of 22162 to 22209 from 22168 to 22204 with t value 0.920035675288205 is False
+INFO:root:Breakpoint 6390 accepted
+INFO:root:Testing validity of 6417 in interval from 5958 to 6436 yields statistic 0.35364354992250996
+INFO:root:Breakpoint 1851 accepted
+INFO:root:Testing validity of 2902 in interval from 1154 to 3497 yields statistic 0.6261276603365007
+INFO:root:Proposed partition of 22209 to 22248 from 22230 to 22242 with t value 0.8148795856737027 is True
+INFO:root:Proposed partition of 22209 to 22230 from 22217 to 22230 with t value 0.13020313051552918 is False
+INFO:root:Proposed partition of 22230 to 22242 from 22230 to 22234 with t value 0.24935446131350888 is False
+INFO:root:Proposed partition of 22242 to 22248 from 22246 to 22248 with t value 0.06530666993679263 is False
+INFO:root:Testing validity of 21 in interval from 0 to 5355 yields statistic 1.6306395290281677
+INFO:root:Breakpoint 15093 rejected
+INFO:root:Testing validity of 15132 in interval from 10133 to 15417 yields statistic 0.1858414792313234
+INFO:root:Breakpoint 11718 accepted
+INFO:root:Testing validity of 11803 in interval from 8676 to 11955 yields statistic 0.5025019958024474
+INFO:root:Proposed partition of 17658 to 18843 from 17773 to 18532 with t value 1.5610553456192549 is True
+INFO:root:Breakpoint 6417 accepted
+INFO:root:Testing validity of 6436 in interval from 6124 to 6441 yields statistic 0.19542371248160148
+INFO:root:Breakpoint 12199 accepted
+INFO:root:Testing validity of 12226 in interval from 12199 to 12358 yields statistic 0.7911540700244538
+INFO:root:Proposed partition of 17658 to 17773 from 17672 to 17705 with t value 1.1792744651993812 is True
+INFO:root:Breakpoint 12226 accepted
+INFO:root:Testing validity of 12358 in interval from 12226 to 12417 yields statistic 0.25733243337699524
+INFO:root:Breakpoint 6436 rejected
+INFO:root:Testing validity of 6441 in interval from 6124 to 6461 yields statistic 0.20926928401910783
+INFO:root:Breakpoint 12358 rejected
+INFO:root:Testing validity of 12417 in interval from 12226 to 12488 yields statistic 0.9383016865133064
+INFO:root:Proposed partition of 17658 to 17672 from 17658 to 17665 with t value 0.12459778519966913 is False
+INFO:root:Breakpoint 2860 accepted
+INFO:root:Testing validity of 2914 in interval from 219 to 2989 yields statistic 0.17699998547806092
+INFO:root:Proposed partition of 5398 to 7266 from 5715 to 6122 with t value 0.8375405835759905 is True
+INFO:root:Proposed partition of 17672 to 17705 from 17681 to 17697 with t value 0.9072675848647748 is False
+INFO:root:Proposed partition of 17705 to 17773 from 17719 to 17773 with t value 0.3414577733897315 is False
+INFO:root:Breakpoint 11625 accepted
+INFO:root:Testing validity of 11647 in interval from 10323 to 11663 yields statistic 0.013306558904008885
+INFO:root:Breakpoint 11647 rejected
+INFO:root:Proposed partition of 5398 to 5715 from 5423 to 5658 with t value 0.4390794246574445 is False
+INFO:root:Breakpoint 12417 accepted
+INFO:root:Testing validity of 12488 in interval from 12358 to 12611 yields statistic 0.0969882654060948
+INFO:root:Breakpoint 6441 accepted
+INFO:root:Testing validity of 6461 in interval from 6175 to 6483 yields statistic 1.7607136423580547
+INFO:root:Breakpoint 12488 rejected
+INFO:root:Testing validity of 12611 in interval from 12358 to 12832 yields statistic 0.2052679784208693
+INFO:root:Breakpoint 12611 rejected
+INFO:root:Testing validity of 12832 in interval from 12358 to 12915 yields statistic 0.29993455100115207
+INFO:root:Breakpoint 15132 rejected
+INFO:root:Testing validity of 15417 in interval from 10133 to 16752 yields statistic 0.14285834043213444
+INFO:root:Proposed partition of 17773 to 18532 from 18016 to 18412 with t value 0.5560676928042563 is False
+INFO:root:Breakpoint 2914 rejected
+INFO:root:Testing validity of 2989 in interval from 219 to 3001 yields statistic 0.6001569341180825
+INFO:root:Breakpoint 6461 accepted
+INFO:root:Testing validity of 6483 in interval from 6181 to 6508 yields statistic 0.15418826274848244
+INFO:root:Proposed partition of 18532 to 18843 from 18675 to 18808 with t value 0.5231879034130715 is False
+INFO:root:Breakpoint 6483 rejected
+INFO:root:Testing validity of 6508 in interval from 6181 to 6588 yields statistic 0.048091024616823456
+INFO:root:Breakpoint 6508 rejected
+INFO:root:Testing validity of 6588 in interval from 6181 to 6833 yields statistic 0.11653540321878042
+INFO:root:Breakpoint 7985 accepted
+INFO:root:Proposed partition of 18843 to 19250 from 19120 to 19210 with t value 0.342236602133901 is False
+INFO:root:Proposed partition of 19250 to 19349 from 19265 to 19332 with t value 0.10984463036948769 is False
+INFO:root:Testing validity of 183 in interval from 0 to 510 yields statistic 0.9726584806955418
+INFO:root:Breakpoint 2902 accepted
+INFO:root:Testing validity of 3497 in interval from 1851 to 4237 yields statistic 0.0668197466132465
+INFO:root:Breakpoint 3497 rejected
+INFO:root:Testing validity of 4237 in interval from 1851 to 4356 yields statistic 0.6427643023328117
+INFO:root:Proposed partition of 5715 to 6122 from 5764 to 5987 with t value 1.1593837875634703 is True
+INFO:root:Proposed partition of 5715 to 5764 from 5735 to 5756 with t value 0.1060126754416961 is False
+INFO:root:Breakpoint 6588 rejected
+INFO:root:Testing validity of 6833 in interval from 6181 to 6873 yields statistic 0.23401357509075507
+INFO:root:Proposed partition of 5764 to 5987 from 5797 to 5845 with t value 0.4369071534051339 is False
+INFO:root:Breakpoint 12832 accepted
+INFO:root:Breakpoint 15417 rejected
+INFO:root:Testing validity of 16752 in interval from 10133 to 17477 yields statistic 0.37265769056444004
+INFO:root:Breakpoint 183 accepted
+INFO:root:Testing validity of 510 in interval from 183 to 526 yields statistic 0.32142082502326286
+INFO:root:Proposed partition of 5987 to 6122 from 6081 to 6115 with t value 1.0801657320702414 is False
+INFO:root:Breakpoint 6833 accepted
+INFO:root:Testing validity of 6873 in interval from 6208 to 6928 yields statistic 0.19901111776569555
+INFO:root:Breakpoint 8883 accepted
+INFO:root:Testing validity of 17658 in interval from 7434 to 20697 yields statistic 0.45408719127893027
+INFO:root:Breakpoint 510 accepted
+INFO:root:Testing validity of 526 in interval from 510 to 692 yields statistic 0.21140601717959864
+INFO:root:Proposed partition of 6122 to 7266 from 6240 to 7232 with t value 0.4540274849575257 is False
+INFO:root:Breakpoint 11803 accepted
+INFO:root:Testing validity of 11955 in interval from 8830 to 12290 yields statistic 0.12691850113746397
+INFO:root:Proposed partition of 0 to 14830 from 824 to 14643 with t value 18.017986392697928 is True
+INFO:root:Breakpoint 526 accepted
+INFO:root:Testing validity of 692 in interval from 526 to 782 yields statistic 0.3006581196858506
+INFO:root:Breakpoint 11955 rejected
+INFO:root:Testing validity of 12290 in interval from 8830 to 12606 yields statistic 0.8894068998483369
+INFO:root:Breakpoint 6873 accepted
+INFO:root:Testing validity of 6928 in interval from 6224 to 7108 yields statistic 0.39068870246369974
+INFO:root:Breakpoint 692 accepted
+INFO:root:Testing validity of 782 in interval from 692 to 914 yields statistic 0.5247407189046237
+INFO:root:Breakpoint 2989 accepted
+INFO:root:Testing validity of 3001 in interval from 230 to 3024 yields statistic 0.006772361892658287
+INFO:root:Breakpoint 3001 rejected
+INFO:root:Testing validity of 3024 in interval from 230 to 3050 yields statistic 0.020268840509270532
+INFO:root:Breakpoint 782 accepted
+INFO:root:Testing validity of 914 in interval from 782 to 932 yields statistic 0.4696927014176874
+INFO:root:Breakpoint 3024 rejected
+INFO:root:Testing validity of 3050 in interval from 230 to 3163 yields statistic 1.2095448371054265
+INFO:root:Breakpoint 4237 accepted
+INFO:root:Testing validity of 4356 in interval from 2902 to 4773 yields statistic 1.0690144264329606
+INFO:root:Breakpoint 21 accepted
+INFO:root:Testing validity of 5355 in interval from 21 to 9730 yields statistic 2.4968189523574074
+INFO:root:Proposed partition of 0 to 824 from 217 to 824 with t value 24.91306751999715 is True
+INFO:root:Breakpoint 6928 accepted
+INFO:root:Testing validity of 7108 in interval from 6332 to 7414 yields statistic 0.006561202087241249
+INFO:root:Breakpoint 914 accepted
+INFO:root:Testing validity of 932 in interval from 914 to 972 yields statistic 0.24132664119070235
+INFO:root:Proposed partition of 0 to 217 from 95 to 200 with t value 0.2973012323038376 is False
+INFO:root:Breakpoint 7108 rejected
+INFO:root:Testing validity of 7414 in interval from 6332 to 7429 yields statistic 0.3766186216529369
+INFO:root:Proposed partition of 217 to 824 from 400 to 597 with t value 0.7621453766067418 is False
+INFO:root:Breakpoint 932 rejected
+INFO:root:Testing validity of 972 in interval from 914 to 2072 yields statistic 0.21321035325388543
+INFO:root:Breakpoint 7414 accepted
+INFO:root:Testing validity of 7429 in interval from 6351 to 7597 yields statistic 0.052420028748567424
+INFO:root:Breakpoint 7429 rejected
+INFO:root:Breakpoint 6054 accepted
+INFO:root:Testing validity of 11412 in interval from 1009 to 11837 yields statistic 0.05715689186752089
+INFO:root:Breakpoint 4356 accepted
+INFO:root:Testing validity of 4773 in interval from 3497 to 4780 yields statistic 1.3913703205268277
+INFO:root:Breakpoint 972 accepted
+INFO:root:Testing validity of 2072 in interval from 932 to 2120 yields statistic 0.3907794444692338
+INFO:root:Breakpoint 11412 rejected
+INFO:root:Testing validity of 11837 in interval from 1009 to 12651 yields statistic 3.061275371749756
+INFO:root:Breakpoint 12290 accepted
+INFO:root:Testing validity of 12606 in interval from 10558 to 12934 yields statistic 1.378195174562358
+INFO:root:Breakpoint 3050 accepted
+INFO:root:Testing validity of 3163 in interval from 244 to 3784 yields statistic 3.2642947417326276e-05
+INFO:root:Breakpoint 3163 rejected
+INFO:root:Testing validity of 3784 in interval from 244 to 3804 yields statistic 0.5429806290090065
+INFO:root:Breakpoint 2072 accepted
+INFO:root:Testing validity of 2120 in interval from 972 to 2372 yields statistic 0.004162486969561272
+INFO:root:Breakpoint 2120 rejected
+INFO:root:Testing validity of 2372 in interval from 972 to 2431 yields statistic 0.7896237159112147
+INFO:root:Breakpoint 4773 accepted
+INFO:root:Testing validity of 4780 in interval from 4237 to 4878 yields statistic 0.09912777939456116
+INFO:root:Breakpoint 4780 rejected
+INFO:root:Testing validity of 4878 in interval from 4237 to 4908 yields statistic 1.5297158381815803
+INFO:root:Breakpoint 4878 accepted
+INFO:root:Testing validity of 4908 in interval from 4356 to 5164 yields statistic 0.00013998648756347097
+INFO:root:Breakpoint 4908 rejected
+INFO:root:Testing validity of 5164 in interval from 4356 to 5271 yields statistic 1.7755370786458242
+INFO:root:Breakpoint 2372 accepted
+INFO:root:Testing validity of 2431 in interval from 2072 to 2452 yields statistic 12.755677861173405
+INFO:root:Breakpoint 16752 accepted
+INFO:root:Testing validity of 17477 in interval from 10601 to 18525 yields statistic 0.11453843151362639
+INFO:root:Breakpoint 12606 accepted
+INFO:root:Breakpoint 5164 accepted
+INFO:root:Testing validity of 5271 in interval from 4773 to 5347 yields statistic 0.7610403257496939
+INFO:root:Breakpoint 2431 accepted
+INFO:root:Testing validity of 2452 in interval from 2120 to 2478 yields statistic 31.299839022174588
+INFO:root:Breakpoint 17477 rejected
+INFO:root:Breakpoint 5271 accepted
+INFO:root:Testing validity of 5347 in interval from 4780 to 5473 yields statistic 0.08199966846979793
+INFO:root:Breakpoint 2452 accepted
+INFO:root:Testing validity of 2478 in interval from 2372 to 2492 yields statistic 2.5557879941460575
+INFO:root:Breakpoint 5347 rejected
+INFO:root:Testing validity of 5473 in interval from 4780 to 5586 yields statistic 0.2748099893926122
+INFO:root:Proposed partition of 7266 to 12052 from 8469 to 9842 with t value 0.8013416727852234 is True
+INFO:root:Breakpoint 3784 accepted
+INFO:root:Testing validity of 3804 in interval from 316 to 3814 yields statistic 0.4570733804479538
+INFO:root:Breakpoint 2478 accepted
+INFO:root:Testing validity of 2492 in interval from 2431 to 2551 yields statistic 0.8346875612456623
+INFO:root:Breakpoint 5473 rejected
+INFO:root:Testing validity of 5586 in interval from 4780 to 5642 yields statistic 0.23443936128504456
+INFO:root:Breakpoint 2492 accepted
+INFO:root:Testing validity of 2551 in interval from 2452 to 2595 yields statistic 2.2322199293027625
+INFO:root:Breakpoint 5586 rejected
+INFO:root:Testing validity of 5642 in interval from 4780 to 5843 yields statistic 0.46195242270205916
+INFO:root:Breakpoint 2551 accepted
+INFO:root:Testing validity of 2595 in interval from 2478 to 2615 yields statistic 0.5470472306323994
+INFO:root:Breakpoint 2595 accepted
+INFO:root:Testing validity of 2615 in interval from 2492 to 2640 yields statistic 5.086995891746557
+INFO:root:Breakpoint 2615 accepted
+INFO:root:Testing validity of 2640 in interval from 2551 to 2731 yields statistic 12.375873209055928
+INFO:root:Breakpoint 5642 accepted
+INFO:root:Testing validity of 5843 in interval from 4878 to 6063 yields statistic 0.21192966591129855
+INFO:root:Breakpoint 2640 accepted
+INFO:root:Testing validity of 2731 in interval from 2595 to 3073 yields statistic 8.653805564704577
+INFO:root:Proposed partition of 7266 to 8469 from 7658 to 8313 with t value 1.4890634684844786 is True
+INFO:root:Breakpoint 5843 rejected
+INFO:root:Breakpoint 2731 accepted
+INFO:root:Testing validity of 3073 in interval from 2615 to 3095 yields statistic 0.8546230079007624
+INFO:root:Breakpoint 5355 accepted
+INFO:root:Testing validity of 9730 in interval from 5355 to 9864 yields statistic 0.07145795785155053
+INFO:root:Proposed partition of 7266 to 7658 from 7408 to 7595 with t value 0.8303060536640773 is False
+INFO:root:Proposed partition of 7658 to 8313 from 7722 to 7988 with t value 0.5185966653255193 is False
+INFO:root:Breakpoint 3804 accepted
+INFO:root:Testing validity of 3814 in interval from 2571 to 4313 yields statistic 0.2013156150968085
+INFO:root:Breakpoint 3073 accepted
+INFO:root:Testing validity of 3095 in interval from 2640 to 3124 yields statistic 0.08951360727070078
+INFO:root:Breakpoint 3095 rejected
+INFO:root:Testing validity of 3124 in interval from 2640 to 3134 yields statistic 0.2206615142843708
+INFO:root:Breakpoint 9730 rejected
+INFO:root:Testing validity of 9864 in interval from 5355 to 10070 yields statistic 1.2100557737449578
+INFO:root:Proposed partition of 8313 to 8469 from 8333 to 8431 with t value 0.7714495297486483 is False
+INFO:root:Breakpoint 3124 rejected
+INFO:root:Testing validity of 3134 in interval from 2640 to 3150 yields statistic 1.270241339165058
+INFO:root:Breakpoint 3814 rejected
+INFO:root:Testing validity of 4313 in interval from 2571 to 4633 yields statistic 1.1604446834280258
+INFO:root:Breakpoint 3134 accepted
+INFO:root:Testing validity of 3150 in interval from 2731 to 3160 yields statistic 0.2687470337347551
+INFO:root:Breakpoint 3150 rejected
+INFO:root:Testing validity of 3160 in interval from 2731 to 3189 yields statistic 0.014322399281879958
+INFO:root:Breakpoint 3160 rejected
+INFO:root:Testing validity of 3189 in interval from 2731 to 3197 yields statistic 1.0896335997359576
+INFO:root:Breakpoint 3189 accepted
+INFO:root:Testing validity of 3197 in interval from 3073 to 4230 yields statistic 0.0022031233457971023
+INFO:root:Breakpoint 3197 rejected
+INFO:root:Testing validity of 4230 in interval from 3073 to 4429 yields statistic 0.7468157997299629
+INFO:root:Breakpoint 17658 accepted
+INFO:root:Testing validity of 20697 in interval from 7493 to 20702 yields statistic 0.21163272259942106
+INFO:root:Proposed partition of 8469 to 9842 from 8577 to 9429 with t value 0.877832771355999 is True
+INFO:root:Breakpoint 4313 accepted
+INFO:root:Testing validity of 4633 in interval from 2860 to 4639 yields statistic 0.3162452382269326
+INFO:root:Proposed partition of 8469 to 8577 from 8517 to 8539 with t value 0.8278386523958424 is True
+INFO:root:Proposed partition of 8469 to 8517 from 8484 to 8509 with t value 0.12629759703522359 is False
+INFO:root:Proposed partition of 8517 to 8539 from 8517 to 8533 with t value 0.14493788129231894 is False
+INFO:root:Breakpoint 4230 accepted
+INFO:root:Testing validity of 4429 in interval from 3095 to 4723 yields statistic 0.6966041387265073
+INFO:root:Proposed partition of 8539 to 8577 from 8549 to 8569 with t value 0.32483412481456064 is True
+INFO:root:Breakpoint 11837 accepted
+INFO:root:Testing validity of 12651 in interval from 1116 to 12772 yields statistic 0.01322967042997454
+INFO:root:Proposed partition of 8539 to 8549 from 8539 to 8549 with t value 0.06921781566036427 is False
+INFO:root:Proposed partition of 8549 to 8569 from 8549 to 8561 with t value 0.10107274664517829 is False
+INFO:root:Proposed partition of 8569 to 8577 from 8574 to 8577 with t value 0.03309623756933206 is False
+INFO:root:Breakpoint 4633 rejected
+INFO:root:Testing validity of 4639 in interval from 2860 to 4651 yields statistic 0.013461597939169272
+INFO:root:Breakpoint 4639 rejected
+INFO:root:Testing validity of 4651 in interval from 2860 to 4666 yields statistic 0.4050706850628634
+INFO:root:Breakpoint 12651 rejected
+INFO:root:Testing validity of 12772 in interval from 1116 to 16204 yields statistic 11.591951181004402
+INFO:root:Proposed partition of 8577 to 9429 from 9076 to 9373 with t value 0.3701945083495666 is False
+INFO:root:Proposed partition of 9429 to 9842 from 9587 to 9828 with t value 0.5559252189101176 is False
+INFO:root:Breakpoint 9864 accepted
+INFO:root:Testing validity of 10070 in interval from 9730 to 10155 yields statistic 0.06235163112153229
+INFO:root:Breakpoint 10070 rejected
+INFO:root:Testing validity of 10155 in interval from 9730 to 10541 yields statistic 1.1747049992000265
+INFO:root:Breakpoint 4429 accepted
+INFO:root:Testing validity of 4723 in interval from 3124 to 4744 yields statistic 0.7809169043631428
+INFO:root:Breakpoint 20697 rejected
+INFO:root:Testing validity of 20702 in interval from 7493 to 20733 yields statistic 0.07240299691939463
+INFO:root:Breakpoint 10155 accepted
+INFO:root:Testing validity of 10541 in interval from 9864 to 11332 yields statistic 0.5276351828890363
+INFO:root:Breakpoint 4651 accepted
+INFO:root:Testing validity of 4666 in interval from 2914 to 4698 yields statistic 0.061872083248318756
+INFO:root:Breakpoint 4666 rejected
+INFO:root:Testing validity of 4698 in interval from 2914 to 4761 yields statistic 0.4967492964062465
+INFO:root:Breakpoint 20702 rejected
+INFO:root:Testing validity of 20733 in interval from 7493 to 20750 yields statistic 0.699441173264416
+INFO:root:Breakpoint 4723 accepted
+INFO:root:Testing validity of 4744 in interval from 3134 to 4852 yields statistic 0.26035104832553174
+INFO:root:Breakpoint 10541 accepted
+INFO:root:Testing validity of 11332 in interval from 10070 to 11471 yields statistic 0.2523700757440018
+INFO:root:Breakpoint 4698 accepted
+INFO:root:Testing validity of 4761 in interval from 2989 to 4818 yields statistic 0.200766216907902
+INFO:root:Breakpoint 4744 rejected
+INFO:root:Testing validity of 4852 in interval from 3134 to 4865 yields statistic 0.3274381886910129
+INFO:root:Proposed partition of 9842 to 12052 from 10665 to 10865 with t value 0.9111746435801071 is True
+INFO:root:Proposed partition of 9842 to 10665 from 10479 to 10665 with t value 0.2302947687656371 is False
+INFO:root:Breakpoint 4761 rejected
+INFO:root:Testing validity of 4818 in interval from 2989 to 4887 yields statistic 0.35441746559083614
+INFO:root:Proposed partition of 10665 to 10865 from 10744 to 10793 with t value 0.41347699396117704 is False
+INFO:root:Breakpoint 11332 accepted
+INFO:root:Testing validity of 11471 in interval from 10155 to 11570 yields statistic 0.20847646544675227
+INFO:root:Breakpoint 4852 rejected
+INFO:root:Testing validity of 4865 in interval from 3134 to 4956 yields statistic 5.663619694634188e-06
+INFO:root:Breakpoint 4865 rejected
+INFO:root:Testing validity of 4956 in interval from 3134 to 4969 yields statistic 0.6879358498835693
+INFO:root:Breakpoint 11471 rejected
+INFO:root:Testing validity of 11570 in interval from 10155 to 11671 yields statistic 0.3496035809487405
+INFO:root:Breakpoint 4818 accepted
+INFO:root:Testing validity of 4887 in interval from 3001 to 5307 yields statistic 0.19605058456435892
+INFO:root:Proposed partition of 10865 to 12052 from 11032 to 12015 with t value 1.893962165353411 is True
+INFO:root:Proposed partition of 10865 to 11032 from 10932 to 11032 with t value 0.3988367482727526 is True
+INFO:root:Proposed partition of 10865 to 10932 from 10865 to 10915 with t value 0.13613774465223907 is False
+INFO:root:Proposed partition of 10932 to 11032 from 10932 to 11001 with t value 0.16879582637208584 is False
+INFO:root:Breakpoint 4887 rejected
+INFO:root:Testing validity of 5307 in interval from 3001 to 5520 yields statistic 0.2490413377841264
+INFO:root:Breakpoint 4956 accepted
+INFO:root:Testing validity of 4969 in interval from 3150 to 5080 yields statistic 0.46249198262279856
+INFO:root:Proposed partition of 11032 to 12015 from 11065 to 11654 with t value 0.5236732344211215 is False
+INFO:root:Proposed partition of 12015 to 12052 from 12025 to 12052 with t value 0.10329109007144363 is False
+INFO:root:Breakpoint 11570 accepted
+INFO:root:Testing validity of 11671 in interval from 10541 to 11905 yields statistic 0.011721434902473475
+INFO:root:Breakpoint 11671 rejected
+INFO:root:Testing validity of 11905 in interval from 10541 to 11926 yields statistic 0.1306260043535649
+INFO:root:Breakpoint 11905 rejected
+INFO:root:Testing validity of 11926 in interval from 10541 to 11950 yields statistic 4.7225429958746235
+INFO:root:Breakpoint 4969 accepted
+INFO:root:Testing validity of 5080 in interval from 3160 to 5100 yields statistic 0.15546292029647496
+INFO:root:Proposed partition of 824 to 14643 from 2896 to 7339 with t value 4.302548574031512 is True
+INFO:root:Breakpoint 5080 rejected
+INFO:root:Testing validity of 5100 in interval from 3160 to 5131 yields statistic 0.16811712356010128
+INFO:root:Breakpoint 11926 accepted
+INFO:root:Testing validity of 11950 in interval from 11332 to 12018 yields statistic 0.09441521541999236
+INFO:root:Breakpoint 11950 rejected
+INFO:root:Testing validity of 12018 in interval from 11332 to 12029 yields statistic 0.5939083569148544
+INFO:root:Proposed partition of 824 to 2896 from 1447 to 2553 with t value 1.1693287884078485 is False
+INFO:root:Breakpoint 5307 accepted
+INFO:root:Testing validity of 5520 in interval from 3024 to 5588 yields statistic 0.49692824922243195
+INFO:root:Breakpoint 5100 rejected
+INFO:root:Testing validity of 5131 in interval from 3160 to 5297 yields statistic 0.2244969605993239
+INFO:root:Breakpoint 5131 rejected
+INFO:root:Testing validity of 5297 in interval from 3160 to 5571 yields statistic 1.0859879282288283
+INFO:root:Breakpoint 12018 accepted
+INFO:root:Testing validity of 12029 in interval from 11471 to 12046 yields statistic 0.6693704014632267
+INFO:root:Breakpoint 12029 accepted
+INFO:root:Testing validity of 12046 in interval from 11570 to 12125 yields statistic 1.732740654110749
+INFO:root:Proposed partition of 12052 to 14439 from 12108 to 13634 with t value 29.067244494585516 is True
+INFO:root:Proposed partition of 12052 to 12108 from 12063 to 12087 with t value 0.4748794479484335 is False
+INFO:root:Proposed partition of 12108 to 13634 from 13293 to 13613 with t value 0.8890627540135334 is False
+INFO:root:Breakpoint 12046 accepted
+INFO:root:Testing validity of 12125 in interval from 11671 to 12189 yields statistic 5.078107881319839
+INFO:root:Breakpoint 5520 accepted
+INFO:root:Testing validity of 5588 in interval from 3050 to 5732 yields statistic 0.25918559577539796
+INFO:root:Breakpoint 5297 accepted
+INFO:root:Testing validity of 5571 in interval from 3189 to 8099 yields statistic 0.9580408058868025
+INFO:root:Breakpoint 12125 accepted
+INFO:root:Testing validity of 12189 in interval from 11905 to 12209 yields statistic 0.02655372799340595
+INFO:root:Breakpoint 12189 rejected
+INFO:root:Testing validity of 12209 in interval from 11905 to 12540 yields statistic 6.629310040831112
+INFO:root:Proposed partition of 13634 to 14439 from 13648 to 13781 with t value 5.560631578701289 is True
+INFO:root:Proposed partition of 13634 to 13648 from 13640 to 13648 with t value 0.3525465545332948 is False
+INFO:root:Breakpoint 12209 accepted
+INFO:root:Testing validity of 12540 in interval from 11926 to 12580 yields statistic 0.2597991633283436
+INFO:root:Breakpoint 12540 rejected
+INFO:root:Testing validity of 12580 in interval from 11926 to 12598 yields statistic 0.11418705073697105
+INFO:root:Proposed partition of 13648 to 13781 from 13691 to 13743 with t value 0.5681378377321545 is False
+INFO:root:Breakpoint 12580 rejected
+INFO:root:Testing validity of 12598 in interval from 11926 to 12613 yields statistic 1.0279456840400902
+INFO:root:Breakpoint 12772 accepted
+INFO:root:Breakpoint 12598 accepted
+INFO:root:Testing validity of 12613 in interval from 11950 to 12620 yields statistic 3.427094117260201e-05
+INFO:root:Breakpoint 12613 rejected
+INFO:root:Testing validity of 12620 in interval from 11950 to 12921 yields statistic 0.08208190146305697
+INFO:root:Proposed partition of 13781 to 14439 from 13938 to 14356 with t value 0.771925158874713 is False
+INFO:root:Breakpoint 5588 rejected
+INFO:root:Testing validity of 5732 in interval from 3050 to 5783 yields statistic 0.15819312626262472
+INFO:root:Breakpoint 12620 rejected
+INFO:root:Testing validity of 12921 in interval from 11950 to 12928 yields statistic 0.4636289220979141
+INFO:root:Breakpoint 20733 accepted
+INFO:root:Testing validity of 20750 in interval from 8346 to 20996 yields statistic 0.011079630418203269
+INFO:root:Breakpoint 12921 rejected
+INFO:root:Testing validity of 12928 in interval from 11950 to 12946 yields statistic 0.1619946139289904
+INFO:root:Breakpoint 20750 rejected
+INFO:root:Testing validity of 20996 in interval from 8346 to 21411 yields statistic 1.3980603316120384
+INFO:root:Proposed partition of 14439 to 15250 from 14618 to 14931 with t value 0.31908250990411274 is False
+INFO:root:Testing validity of 841 in interval from 0 to 966 yields statistic 0.9745912641142014
+INFO:root:Breakpoint 12928 rejected
+INFO:root:Testing validity of 12946 in interval from 11950 to 12982 yields statistic 0.13845863879487832
+INFO:root:Breakpoint 5732 rejected
+INFO:root:Testing validity of 5783 in interval from 3050 to 6167 yields statistic 0.048994247654118354
+INFO:root:Breakpoint 12946 rejected
+INFO:root:Testing validity of 12982 in interval from 11950 to 13263 yields statistic 0.9171792682433019
+INFO:root:Breakpoint 5783 rejected
+INFO:root:Testing validity of 6167 in interval from 3050 to 6188 yields statistic 0.9143010814618396
+INFO:root:Breakpoint 841 accepted
+INFO:root:Testing validity of 966 in interval from 841 to 1249 yields statistic 0.5365021102759204
+INFO:root:Breakpoint 12982 accepted
+INFO:root:Testing validity of 13263 in interval from 12018 to 13418 yields statistic 0.20289426349818265
+INFO:root:Proposed partition of 2896 to 7339 from 3164 to 5017 with t value 4.078295025305044 is True
+INFO:root:Breakpoint 966 accepted
+INFO:root:Testing validity of 1249 in interval from 966 to 2091 yields statistic 0.8283533029970059
+INFO:root:Breakpoint 13263 rejected
+INFO:root:Testing validity of 13418 in interval from 12018 to 13540 yields statistic 1.1286641413446474
+INFO:root:Breakpoint 5571 accepted
+INFO:root:Testing validity of 8099 in interval from 3197 to 8205 yields statistic 0.9681978126978412
+INFO:root:Proposed partition of 2896 to 3164 from 3055 to 3148 with t value 3.5560331731827355 is True
+INFO:root:Proposed partition of 2896 to 3055 from 2970 to 3046 with t value 0.8272804220262652 is False
+INFO:root:Proposed partition of 3055 to 3148 from 3089 to 3130 with t value 0.3807318980559561 is False
+INFO:root:Proposed partition of 3148 to 3164 from 3157 to 3164 with t value 0.7309661224609737 is True
+INFO:root:Proposed partition of 3148 to 3157 from 3148 to 3157 with t value 0.12549838640984212 is False
+INFO:root:Proposed partition of 3157 to 3164 from 3157 to 3164 with t value 0.11176086801598564 is False
+INFO:root:Breakpoint 1249 accepted
+INFO:root:Testing validity of 2091 in interval from 1249 to 4325 yields statistic 1.7168599283238795
+INFO:root:Breakpoint 6167 accepted
+INFO:root:Testing validity of 6188 in interval from 3163 to 6200 yields statistic 0.05626948235950315
+INFO:root:Breakpoint 13418 accepted
+INFO:root:Testing validity of 13540 in interval from 12029 to 13860 yields statistic 0.429448344880093
+INFO:root:Breakpoint 6188 rejected
+INFO:root:Testing validity of 6200 in interval from 3163 to 6260 yields statistic 0.478072783587396
+INFO:root:Proposed partition of 3164 to 5017 from 3768 to 5003 with t value 1.4560618741278952 is False
+INFO:root:Breakpoint 13540 accepted
+INFO:root:Testing validity of 13860 in interval from 12046 to 13940 yields statistic 1.7687595003732022
+INFO:root:Breakpoint 2091 accepted
+INFO:root:Testing validity of 4325 in interval from 2091 to 4583 yields statistic 0.8172473693246806
+INFO:root:Breakpoint 6200 accepted
+INFO:root:Testing validity of 6260 in interval from 3784 to 6276 yields statistic 0.22623693650257187
+INFO:root:Breakpoint 8099 accepted
+INFO:root:Testing validity of 8205 in interval from 4230 to 10305 yields statistic 0.8586198946009868
+INFO:root:Breakpoint 6260 rejected
+INFO:root:Testing validity of 6276 in interval from 3784 to 6281 yields statistic 2.4600770123892057
+INFO:root:Breakpoint 13860 accepted
+INFO:root:Testing validity of 13940 in interval from 12125 to 14422 yields statistic 0.004599561279866711
+INFO:root:Breakpoint 13940 rejected
+INFO:root:Testing validity of 14422 in interval from 12125 to 14476 yields statistic 0.4572047436930842
+INFO:root:Proposed partition of 5017 to 7339 from 5998 to 6493 with t value 3.2971594452998585 is True
+INFO:root:Proposed partition of 5017 to 5998 from 5076 to 5680 with t value 0.5615121823243037 is False
+INFO:root:Proposed partition of 5998 to 6493 from 6191 to 6465 with t value 0.7893648127197666 is False
+INFO:root:Breakpoint 4325 accepted
+INFO:root:Testing validity of 4583 in interval from 4325 to 5398 yields statistic 0.9626232506876917
+INFO:root:Proposed partition of 6493 to 7339 from 6660 to 7211 with t value 1.2454553576453007 is False
+INFO:root:Breakpoint 6276 accepted
+INFO:root:Testing validity of 6281 in interval from 3804 to 6298 yields statistic 0.16349283722366018
+INFO:root:Breakpoint 14422 accepted
+INFO:root:Testing validity of 14476 in interval from 12189 to 14495 yields statistic 0.7011662679004335
+INFO:root:Breakpoint 4583 accepted
+INFO:root:Testing validity of 5398 in interval from 4583 to 5715 yields statistic 1.446183006078538
+INFO:root:Proposed partition of 7339 to 14643 from 8682 to 12560 with t value 0.9163032405120204 is False
+INFO:root:Breakpoint 6281 rejected
+INFO:root:Testing validity of 6298 in interval from 3804 to 6559 yields statistic 0.5609137625825633
+INFO:root:Proposed partition of 14643 to 14830 from 14668 to 14774 with t value 2.31969093152143 is True
+INFO:root:Breakpoint 5398 accepted
+INFO:root:Testing validity of 5715 in interval from 5398 to 5764 yields statistic 0.45944943014417317
+INFO:root:Proposed partition of 14643 to 14668 from 14643 to 14652 with t value 0.44256417382161517 is True
+INFO:root:Proposed partition of 14643 to 14652 from 14643 to 14652 with t value 0.1565097473176367 is False
+INFO:root:Proposed partition of 14652 to 14668 from 14652 to 14663 with t value 0.12215066035919496 is False
+INFO:root:Breakpoint 5715 accepted
+INFO:root:Testing validity of 5764 in interval from 5715 to 5987 yields statistic 0.27391676207075627
+INFO:root:Proposed partition of 14668 to 14774 from 14701 to 14768 with t value 1.0464816195694264 is False
+INFO:root:Breakpoint 5764 rejected
+INFO:root:Testing validity of 5987 in interval from 5715 to 6122 yields statistic 0.893610166308303
+INFO:root:Breakpoint 14476 accepted
+INFO:root:Testing validity of 14495 in interval from 12209 to 14512 yields statistic 0.1376514399542694
+INFO:root:Breakpoint 14495 rejected
+INFO:root:Testing validity of 14512 in interval from 12209 to 14573 yields statistic 0.706718966317214
+INFO:root:Proposed partition of 14774 to 14830 from 14781 to 14797 with t value 0.9542857191668236 is True
+INFO:root:Proposed partition of 14774 to 14781 from 14774 to 14781 with t value 0.02638619151282292 is False
+INFO:root:Proposed partition of 14781 to 14797 from 14782 to 14786 with t value 0.19393621583383322 is False
+INFO:root:Proposed partition of 14797 to 14830 from 14807 to 14830 with t value 0.09310044673819912 is False
+INFO:root:Testing validity of 217 in interval from 0 to 824 yields statistic 24.83286368983595
+INFO:root:Breakpoint 5987 accepted
+INFO:root:Testing validity of 6122 in interval from 5764 to 7266 yields statistic 0.45210153960212796
+INFO:root:Breakpoint 8205 accepted
+INFO:root:Testing validity of 10305 in interval from 4429 to 10449 yields statistic 0.9524866165483051
+INFO:root:Breakpoint 20996 accepted
+INFO:root:Testing validity of 21411 in interval from 8765 to 21432 yields statistic 0.631006844473899
+INFO:root:Breakpoint 6298 accepted
+INFO:root:Testing validity of 6559 in interval from 3814 to 6579 yields statistic 0.7886902445017107
+INFO:root:Breakpoint 217 accepted
+INFO:root:Testing validity of 824 in interval from 217 to 2896 yields statistic 1.7180267990661544
+INFO:root:Breakpoint 6122 accepted
+INFO:root:Testing validity of 7266 in interval from 5987 to 7658 yields statistic 2.1725989607492853
+INFO:root:Breakpoint 14512 accepted
+INFO:root:Testing validity of 14573 in interval from 12540 to 14616 yields statistic 0.22903933511470118
+INFO:root:Breakpoint 14573 rejected
+INFO:root:Testing validity of 14616 in interval from 12540 to 14765 yields statistic 0.2091386007385648
+INFO:root:Breakpoint 6559 accepted
+INFO:root:Testing validity of 6579 in interval from 4313 to 6654 yields statistic 2.864048166728725e-06
+INFO:root:Breakpoint 6579 rejected
+INFO:root:Testing validity of 6654 in interval from 4313 to 6688 yields statistic 0.3730353396561108
+INFO:root:Breakpoint 14616 rejected
+INFO:root:Testing validity of 14765 in interval from 12540 to 14972 yields statistic 0.4321044081526168
+INFO:root:Breakpoint 7266 accepted
+INFO:root:Testing validity of 7658 in interval from 6122 to 8313 yields statistic 0.1255477490975923
+INFO:root:Breakpoint 824 accepted
+INFO:root:Testing validity of 2896 in interval from 824 to 3055 yields statistic 0.9425046028587865
+INFO:root:Breakpoint 7658 rejected
+INFO:root:Testing validity of 8313 in interval from 6122 to 8469 yields statistic 2.003646270200357
+INFO:root:Breakpoint 2896 rejected
+INFO:root:Testing validity of 3055 in interval from 824 to 3148 yields statistic 8.697268322341527
+INFO:root:Breakpoint 6654 accepted
+INFO:root:Testing validity of 6688 in interval from 4633 to 7392 yields statistic 0.005819164894447535
+INFO:root:Breakpoint 6688 rejected
+INFO:root:Testing validity of 7392 in interval from 4633 to 7406 yields statistic 0.5213292452237047
+INFO:root:Breakpoint 14765 accepted
+INFO:root:Testing validity of 14972 in interval from 12580 to 15169 yields statistic 1.263718720633353
+INFO:root:Breakpoint 8313 accepted
+INFO:root:Testing validity of 8469 in interval from 7266 to 8517 yields statistic 0.5420848372072469
+INFO:root:Breakpoint 10305 accepted
+INFO:root:Testing validity of 10449 in interval from 4723 to 14116 yields statistic 2.454230160405535
+INFO:root:Breakpoint 3055 accepted
+INFO:root:Testing validity of 3148 in interval from 2896 to 3157 yields statistic 0.5371726035121419
+INFO:root:Breakpoint 3148 rejected
+INFO:root:Testing validity of 3157 in interval from 2896 to 3164 yields statistic 0.3139236377826221
+INFO:root:Breakpoint 3157 rejected
+INFO:root:Testing validity of 3164 in interval from 2896 to 5017 yields statistic 4.911777082910064
+INFO:root:Breakpoint 8469 accepted
+INFO:root:Testing validity of 8517 in interval from 7658 to 8539 yields statistic 0.22491290942101796
+INFO:root:Breakpoint 8517 rejected
+INFO:root:Testing validity of 8539 in interval from 7658 to 8549 yields statistic 0.76495296547778
+INFO:root:Breakpoint 14972 accepted
+INFO:root:Testing validity of 15169 in interval from 12598 to 15225 yields statistic 0.26117183630230406
+INFO:root:Breakpoint 7392 accepted
+INFO:root:Breakpoint 8539 accepted
+INFO:root:Testing validity of 8549 in interval from 8313 to 8569 yields statistic 0.12015922345342749
+INFO:root:Breakpoint 8549 rejected
+INFO:root:Testing validity of 8569 in interval from 8313 to 8577 yields statistic 0.3369593236832209
+INFO:root:Breakpoint 8569 rejected
+INFO:root:Testing validity of 8577 in interval from 8313 to 9429 yields statistic 0.2059414645985322
+INFO:root:Breakpoint 8577 rejected
+INFO:root:Testing validity of 9429 in interval from 8313 to 9842 yields statistic 0.9939513257329604
+INFO:root:Breakpoint 15169 rejected
+INFO:root:Testing validity of 15225 in interval from 12598 to 16101 yields statistic 17.059851375668213
+INFO:root:Breakpoint 3164 accepted
+INFO:root:Testing validity of 5017 in interval from 3055 to 5998 yields statistic 1.9980152839425216
+INFO:root:Breakpoint 9429 accepted
+INFO:root:Testing validity of 9842 in interval from 8469 to 10665 yields statistic 0.2155712843400825
+INFO:root:Breakpoint 9842 rejected
+INFO:root:Testing validity of 10665 in interval from 8469 to 10865 yields statistic 1.1023798141919658
+INFO:root:Breakpoint 5017 accepted
+INFO:root:Testing validity of 5998 in interval from 3148 to 6493 yields statistic 0.8505395943842402
+INFO:root:Breakpoint 15225 accepted
+INFO:root:Testing validity of 16101 in interval from 12613 to 17151 yields statistic 3.2210854582573107
+INFO:root:Breakpoint 21411 accepted
+INFO:root:Testing validity of 21432 in interval from 8831 to 21485 yields statistic 0.0063654897623083425
+INFO:root:Breakpoint 21432 rejected
+INFO:root:Testing validity of 21485 in interval from 8831 to 21500 yields statistic 0.23923034676411026
+INFO:root:Breakpoint 10665 accepted
+INFO:root:Testing validity of 10865 in interval from 8517 to 10932 yields statistic 0.6049007345688473
+INFO:root:Breakpoint 5998 rejected
+INFO:root:Testing validity of 6493 in interval from 3148 to 7339 yields statistic 1.9452736014489151
+INFO:root:Breakpoint 10449 accepted
+INFO:root:Testing validity of 14116 in interval from 4744 to 14393 yields statistic 0.37406571630859037
+INFO:root:Breakpoint 10865 accepted
+INFO:root:Testing validity of 10932 in interval from 8539 to 11032 yields statistic 0.027978087632601043
+INFO:root:Breakpoint 10932 rejected
+INFO:root:Testing validity of 11032 in interval from 8539 to 12015 yields statistic 0.21280473973107503
+INFO:root:Breakpoint 11032 rejected
+INFO:root:Testing validity of 12015 in interval from 8539 to 12052 yields statistic 2.94561857578971
+INFO:root:Breakpoint 21485 rejected
+INFO:root:Testing validity of 21500 in interval from 8831 to 21579 yields statistic 0.3596025409413935
+INFO:root:Breakpoint 16101 accepted
+INFO:root:Testing validity of 17151 in interval from 12620 to 18891 yields statistic 14.16360396013553
+INFO:root:Breakpoint 6493 accepted
+INFO:root:Testing validity of 7339 in interval from 3157 to 14643 yields statistic 1.8129123295328964
+INFO:root:Breakpoint 12015 accepted
+INFO:root:Testing validity of 12052 in interval from 8549 to 12108 yields statistic 2.4961009850718265
+INFO:root:Breakpoint 17151 accepted
+INFO:root:Testing validity of 18891 in interval from 12921 to 19337 yields statistic 0.009892455975295459
+INFO:root:Breakpoint 18891 rejected
+INFO:root:Testing validity of 19337 in interval from 12921 to 20485 yields statistic 3.442767811807342
+INFO:root:Breakpoint 12052 accepted
+INFO:root:Testing validity of 12108 in interval from 8569 to 13634 yields statistic 158.07498455778472
+INFO:root:Breakpoint 14116 accepted
+INFO:root:Testing validity of 14393 in interval from 4852 to 15659 yields statistic 0.18093718499140943
+INFO:root:Breakpoint 14393 rejected
+INFO:root:Testing validity of 15659 in interval from 4852 to 15771 yields statistic 0.5513088759445168
+INFO:root:Breakpoint 21500 rejected
+INFO:root:Testing validity of 21579 in interval from 8831 to 21653 yields statistic 0.2245394256876706
+INFO:root:Breakpoint 12108 accepted
+INFO:root:Testing validity of 13634 in interval from 8577 to 13648 yields statistic 0.8307747469351051
+INFO:root:Breakpoint 7339 accepted
+INFO:root:Testing validity of 14643 in interval from 3164 to 14652 yields statistic 1.7906601208531416
+INFO:root:Breakpoint 21579 rejected
+INFO:root:Testing validity of 21653 in interval from 8831 to 21777 yields statistic 0.5504160851283936
+INFO:root:Breakpoint 19337 accepted
+INFO:root:Testing validity of 20485 in interval from 12928 to 20750 yields statistic 0.05478123825999556
+INFO:root:Breakpoint 20485 rejected
+INFO:root:Testing validity of 20750 in interval from 12928 to 20776 yields statistic 0.8212520219814764
+INFO:root:Breakpoint 13634 accepted
+INFO:root:Testing validity of 13648 in interval from 9429 to 13781 yields statistic 5.0965822951296165
+INFO:root:Breakpoint 15659 accepted
+INFO:root:Testing validity of 15771 in interval from 4865 to 16895 yields statistic 0.05308748231542278
+INFO:root:Breakpoint 15771 rejected
+INFO:root:Testing validity of 16895 in interval from 4865 to 17151 yields statistic 0.7861297986277173
+INFO:root:Breakpoint 13648 accepted
+INFO:root:Testing validity of 13781 in interval from 9842 to 14439 yields statistic 1.1442084420572027
+INFO:root:Breakpoint 20750 accepted
+INFO:root:Testing validity of 20776 in interval from 12946 to 20865 yields statistic 0.3077587961405932
+INFO:root:Breakpoint 14643 accepted
+INFO:root:Testing validity of 14652 in interval from 5017 to 14668 yields statistic 0.6136909984771364
+INFO:root:Breakpoint 13781 accepted
+INFO:root:Testing validity of 14439 in interval from 10665 to 15250 yields statistic 205.25286861298142
+INFO:root:Breakpoint 21653 accepted
+INFO:root:Testing validity of 21777 in interval from 8861 to 22066 yields statistic 0.18084069592426147
+INFO:root:Breakpoint 14652 rejected
+INFO:root:Testing validity of 14668 in interval from 5017 to 14774 yields statistic 0.3180339992061757
+INFO:root:Breakpoint 21777 rejected
+INFO:root:Testing validity of 22066 in interval from 8861 to 22278 yields statistic 0.15577691061244187
+INFO:root:Breakpoint 20776 rejected
+INFO:root:Testing validity of 20865 in interval from 12946 to 20885 yields statistic 1.1590992732488175
+INFO:root:Breakpoint 14668 rejected
+INFO:root:Testing validity of 14774 in interval from 5017 to 14781 yields statistic 0.8907233593134438
+INFO:root:Breakpoint 22066 rejected
+INFO:root:Testing validity of 22278 in interval from 8861 to 22349 yields statistic 0.5442583456479609
+INFO:root:Breakpoint 14439 accepted
+INFO:root:Breakpoint 16895 accepted
+INFO:root:Testing validity of 17151 in interval from 4956 to 17222 yields statistic 0.439786099447961
+INFO:root:Breakpoint 20865 accepted
+INFO:root:Testing validity of 20885 in interval from 12982 to 21040 yields statistic 0.3173813811705795
+INFO:root:Breakpoint 14774 rejected
+INFO:root:Testing validity of 14781 in interval from 5017 to 14797 yields statistic 0.0839208568566664
+INFO:root:Breakpoint 14781 rejected
+INFO:root:Testing validity of 14797 in interval from 5017 to 14830 yields statistic 3.942672085521435
+INFO:root:Breakpoint 20885 rejected
+INFO:root:Testing validity of 21040 in interval from 12982 to 21337 yields statistic 2.3493120823195643
+INFO:root:Breakpoint 22278 accepted
+INFO:root:Testing validity of 22349 in interval from 8883 to 23624 yields statistic 0.6723023156207781
+INFO:root:Breakpoint 17151 accepted
+INFO:root:Testing validity of 17222 in interval from 4969 to 17263 yields statistic 0.35899182694190407
+INFO:root:Breakpoint 14797 accepted
+INFO:root:Breakpoint 21040 accepted
+INFO:root:Testing validity of 21337 in interval from 13263 to 21550 yields statistic 0.014555785436909777
+INFO:root:Breakpoint 21337 rejected
+INFO:root:Testing validity of 21550 in interval from 13263 to 21802 yields statistic 2.3940016483505486
+INFO:root:Breakpoint 17222 accepted
+INFO:root:Testing validity of 17263 in interval from 5080 to 17428 yields statistic 0.4272887283554947
+INFO:root:Breakpoint 22349 accepted
+INFO:root:Breakpoint 21550 accepted
+INFO:root:Testing validity of 21802 in interval from 13418 to 21891 yields statistic 0.23264299368888672
+INFO:root:Breakpoint 21802 rejected
+INFO:root:Testing validity of 21891 in interval from 13418 to 21925 yields statistic 0.7175554080539328
+INFO:root:Breakpoint 17263 accepted
+INFO:root:Testing validity of 17428 in interval from 5100 to 17464 yields statistic 0.37596422406749
+INFO:root:Breakpoint 21891 accepted
+INFO:root:Testing validity of 21925 in interval from 13540 to 21958 yields statistic 0.009752778046251255
+INFO:root:Breakpoint 21925 rejected
+INFO:root:Testing validity of 21958 in interval from 13540 to 21987 yields statistic 0.7684163293507708
+INFO:root:Breakpoint 21958 accepted
+INFO:root:Testing validity of 21987 in interval from 13860 to 22115 yields statistic 0.00280014385698131
+INFO:root:Breakpoint 21987 rejected
+INFO:root:Testing validity of 22115 in interval from 13860 to 22123 yields statistic 0.3131847409105874
+INFO:root:Breakpoint 17428 rejected
+INFO:root:Testing validity of 17464 in interval from 5100 to 17658 yields statistic 1.1986114714436935
+INFO:root:Breakpoint 22115 rejected
+INFO:root:Testing validity of 22123 in interval from 13860 to 22136 yields statistic 0.014015044618426896
+INFO:root:Breakpoint 22123 rejected
+INFO:root:Testing validity of 22136 in interval from 13860 to 22148 yields statistic 0.3623576297252661
+INFO:root:Breakpoint 22136 accepted
+INFO:root:Testing validity of 22148 in interval from 13940 to 22157 yields statistic 0.00023811949292833843
+INFO:root:Breakpoint 22148 rejected
+INFO:root:Testing validity of 22157 in interval from 13940 to 22162 yields statistic 0.10823377196800908
+INFO:root:Breakpoint 17464 accepted
+INFO:root:Testing validity of 17658 in interval from 5131 to 17672 yields statistic 0.0049940243299885
+INFO:root:Breakpoint 22157 rejected
+INFO:root:Testing validity of 22162 in interval from 13940 to 22209 yields statistic 0.2416365328194408
+INFO:root:Breakpoint 17658 rejected
+INFO:root:Testing validity of 17672 in interval from 5131 to 17705 yields statistic 1.8796944717122668
+INFO:root:Breakpoint 22162 rejected
+INFO:root:Testing validity of 22209 in interval from 13940 to 22230 yields statistic 0.8222471534818127
+INFO:root:Breakpoint 22209 accepted
+INFO:root:Breakpoint 17672 accepted
+INFO:root:Testing validity of 17705 in interval from 5297 to 17773 yields statistic 0.023225535017472373
+INFO:root:Testing validity of 22230 in interval from 14422 to 22242 yields statistic 0.2654574173958298
+INFO:root:Breakpoint 17705 rejected
+INFO:root:Testing validity of 17773 in interval from 5297 to 18532 yields statistic 0.656677919748775
+INFO:root:Breakpoint 22230 rejected
+INFO:root:Testing validity of 22242 in interval from 14422 to 22248 yields statistic 0.06879710105057105
+INFO:root:Breakpoint 22242 rejected
+INFO:root:Breakpoint 17773 accepted
+INFO:root:Testing validity of 18532 in interval from 5571 to 18843 yields statistic 0.3127074658175761
+INFO:root:Breakpoint 18532 rejected
+INFO:root:Testing validity of 18843 in interval from 5571 to 19250 yields statistic 0.9267220770880403
+INFO:root:Breakpoint 18843 accepted
+INFO:root:Testing validity of 19250 in interval from 8099 to 19349 yields statistic 0.06272057887764605
+INFO:root:Breakpoint 19250 rejected

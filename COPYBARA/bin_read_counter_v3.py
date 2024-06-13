@@ -1,4 +1,5 @@
 from multiprocessing import Pool
+from multiprocessing import cpu_count
 import pysam
 import argparse
 import os
@@ -54,7 +55,7 @@ blacklisting = args.blacklisting
 bl_threshold = args.bl_threshold
 bases_filter = args.bases_filter
 bases_threshold = args.bases_threshold
-threads = args.threads
+# threads = args.threads
 outdir = args.out_dir
 
 if outdir != '.':
@@ -65,6 +66,9 @@ if outdir != '.':
 else:
     pass
 
+# check and define threads
+threads = min(args.threads, cpu_count())
+print(f"... Bin read counter will use threads = {threads}. (threads = {args.threads} defined; threads = {cpu_count()} available) ...")
 
 if args.normal_bam is not None:
     nmode = "mnorm" #matched normal will be used for logR normalisation
@@ -103,8 +107,8 @@ def count_reads_in_curr_bin(bam, chrom, start, end):
     return chunk_read_count
 
 
-def binned_read_counting(chr, alns, bed):
-    print(f"    Read counting {chr} ...")
+def binned_read_counting(curr_chunk,bed_chunk,alns):
+    print(f"    Read counting {curr_chunk} ...")
 
     # bam_T = alns['tumour']
     # bam_N = alns['normal'] if nmode == "mnorm" and len(alns) == 2 else None
@@ -114,10 +118,10 @@ def binned_read_counting(chr, alns, bed):
     bam_N = pysam.AlignmentFile(alns['normal'], "rb") if nmode == "mnorm" and len(alns) == 2 else None
     
     # Read the BED file to get regions and start/end positions for each chromosome
-    bed_file =  pybedtools.BedTool(bed).filter(lambda b: b.chrom == chr)
+    # bed_file =  pybedtools.BedTool(bed).filter(lambda b: b.chrom == chr)
 
     chr_read_counts = []
-    for bin in bed_file:
+    for bin in bed_chunk:
         chrom, start, end, bases = bin[0], int(bin[1]), int(bin[2]), float(bin[3])
         bin_name = f"{chrom}:{start}_{end}"
          
@@ -183,7 +187,23 @@ def filter_and_normalise(nmode, countData):
             r.append(n)
     # return out        
     return filtered_counts, normalised_counts
-    
+
+
+def chunkify_bed(bed_file, chunk_size):
+    '''
+    Divides bed files into chunks based on threads available for multiprocessing.
+    '''
+    chunks = []
+    current_chunk = []
+    for i, feature in enumerate(bed_file):
+        current_chunk.append(feature)
+        if (i + 1) % chunk_size == 0:
+            chunks.append(pybedtools.BedTool(current_chunk))
+            current_chunk = []
+    if current_chunk:
+        chunks.append(pybedtools.BedTool(current_chunk))
+    return chunks
+
 
 #----    
 # 3. Perform binned read counting on bam file/files per chromosome
@@ -193,21 +213,30 @@ def main():
     print(f"Normalisation mode: {nmode}")
 
     # Define contig names from annotation bed file
-    chr_names = list(dict.fromkeys([x[0] for x in pybedtools.BedTool(bed_file_path)]))
+    # chr_names = list(dict.fromkeys([x[0] for x in pybedtools.BedTool(bed_file_path)]))
+
+    # Define bed_file chunks
+    bed_file =  pybedtools.BedTool(bed_file_path)
+    bed_length = sum(1 for _ in bed_file)
+    chunk_size = bed_length // threads + (bed_length % threads > 0)
+    print(f"    splitting bed file into n = {math.ceil(bed_length / chunk_size)} chunks ...")
+    # Split the BED file into chunks
+    chunks = chunkify_bed(bed_file, chunk_size)
 
     # only use multiprocessing if more than 1 thread available/being used. 
     if threads == 1:
         # loop through chromosomes
         print("multithreading skipped.")
         countData = []
-        for chr in chr_names:
-            counts_binned_chr = binned_read_counting(chr, aln_files, bed_file_path)
+        for idx,bed_chunk in enumerate(chunks):
+            curr_chunk = f"chunk {idx+1}"
+            counts_binned_chr = binned_read_counting(curr_chunk,bed_chunk, aln_files)
             countData.append(counts_binned_chr)
         countData = [x for xs in countData for x in xs]
 
     else:
         print(f"multithreading using {threads} threads.")
-        args_in = [[chr, aln_files, bed_file_path] for chr in chr_names]
+        args_in = [[str(f"chunk {idx+1}"),bed_chunk,aln_files] for idx,bed_chunk in enumerate(chunks)]
         # print(args_in)
         with Pool(processes=threads) as pool:
             countData = [x for xs in list(pool.starmap(binned_read_counting, args_in)) for x in xs]
