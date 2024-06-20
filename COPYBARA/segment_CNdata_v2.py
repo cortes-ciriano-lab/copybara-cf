@@ -1,4 +1,5 @@
 from multiprocessing import Pool
+from multiprocessing import cpu_count
 import argparse
 import numpy as np
 import seaborn as sns
@@ -42,6 +43,10 @@ p_val = args.p_val
 quantile = args.quantile
 threads = args.threads
 outdir = args.out_dir
+
+# check and define threads
+threads = min(args.threads, cpu_count())
+print(f"... CBS segmentation will use threads = {threads}. (threads = {args.threads} defined; threads = {cpu_count()} available) ...")
 
 
 ###
@@ -227,13 +232,13 @@ def segment_chromosome(chr, in_data, min_segment_size, shuffles, p_seg, p_val):
         input_ansc.append(val_ansc)
     # initial cbs segmentation identifying start and end positions of candidate segments
     L = segment(input_ansc, min_segment_size=min_segment_size, shuffles=shuffles, p=p_seg)
-    print(L)
+    # print(L)
     # validate candidate segments
     S, Sse = validate(input_ansc, L, shuffles=shuffles, p=p_val)
-    print(Sse)
+    # print(Sse)
     # merge segments based on Xth quantile of changepoints (of segment medians)
     M = merge_segments(input_ansc, Sse, quantile = quantile)
-    print(M)
+    # print(M)
     # prepare and return chromosome output data
     chr_out_data = []
     for i, (s_start,s_end) in enumerate(M):
@@ -324,8 +329,6 @@ if __name__ == '__main__':
         with Pool(processes=threads) as pool:
             segmentedData = [x for xs in list(pool.starmap(segment_chromosome, args_in)) for x in xs]
 
-    
-    
     ### WRITE OUT FILE ###
     outfile = open(f"{outdir}/{prefix}_segmented.tsv", "w")
     for r in segmentedData:
