@@ -37,7 +37,7 @@ parser.add_argument('-a', '--bin_annotations', type=str, help='Path to bed file 
 parser.add_argument('-q', '--mapping_quality', type=int,  default=5, help='Mapping quality threshold used for read counting', required=False)
 parser.add_argument('--no_blacklist', dest='blacklisting', action='store_false')
 parser.set_defaults(blacklisting=True)
-parser.add_argument('-blt', '--bl_threshold', type=int,  default='0', help='Percentage overlap between bin and blacklist threshold to tolerate for read counting (default = 0, i.e. no overlap tolerated). Please specify percentage threshold as integer, e.g. "-t 5" ', required=False)
+parser.add_argument('-blt', '--bl_threshold', type=int,  default='5', help='Percentage overlap between bin and blacklist threshold to tolerate for read counting (default = 0, i.e. no overlap tolerated). Please specify percentage threshold as integer, e.g. "-t 5" ', required=False)
 parser.add_argument('--no_basesfilter', dest='bases_filter', action='store_false')
 parser.set_defaults(bases_filter=True)
 parser.add_argument('-bt', '--bases_threshold', type=int,  default='75', help='Percentage of known bases per bin required for read counting (default = 0, i.e. no filtering). Please specify percentage threshold as integer, e.g. "-bt 95" ', required=False)
