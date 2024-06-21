@@ -195,9 +195,9 @@ def main(fasta_file_path):
 
     # c. Concat results into a single bed file
     if contigs != 'all':
-        outfile_name = f"{outdir}/{int(bin_size/1000)}kbp_bin_ref_subset_{binmode}.bed"
+        outfile_name = f"{outdir}/{int(bin_size/1000)}kbp_bin_ref_subset_{sample_prefix}{binmode}.bed"
     else:
-        outfile_name = f"{outdir}/{int(bin_size/1000)}kbp_bin_ref_all_{binmode}.bed"
+        outfile_name = f"{outdir}/{int(bin_size/1000)}kbp_bin_ref_all_{sample_prefix}{binmode}.bed"
 
     outfile = open(outfile_name, "w")
 
