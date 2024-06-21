@@ -14,6 +14,7 @@ parser = argparse.ArgumentParser(description="Generate bin annotations from fast
 parser.add_argument('-w', '--bin_size', type=int, help='Bin window size in kbp', required=True)
 parser.add_argument('-f', '--fasta_file', type=str, help='Path to the reference FASTA file', required=True)
 parser.add_argument('-b', '--black_list', type=str, help='Path to the blacklist file', required=False)
+parser.add_argument('-s', '--sample_prefix', default='', type=str, help='Sample name or prefix to use for out files (relevant if sample-specific vcf file is provided).', required=False)
 parser.add_argument('-bp', '--breakpoints', type=str, help='Path to Savana vcf file to incorporate savana breakpoints into copy number analysis', required=False)
 parser.add_argument('-c', '--chromosomes', nargs='+', default='all', help='Chromosomes to analyse. To run on all chromosomes, leave unspecified (default). To run on a subset of chromosomes only, specify the chromosome numbers separated by spaces. For x and y chromosomes, use 23 and 24, respectively.  E.g. use "-c 1 4 23 24" to run chromosomes 1, 4, X and Y', required=False)
 parser.add_argument('-t', '--threads', type=int,  default=24, help='number of threads to be used for multiprocessing of chromosomes. Use threads = 1 to avoid multiprocessing.', required=False)
@@ -22,8 +23,8 @@ args = parser.parse_args()
 
 bin_size = args.bin_size * int(1000)
 fasta_file_path = args.fasta_file
-print(fasta_file_path)
 blacklist_file = args.black_list
+sample_prefix = args.sample_prefix
 breakpoints_file = args.breakpoints
 contigs = args.chromosomes
 threads = args.threads
