@@ -89,7 +89,7 @@ def process_chromosome(chrom, chr_length, fasta_file_path, breakpoints = []):
     # append chr_starts with vcf breakpoint positions if provided 
     if breakpoints_file != None:
         print(f"    adding vcf breakpoints for {chrom} ...")
-        for bp in breakpoints: 
+        for bp in breakpoints:
             chr_starts.append(bp)
         # make sure all bin starts are unique (in case breakpoints = chr_start position) to avoid bins of 0kbp bin size.
         chr_starts = list(set(chr_starts))
@@ -184,7 +184,10 @@ def main(fasta_file_path):
         chrData = []
         for contig in chr_in:
             chrom, chr_length, fasta_file_path = contig[0], contig[1], contig[2]
-            binned_chr = process_chromosome(chrom, chr_length, fasta_file_path)
+            if (breakpoints_file != None):
+                binned_chr = process_chromosome(chrom, chr_length, fasta_file_path, bp_dict[chrom])
+            elif (breakpoints_file == None):
+                binned_chr = process_chromosome(chrom, chr_length, fasta_file_path)
             chrData.append(binned_chr)
     else:
         print(f"multithreading using {threads} threads.")
