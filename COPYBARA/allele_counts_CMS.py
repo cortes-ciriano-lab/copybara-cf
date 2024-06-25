@@ -160,42 +160,60 @@ def allele_counter(curr_chunk, sites, bam):
 # 3. Prepare input and run allele counter
 #----
 
-# a. Extract chormosome info and pass fasta file into chr_in list
-# bam = pysam.AlignmentFile(bam_file_path, "rb")
-# if contigs != 'all':
-#     chr_names = [bam.references[(int(x)-1)] for x in contigs]     
-# else:
-#     chr_names = bam.references[0:24]
+def main():
+    ## RUN IN CHUNKS TO SPEED UP
+    # Define bed_file chunks
+    bed_file =  pybedtools.BedTool(hets_bed_path)
+    bed_length = sum(1 for _ in bed_file)
+    chunk_size = bed_length // threads + (bed_length % threads > 0)
+    print(f"    splitting bed file into n = {math.ceil(bed_length / chunk_size)} chunks ...")
+    # Split the BED file into chunks
+    chunks = chunkify_bed(bed_file, chunk_size)
+
+    # only use multiprocessing if more than 1 thread available/being used. 
+    if threads == 1:
+        # loop through chromosomes
+        print("multithreading skipped.")
+        allele_counts = []
+        for idx,bed_chunk in enumerate(chunks):
+            curr_chunk = f"chunk {idx+1}"
+            allele_counts_chunk = allele_counter(curr_chunk, bed_chunk, bam_file_path)
+            allele_counts.append(allele_counts_chunk)
+        allele_counts = [x for xs in allele_counts for x in xs]
+
+    else:
+        print(f"multithreading using {threads} threads.")
+        args_in = [[str(f"chunk {idx+1}"),bed_chunk,bam_file_path] for idx,bed_chunk in enumerate(chunks)]
+        # print(args_in)
+        with Pool(processes=threads) as pool:
+            allele_counts = [x for xs in list(pool.starmap(allele_counter, args_in)) for x in xs]
+
+    print(allele_counts)
+    print(len(allele_counts))
+
+    #----
+    # 4. Get results and write out
+    #----
+    outfile = open(f"{outdir}/{prefix}_allele_counts_het_snps.tsv", "w")
+    for r in allele_counts:
+        Line = '\t'.join(r) + '\n'
+        outfile.write(Line)
+    outfile.close()           
 
 
-start_t = timeit.default_timer()
 
-## RUN IN CHUNKS TO SPEED UP
-# Define bed_file chunks
-bed_file =  pybedtools.BedTool(hets_bed_path)
-bed_length = sum(1 for _ in bed_file)
-chunk_size = bed_length // threads + (bed_length % threads > 0)
-print(f"    splitting bed file into n = {math.ceil(bed_length / chunk_size)} chunks ...")
-# Split the BED file into chunks
-chunks = chunkify_bed(bed_file, chunk_size)
+if __name__ == "__main__":
+    start_t = timeit.default_timer()
+    main()
+    stop = timeit.default_timer()
+    Seconds = round(stop - start_t)
+    print(f"Computation time (allele_counts): {Seconds} seconds\n") 
 
 
-if threads == 1:
-    # loop through chromosomes
-    print("multithreading skipped.")
-    allele_counts = []
-    for idx,bed_chunk in enumerate(chunks):
-        curr_chunk = f"chunk {idx+1}"
-        allele_counts_chunk = allele_counter(curr_chunk, bed_chunk, bam_file_path)
-        allele_counts.append(allele_counts_chunk)
-    allele_counts = [x for xs in allele_counts for x in xs]
 
-else:
-    print(f"multithreading using {threads} threads.")
-    args_in = [[str(f"chunk {idx+1}"),bed_chunk,bam_file_path] for idx,bed_chunk in enumerate(chunks)]
-    # print(args_in)
-    with Pool(processes=threads) as pool:
-        allele_counts = [x for xs in list(pool.starmap(allele_counter, args_in)) for x in xs]
+
+
+
 
 ## BY CHROMOSOME
 # with open(hets_bed_path) as bed:
@@ -221,11 +239,3 @@ else:
 #     with Pool(processes=threads) as pool:
 #         allele_counts = list(pool.starmap(allele_counter, chr_in))
 
-print(allele_counts)
-print(len(allele_counts))
-
-
-# # results = allele_counter(bam_file_path,hets_bed_path)
-stop = timeit.default_timer()
-Seconds = round(stop - start_t)
-print(f"Computation time (bin_ref_generator): {Seconds} seconds\n") 
