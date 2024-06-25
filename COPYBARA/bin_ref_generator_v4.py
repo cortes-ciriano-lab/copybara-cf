@@ -219,4 +219,5 @@ if __name__ == "__main__":
     main(fasta_file_path)
     stop = timeit.default_timer()
     Seconds = round(stop - start_t)
-    print(f"Computation time (bin_ref_generator): {Seconds} seconds\n") 
+
+
