@@ -147,7 +147,7 @@ def allele_counter(curr_chunk, sites, bam):
                     dict_out[key_now]["AF_0"] = AF_0
                     dict_out[key_now]["AF_1"] = AF_1
 
-                    out = [chr, start, end, ref, alt, dict_out[key_now]["A"], dict_out[key_now]["C"], dict_out[key_now]["G"], dict_out[key_now]["T"], dict_out[key_now]["N"] , dict_out[key_now]["AF_0"],dict_out[key_now]["AF_1"], GT, PS]
+                    out = [chr, str(start), str(end), ref, alt, str(dict_out[key_now]["A"]), str(dict_out[key_now]["C"]), str(dict_out[key_now]["G"]), str(dict_out[key_now]["T"]), str(dict_out[key_now]["N"]) , str(dict_out[key_now]["AF_0"]), str(dict_out[key_now]["AF_1"]), GT, str(PS)]
                     # print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(key_now, dict_out[key_now]["A"], dict_out[key_now]["C"], dict_out[key_now]["G"], dict_out[key_now]["T"], dict_out[key_now]["N"] , dict_out[key_now]["AF_0"],dict_out[key_now]["AF_1"], GT, PS ))
                     # print(out)
                 list_out.append(out)
