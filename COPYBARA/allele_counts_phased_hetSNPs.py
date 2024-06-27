@@ -2,23 +2,19 @@ from multiprocessing import Pool
 from multiprocessing import cpu_count
 import argparse
 import timeit
-import csv
+import cyvcf2
 import pysam
 import pybedtools
 import math
 import os
-
-# inputs needed... 
-# bed file
-# sample name
-# threads for multiprocessing 
 
 #----
 # 1. Parse command line arguments
 #----
 parser = argparse.ArgumentParser(description="Count alleles/bases in tumour bam using heterozygous SNPs from phased normal.")
 parser.add_argument('-b', '--bam', type=str, help='Path to tumour bam file.', required=True)
-parser.add_argument('-hb', '--hets_bed', type=str, help='Path to bed file containing heterozygous SNPs extracted from normal phased.vcf.', required=True)
+parser.add_argument('-v', '--phased_vcf', type=str, help='Path to phased vcf file to extract heterozygous SNPs for allele counting.', required=True)
+# parser.add_argument('-hb', '--hets_bed', type=str, help='Path to bed file containing heterozygous SNPs extracted from normal phased.vcf.', required=True)
 parser.add_argument('-s', '--sample_prefix', default='bam', type=str, help='Sample name of prefix to use for out files.', required=False)
 # parser.add_argument('-c', '--chromosomes', nargs='+', default='all', help='Chromosomes to analyse. To run on all chromosomes, leave unspecified (default). To run on a subset of chromosomes only, specify the chromosome numbers separated by spaces. For x and y chromosomes, use 23 and 24, respectively.  E.g. use "-c 1 4 23 24" to run chromosomes 1, 4, X and Y', required=False)
 parser.add_argument('-q', '--mapping_quality', type=int,  default=0, help='Mapping quality threshold used reads to be included in the allele counting (default = 0)', required=False)
@@ -28,7 +24,7 @@ parser.add_argument('-o', '--out_dir', type=str, default='.', help='Path to out 
 args = parser.parse_args()
 
 bam_file_path = args.bam
-hets_bed_path = args.hets_bed
+phased_vcf_path = args.phased_vcf
 prefix = args.sample_prefix
 # contigs = args.chromosomes
 mapq = args.mapping_quality
@@ -43,17 +39,40 @@ if outdir != '.':
 else:
     pass
 
+hets_bed_path = f"{outdir}/{prefix}_phased_het_snps.bed"
+
 # check and define threads
 threads = min(args.threads, cpu_count())
 print(f"... Allele counter will use threads = {threads}. (threads = {args.threads} defined; threads = {cpu_count()} available) ...")
 
-# donor=sys.argv[1]
-# chr_now=sys.argv[2]
-# bam_path=sys.argv[3]
-
 #----
 # 2. Define functions
 #----
+def extract_hets(phased_vcf):
+    '''
+    Extracts heterozygous SNPs from phased.vcf (e.g. from matched normal bam).
+    '''
+    print(f"    Extracting phased heterozygous SNPs from {phased_vcf} ...")
+    vcf_reader = cyvcf2.VCF(phased_vcf)
+    hets = []
+    # iterate through variants
+    for variant in vcf_reader:
+        # check if variant is a SNP
+        if variant.is_snp:
+            # iterate through each genotype
+            for s_idx, gt in enumerate(variant.genotypes):
+                # only get heterozygous snps
+                if gt[0] != gt[1]:
+                    # print(s_idx, gt)
+                    # sample = vcf_reader.samples[s_idx]
+                    ps = int(variant.format('PS')[s_idx]) if 'PS' in variant.FORMAT else None
+                    gt_str = f"{gt[0]}|{gt[1]}" if gt[2] == 1 else f"{gt[0]}/{gt[1]}"
+                    # dp = int(variant.format('DP')[s_idx]) if 'DP' in variant.FORMAT else None
+                    # ad = int(variant.format('AD')[s_idx]) if 'AD' in variant.FORMAT else None
+                    var_out = [variant.CHROM,str(variant.POS),str(variant.POS),variant.REF,variant.ALT[0],gt_str,str(ps)]
+                    hets.append(var_out)
+    return hets
+
 def chunkify_bed(bed_file, chunk_size):
     '''
     Divides bed file into chunks based on threads available for multiprocessing.
@@ -73,13 +92,7 @@ def allele_counter(curr_chunk, sites, bam):
     '''
     Count alleles across heterozygous SNP positions from phased normal bam
     '''
-    # open bed file
-    # with open(hets_bed_path) as bed:
-    #     reader = csv.reader(bed, delimiter="\t")
-    #     sites = list(reader)
-
-    print(f"    Read counting {curr_chunk} ...")
-    
+    print(f"    Read counting {curr_chunk} ...")   
     # open tumour bam
     with pysam.AlignmentFile(bam, "rb") as bamfile:
         list_out = []
@@ -148,8 +161,7 @@ def allele_counter(curr_chunk, sites, bam):
                     dict_out[key_now]["AF_1"] = AF_1
 
                     out = [chr, str(start), str(end), ref, alt, str(dict_out[key_now]["A"]), str(dict_out[key_now]["C"]), str(dict_out[key_now]["G"]), str(dict_out[key_now]["T"]), str(dict_out[key_now]["N"]) , str(dict_out[key_now]["AF_0"]), str(dict_out[key_now]["AF_1"]), GT, str(PS)]
-                    # print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(key_now, dict_out[key_now]["A"], dict_out[key_now]["C"], dict_out[key_now]["G"], dict_out[key_now]["T"], dict_out[key_now]["N"] , dict_out[key_now]["AF_0"],dict_out[key_now]["AF_1"], GT, PS ))
-                    # print(out)
+
                 list_out.append(out)
             except:
                 continue
@@ -157,10 +169,17 @@ def allele_counter(curr_chunk, sites, bam):
 
 
 #----
-# 3. Prepare input and run allele counter
+# 3. Prepare input and run allele counter across heterozygous SNPs
 #----
-
 def main():
+    # extract heterozygous SNPs
+    het_snps = extract_hets(phased_vcf_path)
+    outfile = open(hets_bed_path, "w")
+    for r in het_snps:
+        Line = '\t'.join(r) + '\n'
+        outfile.write(Line)
+    outfile.close()
+
     ## RUN IN CHUNKS TO SPEED UP
     # Define bed_file chunks
     bed_file =  pybedtools.BedTool(hets_bed_path)
@@ -188,8 +207,8 @@ def main():
         with Pool(processes=threads) as pool:
             allele_counts = [x for xs in list(pool.starmap(allele_counter, args_in)) for x in xs]
 
-    print(allele_counts)
-    print(len(allele_counts))
+    # print(allele_counts)
+    # print(len(allele_counts))
 
     #----
     # 4. Get results and write out
@@ -207,7 +226,7 @@ if __name__ == "__main__":
     main()
     stop = timeit.default_timer()
     Seconds = round(stop - start_t)
-    print(f"Computation time (allele_counts): {Seconds} seconds\n") 
+    print(f"Computation time (allele_counts_phased_hetSNPs): {Seconds} seconds\n") 
 
 
 
