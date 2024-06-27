@@ -173,8 +173,8 @@ def allele_counter(curr_chunk, sites, bam):
 #----
 def main():
     # extract heterozygous SNPs
-    het_snps = extract_hets(phased_vcf_path)
     outfile = open(hets_bed_path, "w")
+    het_snps = extract_hets(phased_vcf_path)
     for r in het_snps:
         Line = '\t'.join(r) + '\n'
         outfile.write(Line)
@@ -213,7 +213,7 @@ def main():
     #----
     # 4. Get results and write out
     #----
-    outfile = open(f"{outdir}/{prefix}_allele_counts_het_snps.tsv", "w")
+    outfile = open(f"{outdir}/{prefix}_allele_counts_hetSNPs.tsv", "w")
     for r in allele_counts:
         Line = '\t'.join(r) + '\n'
         outfile.write(Line)
