@@ -2,6 +2,9 @@ from multiprocessing import Pool
 from multiprocessing import cpu_count
 import numpy as np
 from scipy.stats import gaussian_kde
+import statistics
+import sys
+# import math
 # from scipy.stats import skew as scipy_skew
 # from scipy.stats import kurtosis as scipy_kurtosis
 
@@ -177,26 +180,105 @@ import CN_helper as cnh
 # 3. Estimate purity using phased heterozygous SNPs
 #----
 # Method/principles based on: https://doi.org/10.1371/journal.pone.0045835
-allele_counts_path = "chr17_215000645_allele_counts_hetSNPs.tsv"
+# allele_counts_path = "chr17_test/chr17_215000645_allele_counts_hetSNPs.tsv"
+# allele_counts_path = "215000645_wg_allele_counts.txt"
+allele_counts_path = "test_out_20240628/215000645_allele_counts_hetSNPs.tsv"
 # process input - allele_counts_hetSNPs.tsv
+
+allele_counts_path=sys.argv[1]
+
 allele_counts = []
 with open(allele_counts_path, "r") as file:
     for line in file:
         fields = line.strip().split("\t")
         A,C,G,T,N = int(fields[5]),int(fields[6]),int(fields[7]),int(fields[8]),int(fields[9])
+        ps_id = f"{fields[0]}_{fields[-1]}" # assign phase sets IDs as same phase set might accur in different chromosomes
+        fields.append(ps_id)
         DP = A+C+G+T+N
-        # only include het SNPs allele counts with a total depth of > 20.
-        if DP > 20:
+        if DP > 20: # only include het SNPs allele counts with a total depth of > 20.
             fields.append(DP)
             # print(fields.append(str(DP)))
             allele_counts.append(fields)
 
-# columns:"chr", "start", "end","REF", "ALT", "A","C","G","T","N","AF_0","AF_1","GT","PS","DP"
+# columns:"chr", "start", "end","REF", "ALT", "A","C","G","T","N","AF_0","AF_1","GT","PS","ps_id","DP"
+
+ac_mean_depth = statistics.mean([x[-1] for x in allele_counts])
+dp_cutoff = 2 * ac_mean_depth # to exclude potentially amplified/gained regions as those will impact BAF distribution
+# dp_cutoff = 100
+no_hetSNPs = len(allele_counts)
+
+
+### PARAM to add in!!! ###
+min_PS_size = 10
 
 # get unique phase sets to iterate (or multiprocess through)
 phasesets = list(dict.fromkeys([x[-2] for x in allele_counts]))
-ps = '72909885'
-ac_ps = [x for x in allele_counts if x[-2] == ps]
+# phasesets_dict = dict.fromkeys([x[-2] for x in allele_counts])
+
+# TESTING
+# phasesets = [phasesets[0]]
+
+phasesets_dict = {}
+ps_summary = []
+for ps in phasesets:
+    if "None" not in ps: 
+    # if ps == 'None':
+    #     continue
+    # else:
+        #print(ps)
+        # subset allele count data to ps and remove SNPs with AF0/AF1 of 0 or 1
+        ac_ps = [x for x in allele_counts if x[-2] == ps and float(x[10]) != 0 and float(x[10]) != 1 and float(x[11]) != 0 and float(x[11]) != 1]
+        if len(ac_ps) < min_PS_size:
+            continue
+        else:
+            ps_length = max([int(x[2]) for x in ac_ps]) - min([int(x[1]) for x in ac_ps]) # genomic lenght of ps_length
+            ps_snps = len(ac_ps) # number of SNPs in ps
+            ps_depth = statistics.mean([int(x[-1]) for x in ac_ps]) # mean depth of ps
+            ps_weight = ps_snps/no_hetSNPs # estimate weight of PS based on number of hetSNPs present in PS compared to all hetSNPs across sample
+            # all AFs at all het SNP position within ps
+            af = [float(x[10]) for x in ac_ps] + [float(x[11]) for x in ac_ps]
+            # check if distribution is not unimodal and estimate bimodality coefficient
+            if cnh.is_unimodal(af) == False:
+                ps_bc = cnh.bimodality_coefficient(af)
+            # if is_unimodal(af) == False:
+            #     ps_bc = bimodality_coefficient(af)
+                # ps_bc_weighted = ps_weight * ps_bc
+                if ps_depth < dp_cutoff:
+                    phasesets_dict[ps] = ac_ps
+                    # ps_summary.append([ps, ps_depth, ps_length, ps_snps, ps_weight, ps_bc, ps_bc_weighted])
+                    ps_summary.append([ps, ps_depth, ps_length, ps_snps, ps_weight, ps_bc])
+            
+# select PS 
+ps_summary = sorted(ps_summary,key=lambda x: x[-1]) # sort by ps_bc 
+# ps_summary = sorted(sorted(ps_summary,key=lambda x: x[-2]), key=lambda x: round(x[-1],3)) # sort by ps_bc and weight
+
+#select top 10% PSs
+# ps_top = [x[0] for x in ps_summary[-(round(len(ps_summary)*0.01)):]]
+
+# current isidro method
+ps_summary_long = [x for x in ps_summary if x[2] > 500000]
+ps_top = [x[0] for x in ps_summary_long[-10:]]
+
+# ps_top = [x[0] for x in ps_summary[-10:]]
+
+
+# pull out data for ps_top
+ps_top_acs = []
+for pst in ps_top:
+    ps_top_acs += phasesets_dict[pst]
+#
+af_cutoff = 0.5
+pur0 = statistics.median([float(x[10]) for x in ps_top_acs if float(x[10]) > af_cutoff] + [float(x[11]) for x in ps_top_acs if float(x[11]) > af_cutoff])
+pur1 = statistics.median([float(x[10]) for x in ps_top_acs if float(x[10]) < (1-af_cutoff)] + [float(x[11]) for x in ps_top_acs if float(x[11]) < (1-af_cutoff)])
+
+purity = statistics.mean([1-(1-max(pur0,pur1))*2]+[1-(min(pur0,pur1))*2])
+
+print(purity)
+
+
+    # add weighting of bc per PS for selection
+    # ALSO add if statement on Depth < 100?? and other filters? Write dictionary or list with PS summary and also output data for purity estimation.. 
+
 
 
 
