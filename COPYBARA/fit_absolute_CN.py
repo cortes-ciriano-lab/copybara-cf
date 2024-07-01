@@ -182,7 +182,9 @@ import CN_helper as cnh
 # Method/principles based on: https://doi.org/10.1371/journal.pone.0045835
 # allele_counts_path = "chr17_test/chr17_215000645_allele_counts_hetSNPs.tsv"
 # allele_counts_path = "215000645_wg_allele_counts.txt"
-allele_counts_path = "test_out_20240628/215000645_allele_counts_hetSNPs.tsv"
+# allele_counts_path = "test_out_20240628/215000645_allele_counts_hetSNPs.tsv"
+allele_counts_path = "../test_purity_estimator/ac_pur_test_out_20240630/sarcoma/215000173_ac_purity/215000173_allele_counts_hetSNPs.tsv"
+
 # process input - allele_counts_hetSNPs.tsv
 
 allele_counts_path=sys.argv[1]
@@ -225,7 +227,7 @@ for ps in phasesets:
     # if ps == 'None':
     #     continue
     # else:
-        #print(ps)
+        print(ps)
         # subset allele count data to ps and remove SNPs with AF0/AF1 of 0 or 1
         ac_ps = [x for x in allele_counts if x[-2] == ps and float(x[10]) != 0 and float(x[10]) != 1 and float(x[11]) != 0 and float(x[11]) != 1]
         if len(ac_ps) < min_PS_size:
@@ -238,10 +240,10 @@ for ps in phasesets:
             # all AFs at all het SNP position within ps
             af = [float(x[10]) for x in ac_ps] + [float(x[11]) for x in ac_ps]
             # check if distribution is not unimodal and estimate bimodality coefficient
-            if cnh.is_unimodal(af) == False:
-                ps_bc = cnh.bimodality_coefficient(af)
-            # if is_unimodal(af) == False:
-            #     ps_bc = bimodality_coefficient(af)
+            # if cnh.is_unimodal(af) == False:
+            #     ps_bc = cnh.bimodality_coefficient(af)
+            if is_unimodal(af) == False:
+                ps_bc = bimodality_coefficient(af)
                 # ps_bc_weighted = ps_weight * ps_bc
                 if ps_depth < dp_cutoff:
                     phasesets_dict[ps] = ac_ps
