@@ -4,6 +4,7 @@
 import argparse
 import statistics
 import math
+import copy
 
 parser = argparse.ArgumentParser(description="Estimate purity and ploidy and fit absolute copy number.")
 parser.add_argument('-i', '--input', type=str, help='Path to segmented log2r copy number tsv file.', required=True)
@@ -95,6 +96,89 @@ def acn_distance(relative_CN, purity, ploidy, distance_function="RMSD", weights=
         distance = math.sqrt(sum(differences[i]**2 * weights[i] for i in range(len(differences))) / sum(weights))
     return distance
 
-def distance_grid(relative_CN, weights, min_ploidy, max_ploidy, ploidy_step, min_cellularity, max_cellularity, cellularity_step, distance_function="RMSD"):
-    distances = []
-    return distances
+
+def define_search_space(min, max, by=0.01):
+    digs = len(str(by))-2 if isinstance(by,int) != True else 1
+    # print(by,digs)
+    if by <= 0:
+        raise ValueError("by must be >= zero")
+    result = []
+    current = min
+    if (min < max and by > 0):
+        while (current <= max):
+            result.append(current)
+            current += by
+            current = round(current,digs)
+    return result
+
+
+def build_search_grid(purity_seq, ploidy_seq):
+    unique_combinations = []
+    for i in range(len(purity_seq)):
+        for j in range(len(ploidy_seq)):
+            unique_combinations.append([purity_seq[i], ploidy_seq[j], i+1, j+1])
+    return unique_combinations
+
+
+def estimate_grid_distances(min_cellularity, max_cellularity, cellularity_step, min_ploidy, max_ploidy, ploidy_step, relative_CN, weights=None, distance_function="RMSD"):
+    purs = define_search_space(min_cellularity,max_cellularity,by=cellularity_step)
+    plois = define_search_space(min_ploidy,max_ploidy,by=ploidy_step)
+    grid = build_search_grid(purs,plois)
+    fits = []
+    for pair in grid:
+        cur_pur = pair[0]
+        cur_ploi = pair[1]
+        d = acn_distance(relative_CN, cur_pur, cur_ploi, weights = weights, distance_function="RMSD")
+        pair.append(d)
+        fits.append(pair)
+    return fits
+
+
+def reduce_grid(fits,distance_filter_scale_factor = 1.25):
+    reduced_grid = copy.deepcopy(fits)
+    for xdelta in [-1, 0, 1]:
+        for ydelta in [-1, 0, 1]:
+            if xdelta != 0 or ydelta != 0:
+                keep_idxs = []
+                for idx,sol in enumerate(reduced_grid):
+                    xc = sol[-2] + xdelta
+                    yc = sol[-3] + ydelta
+                    # Check if there's a corresponding (xc, yc) in fits
+                    dc = next((d[-1] for d in fits if d[-2] == xc and d[-3] == yc),None)
+                    if dc is None or sol[-1] <= dc:
+                        keep_idxs.append(idx)
+                reduced_grid = [reduced_grid[i] for i in keep_idxs]
+    if isinstance(distance_filter_scale_factor, (int,float)):
+        scaler = min([x[-1] for x in reduced_grid]) * distance_filter_scale_factor
+        reduced_grid = [x for x in reduced_grid if x[-1] < scaler]
+    return reduced_grid
+
+
+def is_acceptable_fit(purity, ploidy, relative_CN, weights, max_proportion_zero = 0.1, min_proportion_close_to_whole_number = 0.5, max_distance_from_whole_number = 0.2):
+    acn = [relative_to_absolute_CN(x, purity, ploidy) for x in relative_CN]
+    acn_int = [round(x) for x in acn]
+    differences = [abs(x - round(x)) for x in acn]
+    if weights == None:
+        weights = [1]*len(relative_CN)
+    # Filter fits based on fraction genome fitted to ACN of >= 0
+    zeros_idxs =  [i for i in range(len(acn_int)) if acn_int[i] <= 0]
+    prop_zero = sum([weights[i] for i in zeros_idxs]) / sum(weights)
+    if prop_zero > max_proportion_zero:
+        return False
+    # Filter fits based on fraction genome that is fitted to < min_proportion_close_to_whole_number
+    state_idxs = [i for i in range(len(differences)) if differences[i] < max_distance_from_whole_number] 
+    prop_state = sum([weights[i] for i in state_idxs]) / sum(weights)
+    if prop_state < min_proportion_close_to_whole_number:
+        return False
+    # Remove fits which result in overstretchin/overfitting of copy number states (i.e. copy number state skipping) normally caused by oversegmentation
+
+
+
+    
+    
+
+
+    # print("No acceptable fit was found. Please QC data and/or consider parameter choices.")
+
+
+
