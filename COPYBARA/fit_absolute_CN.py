@@ -140,11 +140,9 @@ def process_log2r_input(input_file):
             bin_length = end-start+1 
             # print(chrom,start,end,seg_id,copy_number)
             rel_copy_number.append([chrom,start,end,bin_length,seg_id,copy_number])
-
     # Collapse copy number to segments
     segs = list(dict.fromkeys([x[-2] for x in rel_copy_number])) # unique segment ids  
     med_length = statistics.median([x[3] for x in rel_copy_number]) # Estimate median length of all bins to determine weight of segment
-    
     rel_copy_number_segments = []
     for s in segs:
         cn_seg = [x for x in rel_copy_number if x[-2] == s]
@@ -159,7 +157,6 @@ def process_log2r_input(input_file):
         else:
             print(f"    ERROR: segment {s} contains multiple copy number values.")
             break
-
     return rel_copy_number_segments
 
 #----
@@ -213,31 +210,35 @@ for x in abs_copy_number_segments:
     acn_int = round(acn)
     x[-1] = acn
     x.append(acn_int)
+# set negative values to 0
+for x in abs_copy_number_segments:
+    if x[-1] < 0:
+        x[-1] = 0
 
 # Prepare and write out results
 ## ranked solutions, final fit, and converted segmented absolute copy number
 
 outfile1 = open(f"{outdir}/{prefix}_ranked_solutions.tsv", "w")
 for r in solutions_ranked:
-    Line = '\t'.join(r) + '\n'
+    Line = '\t'.join(str(e) for e in r) + '\n'
     outfile1.write(Line)
 outfile1.close()           
 
 outfile2 = open(f"{outdir}/{prefix}_fitted_purity_ploidy.tsv", "w")
-for r in solutions_ranked:
-    Line = '\t'.join(r) + '\n'
+for r in final_fit:
+    Line = '\t'.join(str(e) for e in r) + '\n'
     outfile2.write(Line)
 outfile2.close()       
 
 outfile3 = open(f"{outdir}/{prefix}_segmented_absolute_copy_number.tsv", "w")
-for r in solutions_ranked:
-    Line = '\t'.join(r) + '\n'
+for r in abs_copy_number_segments:
+    Line = '\t'.join(str(e) for e in r) + '\n'
     outfile3.write(Line)
 outfile3.close() 
 
 ###############
 #!!!!! ADD IN FUNCTION FOR MAJOR AND MINOR COPY NUMBER!!!
-
+# Add in code for multiprocessing phasesets
 # Add in code to redefine segment breaks based on rounded acn?
 ###############
 
