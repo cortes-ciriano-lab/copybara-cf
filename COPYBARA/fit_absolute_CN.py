@@ -1,12 +1,16 @@
+# from multiprocessing import Pool
+# from multiprocessing import cpu_count
 import numpy as np
 from scipy.stats import gaussian_kde
 import statistics
 import math
 import copy
 import argparse
+import timeit
 
 import CN_functions as cnfitter
 
+start_t = timeit.default_timer()
 #----
 # 1. Parse command line arguments
 #----
@@ -15,6 +19,8 @@ parser.add_argument('-i', '--input', type=str, help='Path to segmented log2r cop
 parser.add_argument('-a', '--allele_counts', type=str, default=None, help='Path to hetSNPs allele counts to estimate purity.', required=False)
 parser.add_argument('-s', '--sample_prefix', type=str, help='Sample name of prefix to use for out files.', required=True)
 parser.add_argument('-o', '--out_dir', type=str, default='.', help='Path to out directory. Default is working directory', required=False)
+# parser.add_argument('-t', '--threads', type=int,  default=1, help='number of threads to be used for multiprocessing phasesets for purity estimation. Use threads = 1 (default) to avoid multiprocessing. Will be skipped if no allele count data is provided.', required=False)
+
 # Fitting parameters
 parser.add_argument('--min_ploidy', type=float, default=1.5, help='Minimum ploidy to be considered for copy number fitting.', required=False)
 parser.add_argument('--max_ploidy', type=float, default=6.5, help='Maximum ploidy to be considered for copy number fitting.', required=False)
@@ -33,7 +39,6 @@ parser.add_argument('--min_ps_length', type=int, default=500000, help='Minimum l
 
 args = parser.parse_args()
 
-min_ps_size = 10
 ###############
 # ADD IN FITTING PARAMETERS... i.e. PS parameters for purity and ploidy estimation parameters...
 ###############
@@ -60,6 +65,10 @@ max_distance_from_whole_number = args.max_distance_from_whole_number
 min_ps_size = args.min_ps_size
 min_ps_length = args.min_ps_length
 
+# check and define threads
+# threads = min(args.threads, cpu_count())
+# print(f"... Phase sets will be processed using threads = {threads}. (threads = {args.threads} defined; threads = {cpu_count()} available) ...")
+
 #----
 # 2. Define functions
 #----
@@ -81,17 +90,35 @@ def process_allele_counts(allele_counts_file):
     phasesets = list(dict.fromkeys([x[-2] for x in allele_counts]))
     return allele_counts, phasesets
 
+# def chunkify_phasesets(phasesets, chunk_size):
+#     '''
+#     Divides phasesets list into chunks based on threads available for multiprocessing.
+#     '''
+#     chunks = []
+#     current_chunk = []
+#     for i, set in enumerate(phasesets):
+#         current_chunk.append(set)
+#         if (i + 1) % chunk_size == 0:
+#             chunks.append(current_chunk)
+#             current_chunk = []
+#     if current_chunk:
+#         chunks.append(current_chunk)
+#     return chunks
 
-def estimate_cellularity_phased_hetSNPs(phasesets,allele_counts,dp_cutoff,min_ps_size=10,min_ps_length=500000):
+# def estimate_cellularity_phased_hetSNPs(phasesets,allele_counts,dp_cutoff,min_ps_size=10,min_ps_length=500000):
+def process_phased_hetSNPs(phasesets,allele_counts,dp_cutoff,min_ps_size=10,min_ps_length=500000):
     '''
     Estimate sample cellularity/purity using allele counts of phased hetSNPs.
     '''
+    # allele_counts_sub = [list(filter(lambda x:x[-2] == ps, allele_counts)) for ps in phasesets]
+    # allele_counts_sub = [x for xs in allele_counts_sub for x in xs]
     phasesets_dict = {}
     ps_summary = []
     for ps in phasesets:
         if "None" not in ps: 
             print(ps)
             # subset allele count data to ps and remove SNPs with AF0/AF1 of 0 or 1
+            # ac_ps = [x for x in allele_counts_sub if x[-2] == ps and float(x[10]) != 0 and float(x[10]) != 1 and float(x[11]) != 0 and float(x[11]) != 1]
             ac_ps = [x for x in allele_counts if x[-2] == ps and float(x[10]) != 0 and float(x[10]) != 1 and float(x[11]) != 0 and float(x[11]) != 1]
             if len(ac_ps) < min_ps_size: # skip ps with less than min_ps_size SNPs
                 continue
@@ -107,11 +134,15 @@ def estimate_cellularity_phased_hetSNPs(phasesets,allele_counts,dp_cutoff,min_ps
                 # check if distribution is not unimodal and estimate bimodality coefficient
                 if cnfitter.is_unimodal(af) == False:
                     ps_bc = cnfitter.bimodality_coefficient(af)
+                # if is_unimodal(af) == False:
+                #     ps_bc = bimodality_coefficient(af)
                     if ps_depth < dp_cutoff:
                         phasesets_dict[ps] = ac_ps
                         ps_summary.append([ps, ps_depth, ps_length, ps_snps, ps_bc])
                         # ps_summary.append([ps, ps_depth, ps_length, ps_snps, ps_weight, ps_bc])
-                
+    return phasesets_dict, ps_summary
+
+def estimate_cellularity(phasesets_dict, ps_summary):
     ps_summary = sorted(ps_summary,key=lambda x: x[-1]) # sort ps by bimodality coefficient
     # ps_summary = sorted(sorted(ps_summary,key=lambda x: x[-2]), key=lambda x: round(x[-1],3)) # sort by ps_bc and weight
     # select top 10% PSs
@@ -159,6 +190,7 @@ def process_log2r_input(input_file):
             break
     return rel_copy_number_segments
 
+
 #----
 # 3. Estimate purity using phased heterozygous SNPs
 ### Method/principles based on: https://doi.org/10.1371/journal.pone.0045835
@@ -176,8 +208,39 @@ elif allele_counts_file != None:
     dp_cutoff = 2 * ac_mean_depth 
     # no_hetSNPs = len(allele_counts)
 
-    cellularity = estimate_cellularity_phased_hetSNPs(phasesets, allele_counts, dp_cutoff, min_ps_size=min_ps_size, min_ps_length=min_ps_size)
+    # # multiprocessing?
+    # chunk_size = len(phasesets) // threads + (len(phasesets) % threads > 0)
+    # print(f"    splitting phase sets into n = {math.ceil(len(phasesets) / chunk_size)} chunks ...")
+    # chunks = chunkify_phasesets(phasesets, chunk_size)
 
+    # if threads == 1:
+    #     # loop through chromosomes
+    #     print("multithreading skipped.")
+    #     phasesets_dict = {}
+    #     ps_summary = []
+    #     for idx,ps_chunk in enumerate(chunks):
+    #         # allele_count_ps = [x for xs in [list(filter(lambda x:x[-2] == ps, allele_counts)) for ps in ps_chunk] for x in xs]
+    #         curr_chunk = f"chunk {idx+1}"
+    #         phasesets_dict_chunk, ps_summary_chunk = process_phased_hetSNPs(ps_chunk, allele_counts, dp_cutoff, min_ps_size=min_ps_size, min_ps_length=min_ps_size)
+    #         phasesets_dict.update(phasesets_dict_chunk)
+    #         ps_summary.append(ps_summary_chunk)
+    #     ps_summary = [x for xs in ps_summary for x in xs]
+
+    # else:
+    #     print(f"multithreading using {threads} threads.")
+    #     args_in = [[ps_chunk, allele_counts, dp_cutoff, min_ps_size, min_ps_size] for ps_chunk in chunks]
+    #     # print(args_in)
+    #     with Pool(processes=threads) as pool:
+    #         phasesets_dict_sm, ps_summary_sm = pool.starmap(process_phased_hetSNPs, args_in)
+    #         ps_summary = [x for xs in list(ps_summary_sm) for x in xs]
+    #     print(ps_summary)
+    #     print(phasesets_dict_sm)
+
+    # cellularity = estimate_cellularity_phased_hetSNPs(phasesets, allele_counts, dp_cutoff, min_ps_size=min_ps_size, min_ps_length=min_ps_size)
+    phasesets_dict, ps_summary = process_phased_hetSNPs(phasesets, allele_counts, dp_cutoff, min_ps_size=min_ps_size, min_ps_length=min_ps_size)
+    
+    cellularity = estimate_cellularity(phasesets_dict, ps_summary)
+    print(f"estimated cellularity using hetSNPs = {cellularity}.")
     min_cellularity = max(0,cellularity - 0.1)
     max_cellularity = min(1,cellularity + 0.1) 
 
@@ -241,7 +304,9 @@ outfile3.close()
 # Add in code for multiprocessing phasesets
 # Add in code to redefine segment breaks based on rounded acn?
 ###############
-
+stop = timeit.default_timer()
+Seconds = round(stop - start_t)
+print(f"Computation time (copy number fitting): {Seconds} seconds\n") 
 
 
 
