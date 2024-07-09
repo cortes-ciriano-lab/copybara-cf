@@ -302,14 +302,14 @@ def viable_solutions(fits_r, relative_CN, weights, max_proportion_zero = 0.1, mi
     return solutions
 
 
-def rank_solutions(solutions,precision=3):
+def rank_solutions(solutions,distance_precision=3):
     '''
     Rank acceptable solution candidates.
     '''
     ranked = copy.deepcopy(solutions)
     # round distance function
     for x in ranked:
-        x[-1] = round(x[-1],precision)
+        x[-1] = round(x[-1],distance_precision)
     ranked = sorted(ranked,key=lambda x: (x[-1],x[1])) # sort by rounded distance, and second by ploidy
     # add rank position to output
     for idx,x in enumerate(ranked):
