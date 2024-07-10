@@ -288,3 +288,16 @@ for x in test:
     x.append(acn_int)
     x.append(totalCN)
     x.append(minorCN)
+
+
+# CONTINUE HERE TOMORROW:
+## write function for minor and major AF and total CN
+## write output file and check format (for recon downstream)
+## multiprocess last step by chromosome
+
+# get chrom for individual chrom names
+# then for chrom in chr_names: chr_ac = [x for x in allele_counts if x[0] == chrom] ; chr_cn = [x for x in rel_copy_number_segments if x[0] == chrom]... 
+# then build args_in using fitted_purity fitted_ploidy chr_ac and chr_rel
+# store in new list of list and write out with given format! 
+# also implement 1 thread! 
+
