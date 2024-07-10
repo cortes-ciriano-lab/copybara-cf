@@ -292,12 +292,12 @@ def viable_solutions(fits_r, relative_CN, weights, max_proportion_zero = 0.1, mi
     '''
     solutions = []
     for sol in fits_r:
-        purity,ploidy = sol[0],sol[1]
+        purity,ploidy,d = sol[0],sol[1],sol[-1]
         if is_acceptable_fit(purity, ploidy, relative_CN, weights, 
                         max_proportion_zero = max_proportion_zero, 
                         min_proportion_close_to_whole_number = min_proportion_close_to_whole_number, 
                         max_distance_from_whole_number = max_distance_from_whole_number) == True:
-            solutions.append(sol)
+            solutions.append([sol[0],sol[1],sol[-1]])
     # sort solutions by distance function
     return solutions
 
