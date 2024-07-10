@@ -5,8 +5,10 @@ from scipy.stats import gaussian_kde
 import statistics
 import math
 import copy
+import pybedtools
 import argparse
 import timeit
+
 
 import CN_functions as cnfitter
 
@@ -88,7 +90,9 @@ def process_allele_counts(allele_counts_file):
     # columns:"chr", "start", "end","REF", "ALT", "A","C","G","T","N","AF_0","AF_1","GT","PS","ps_id","DP"
     # get unique phase sets to iterate (or multiprocess through)
     phasesets = list(dict.fromkeys([x[-2] for x in allele_counts]))
+    file.close()
     return allele_counts, phasesets
+
 
 # def chunkify_phasesets(phasesets, chunk_size):
 #     '''
@@ -120,35 +124,66 @@ def process_phased_hetSNPs(phasesets,allele_counts,dp_cutoff,min_ps_size=10,min_
             # subset allele count data to ps and remove SNPs with AF0/AF1 of 0 or 1
             # ac_ps = [x for x in allele_counts_sub if x[-2] == ps and float(x[10]) != 0 and float(x[10]) != 1 and float(x[11]) != 0 and float(x[11]) != 1]
             ac_ps = [x for x in allele_counts if x[-2] == ps and float(x[10]) != 0 and float(x[10]) != 1 and float(x[11]) != 0 and float(x[11]) != 1]
-            if len(ac_ps) < min_ps_size: # skip ps with less than min_ps_size SNPs
-                continue
-            if (max([int(x[2]) for x in ac_ps]) - min([int(x[1]) for x in ac_ps])) < min_ps_length: # skip ps less than min_ps_length bps in size
+            ps_snps = len(ac_ps) # number of SNPs in ps
+            if ps_snps < min_ps_size: # skip ps with less than min_ps_size SNPs and remove empty ps
                 continue
             else:
-                ps_length = max([int(x[2]) for x in ac_ps]) - min([int(x[1]) for x in ac_ps]) # genomic lenght of ps_length
-                ps_snps = len(ac_ps) # number of SNPs in ps
+                ps_length = max([int(x[2]) for x in ac_ps]) - min([int(x[1]) for x in ac_ps]) # genomic lenght of ps_length         
                 ps_depth = statistics.mean([int(x[-1]) for x in ac_ps]) # mean depth of ps
                 # ps_weight = ps_snps/no_hetSNPs # estimate weight of PS based on number of hetSNPs present in PS compared to all hetSNPs across sample
                 # all AFs at all het SNP position within ps
                 af = [float(x[10]) for x in ac_ps] + [float(x[11]) for x in ac_ps]
-                # check if distribution is not unimodal and estimate bimodality coefficient
-                if cnfitter.is_unimodal(af) == False:
+                #
+                # if ps_snps < min_ps_size or ps_length < min_ps_length or ps_depth > dp_cutoff:
+                #     continue
+                #
+                if ps_snps > min_ps_size and ps_length > min_ps_length and ps_depth < dp_cutoff and cnfitter.is_unimodal(af) == False:
                     ps_bc = cnfitter.bimodality_coefficient(af)
-                # if is_unimodal(af) == False:
+                # if ps_snps > min_ps_size and ps_length > min_ps_length and ps_depth < dp_cutoff and is_unimodal(af) == False:
                 #     ps_bc = bimodality_coefficient(af)
-                    if ps_depth < dp_cutoff:
-                        phasesets_dict[ps] = ac_ps
-                        ps_summary.append([ps, ps_depth, ps_length, ps_snps, ps_bc])
-                        # ps_summary.append([ps, ps_depth, ps_length, ps_snps, ps_weight, ps_bc])
+                    phasesets_dict[ps] = ac_ps
+                    ps_summary.append([ps, ps_depth, ps_length, ps_snps, ps_bc])
     return phasesets_dict, ps_summary
+
+            # elif cnfitter.is_unimodal(af) == False:
+            #     ps_bc = cnfitter.bimodality_coefficient(af)
+            # elif is_unimodal(af) == False:
+                
+                
+            #############################
+            # if len(ac_ps) < min_ps_size: # skip ps with less than min_ps_size SNPs
+            #     continue
+            #
+            # if (max([int(x[2]) for x in ac_ps]) - min([int(x[1]) for x in ac_ps])) < min_ps_length: # skip ps less than min_ps_length bps in size
+            #     continue
+            #
+    #         else:
+    #             ps_length = max([int(x[2]) for x in ac_ps]) - min([int(x[1]) for x in ac_ps]) # genomic lenght of ps_length
+    #             ps_snps = len(ac_ps) # number of SNPs in ps
+    #             ps_depth = statistics.mean([int(x[-1]) for x in ac_ps]) # mean depth of ps
+    #             # ps_weight = ps_snps/no_hetSNPs # estimate weight of PS based on number of hetSNPs present in PS compared to all hetSNPs across sample
+    #             # all AFs at all het SNP position within ps
+    #             af = [float(x[10]) for x in ac_ps] + [float(x[11]) for x in ac_ps]
+    #             # check if distribution is not unimodal and estimate bimodality coefficient
+    #             # if cnfitter.is_unimodal(af) == False:
+    #             #     ps_bc = cnfitter.bimodality_coefficient(af)
+    #             if is_unimodal(af) == False:
+    #                 ps_bc = bimodality_coefficient(af)
+    #                 if ps_depth < dp_cutoff and ps_length > min_ps_length:
+    #                     phasesets_dict[ps] = ac_ps
+    #                     ps_summary.append([ps, ps_depth, ps_length, ps_snps, ps_bc])
+    #                     # ps_summary.append([ps, ps_depth, ps_length, ps_snps, ps_weight, ps_bc])
+    # return phasesets_dict, ps_summary
 
 def estimate_cellularity(phasesets_dict, ps_summary):
     ps_summary = sorted(ps_summary,key=lambda x: x[-1]) # sort ps by bimodality coefficient
     # ps_summary = sorted(sorted(ps_summary,key=lambda x: x[-2]), key=lambda x: round(x[-1],3)) # sort by ps_bc and weight
     # select top 10% PSs
     # # ps_top = [x[0] for x in ps_summary[-(round(len(ps_summary)*0.01)):]]
+    #
     # ps_summary_long = [x for x in ps_summary if x[2] > min_ps_length]
     # ps_top = [x[0] for x in ps_summary_long[-10:]]
+    #
     ps_top = [x[0] for x in ps_summary[-10:]]
     # pull out data for ps_top
     ps_top_acs = []
@@ -209,6 +244,13 @@ elif allele_counts_file != None:
     # no_hetSNPs = len(allele_counts)
 
     # # multiprocessing?
+    # bed_file =  pybedtools.BedTool(allele_counts_file)
+    # bed_length = sum(1 for _ in bed_file)
+    # chunk_size = bed_length // threads + (bed_length % threads > 0)
+    # print(f"    splitting bed file into n = {math.ceil(bed_length / chunk_size)} chunks ...")
+    # # Split the BED file into chunks
+    # chunks = chunkify_bed(bed_file, chunk_size)
+
     # chunk_size = len(phasesets) // threads + (len(phasesets) % threads > 0)
     # print(f"    splitting phase sets into n = {math.ceil(len(phasesets) / chunk_size)} chunks ...")
     # chunks = chunkify_phasesets(phasesets, chunk_size)
@@ -237,7 +279,7 @@ elif allele_counts_file != None:
     #     print(phasesets_dict_sm)
 
     # cellularity = estimate_cellularity_phased_hetSNPs(phasesets, allele_counts, dp_cutoff, min_ps_size=min_ps_size, min_ps_length=min_ps_size)
-    phasesets_dict, ps_summary = process_phased_hetSNPs(phasesets, allele_counts, dp_cutoff, min_ps_size=min_ps_size, min_ps_length=min_ps_size)
+    phasesets_dict, ps_summary = process_phased_hetSNPs(phasesets, allele_counts, dp_cutoff, min_ps_size=min_ps_size, min_ps_length=min_ps_length)
     
     cellularity = estimate_cellularity(phasesets_dict, ps_summary)
     print(f"estimated cellularity using hetSNPs = {cellularity}.")
@@ -288,9 +330,8 @@ for r in solutions_ranked:
 outfile1.close()           
 
 outfile2 = open(f"{outdir}/{prefix}_fitted_purity_ploidy.tsv", "w")
-for r in final_fit:
-    Line = '\t'.join(str(e) for e in r) + '\n'
-    outfile2.write(Line)
+Line = '\t'.join(str(e) for e in final_fit) + '\n'
+outfile2.write(Line)
 outfile2.close()       
 
 outfile3 = open(f"{outdir}/{prefix}_segmented_absolute_copy_number.tsv", "w")

@@ -213,7 +213,7 @@ def main():
     #----
     # 4. Get results and write out
     #----
-    outfile = open(f"{outdir}/{prefix}_allele_counts_hetSNPs.tsv", "w")
+    outfile = open(f"{outdir}/{prefix}_allele_counts_hetSNPs.bed", "w")
     for r in allele_counts:
         Line = '\t'.join(r) + '\n'
         outfile.write(Line)
