@@ -317,5 +317,29 @@ def rank_solutions(solutions,distance_precision=3):
     return ranked
 
 
+def relative_to_absolute_minor_total_CN(chrom, rel_copy_number_segments, allele_counts, fitted_purity, fitted_ploidy):
+    print(f"    ... estimating absolute minor and major allele copy number for {chrom} ...")
+    acn_minor_major = []
+    for x in rel_copy_number_segments:
+        s_start, s_end, rcn, sid = x[1],x[2],x[-1],x[3]
+        afs = [float(x[10]) for x in allele_counts if int(x[1]) >= s_start and int(x[2]) <= s_end]
+        if len(afs) < 1:
+            print(f'        BAF and minor allele copy number cannot be estimated for segment {sid}... Total absolute copy number estimated only.')
+            minorCN = ''
+            totalCN = round(relative_to_absolute_CN(rcn, fitted_purity, fitted_ploidy),4)
+            x[-1] = totalCN if totalCN > 0 else 0
+            x.append(minorCN)
+        elif len(afs) >= 1:
+            baf_mean = statistics.mean(afs)
+            CN_a = (fitted_purity - 1 + (rcn*(1-baf_mean)*(2*(1-fitted_purity)+fitted_purity*fitted_ploidy))) / fitted_purity 
+            CN_b = (fitted_purity - 1 + (rcn*(baf_mean)*(2*(1-fitted_purity)+fitted_purity*fitted_ploidy))) / fitted_purity 
+            minorCN = round(min(CN_a,CN_b),4) if round(min(CN_a,CN_b),4) > 0 else 0
+            totalCN = round((CN_a + CN_b),4) if round((CN_a + CN_b),4) > 0 else 0
+            x[-1] = totalCN 
+            x.append(minorCN)
+        acn_minor_major.append(x)
+    return acn_minor_major
+
+
 if __name__ == "__main__":
 	print("Helper functions for Copy Number fitting")

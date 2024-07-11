@@ -1,11 +1,13 @@
+from multiprocessing import Pool
+from multiprocessing import cpu_count
 import numpy as np
 from scipy.stats import gaussian_kde
 import statistics
 import math
 import copy
-import pybedtools
 import argparse
 import timeit
+import os
 
 
 import CN_functions as cnfitter
@@ -19,6 +21,7 @@ parser.add_argument('-i', '--input', type=str, help='Path to segmented log2r cop
 parser.add_argument('-a', '--allele_counts', type=str, default=None, help='Path to hetSNPs allele counts to estimate purity.', required=False)
 parser.add_argument('-s', '--sample_prefix', type=str, help='Sample name of prefix to use for out files.', required=True)
 parser.add_argument('-o', '--out_dir', type=str, default='.', help='Path to out directory. Default is working directory', required=False)
+parser.add_argument('-t', '--threads', type=int,  default=24, help='Number of threads to be used for multiprocessing of chromosomes. Use threads = 1 (default) to avoid multiprocessing.', required=False)
 
 # Fitting parameters
 parser.add_argument('--min_ploidy', type=float, default=1.5, help='Minimum ploidy to be considered for copy number fitting.', required=False)
@@ -64,6 +67,18 @@ max_distance_from_whole_number = args.max_distance_from_whole_number
 min_ps_size = args.min_ps_size
 min_ps_length = args.min_ps_length
 
+# check and define threads
+threads = min(args.threads, cpu_count())
+print(f"... CN fitting will use threads = {threads}. (threads = {args.threads} defined; threads = {cpu_count()} available) ...")
+
+# outdir 
+if outdir != '.':
+    try:
+        os.mkdir(outdir)
+    except FileExistsError:
+        pass
+else:
+    pass
 
 #----
 # 2. Define functions
@@ -97,7 +112,7 @@ def process_phased_hetSNPs(phasesets,allele_counts,dp_cutoff,min_ps_size=10,min_
     ps_summary = []
     for ps in phasesets:
         if "None" not in ps: 
-            print(ps)
+            # print(ps)
             # subset allele count data to ps and remove SNPs with AF0/AF1 of 0 or 1
             ac_ps = [x for x in allele_counts if x[-2] == ps and float(x[10]) != 0 and float(x[10]) != 1 and float(x[11]) != 0 and float(x[11]) != 1]
             ps_snps = len(ac_ps) # number of SNPs in ps
@@ -186,9 +201,10 @@ elif allele_counts_file != None:
     phasesets_dict, ps_summary = process_phased_hetSNPs(phasesets, allele_counts, dp_cutoff, min_ps_size=min_ps_size, min_ps_length=min_ps_length)
     
     cellularity = estimate_cellularity(phasesets_dict, ps_summary)
-    print(f"estimated cellularity using hetSNPs = {cellularity}.")
-    min_cellularity = max(0,cellularity - 0.1)
-    max_cellularity = min(1,cellularity + 0.1) 
+    digs = len(str(cellularity_step))-2 if isinstance(cellularity_step,int) != True else 1
+    print(f"        estimated cellularity using hetSNPs = {round(cellularity,digs)}.")
+    min_cellularity = round(max(0,cellularity - 0.1),digs)
+    max_cellularity = round(min(1,cellularity + 0.1),digs) 
 
 #----
 # 4. Estimate ploidy and fit ACN using estimated sample purity
@@ -212,20 +228,42 @@ solutions_ranked = cnfitter.rank_solutions(solutions,distance_precision=3)
 final_fit = solutions_ranked[0]
 
 
-# Obtain major and minor copy number values
+# Convert relative to absolute copy number and obtain major and minor copy number values if allele counts provided
+if allele_counts_file == None:
+    print("     ... No phased hetSNPs allele counts provided. Only total absolute copy number will be estimated. Consider providing hetSNPs allele counts if possible. See documentation for instructions on how to generate these.")
+    fitted_purity, fitted_ploidy = final_fit[0], final_fit[1]
+    abs_copy_number_segments = copy.deepcopy(rel_copy_number_segments)
+    for x in abs_copy_number_segments:
+        acn = round(cnfitter.relative_to_absolute_CN(x[-1], fitted_purity, fitted_ploidy),4)
+        x[-1] = acn if acn > 0 else 0
+    # set negative values to 0
+    for x in abs_copy_number_segments:
+        if x[-1] < 0:
+            x[-1] = 0
 
-# Convert relative to absolute copy number
-fitted_purity, fitted_ploidy = final_fit[0], final_fit[1]
-abs_copy_number_segments = copy.deepcopy(rel_copy_number_segments)
-for x in abs_copy_number_segments:
-    acn = cnfitter.relative_to_absolute_CN(x[-1], fitted_purity, fitted_ploidy)
-    acn_int = round(acn)
-    x[-1] = acn
-    x.append(acn_int)
-# set negative values to 0
-for x in abs_copy_number_segments:
-    if x[-1] < 0:
-        x[-1] = 0
+elif allele_counts_file != None:
+    print("     ... Allele counts for phased hetSNPs provided. Minor and total absolute copy number are being estimated ...")
+    fitted_purity, fitted_ploidy = final_fit[0], final_fit[1]
+    # prepare for multiprocessing
+    chr_names = list(dict.fromkeys([x[0] for x in rel_copy_number_segments]))
+    # only use multiprocessing if more than 1 thread available/being used. 
+    if threads == 1:
+        # loop through chromosomes
+        print("multithreading skipped.")
+        abs_copy_number_segments = []
+        for chrom in chr_names:
+            cn_chr = [x for x in rel_copy_number_segments if x[0] == chrom]
+            ac_chr = [x for x in allele_counts if x[0] == chrom] 
+            cur_chr = cnfitter.relative_to_absolute_minor_total_CN(chrom, cn_chr, ac_chr, fitted_purity, fitted_ploidy)
+            abs_copy_number_segments.append(cur_chr) 
+        abs_copy_number_segments = [x for xs in abs_copy_number_segments for x in xs] 
+
+    else:
+        print(f"multithreading using {threads} threads.")
+        args_in = [[chrom, [x for x in rel_copy_number_segments if x[0] == chrom], [x for x in allele_counts if x[0] == chrom], fitted_purity, fitted_ploidy] for chrom in chr_names]
+        with Pool(processes=threads) as pool:
+            abs_copy_number_segments = [x for xs in list(pool.starmap(cnfitter.relative_to_absolute_minor_total_CN, args_in)) for x in xs]
+
 
 # Prepare and write out results
 ## ranked solutions, final fit, and converted segmented absolute copy number
@@ -245,7 +283,10 @@ outfile2.write(Line)
 outfile2.close()       
 
 outfile3 = open(f"{outdir}/{prefix}_segmented_absolute_copy_number.tsv", "w")
-header=['chr','start','end','segment_id', 'bin_count', 'sum_of_bin_lengths', 'weight', 'CN', 'copyNumber']
+if allele_counts_file == None:
+    header=['chr','start','end','segment_id', 'bin_count', 'sum_of_bin_lengths', 'weight', 'copyNumber']
+elif allele_counts_file != None:
+    header=['chr','start','end','segment_id', 'bin_count', 'sum_of_bin_lengths', 'weight', 'copyNumber', 'minorAlleleCopyNumber']
 outfile3.write('\t'.join(header)+'\n')
 for r in abs_copy_number_segments:
     Line = '\t'.join(str(e) for e in r) + '\n'
@@ -253,7 +294,6 @@ for r in abs_copy_number_segments:
 outfile3.close() 
 
 ###############
-#!!!!! ADD IN FUNCTION FOR MAJOR AND MINOR COPY NUMBER!!!
 # Add in code to redefine segment breaks based on rounded acn?
 ###############
 stop = timeit.default_timer()
@@ -264,30 +304,42 @@ print(f"Computation time (copy number fitting): {Seconds} seconds\n")
 
 
 ################# DEV AREA #################
-for seg in rel_copy_number_segments:
-    s_start = seg[1]
-    s_end = seg[2]
-    baf_mean = statistics.mean([float(x[10]) for x in allele_counts if int(x[1]) >= s_start and int(x[2]) <= s_end])
-    seg.append(baf_mean)
 
 
-fitted_purity, fitted_ploidy = final_fit[0], final_fit[1]
-test = copy.deepcopy(rel_copy_number_segments[:50])
-for x in test:
-    print(x)
-    s_start,s_end,rcn = x[1],x[2],x[-1]
-    baf_mean = statistics.mean([float(x[10]) for x in allele_counts if int(x[1]) >= s_start and int(x[2]) <= s_end])
-    CN_a = (fitted_purity - 1 + (rcn*(1-baf_mean)*(2*(1-fitted_purity)+fitted_purity*fitted_ploidy))) / fitted_purity 
-    CN_b = (fitted_purity - 1 + (rcn*(baf_mean)*(2*(1-fitted_purity)+fitted_purity*fitted_ploidy))) / fitted_purity 
-    minorCN = round(min(CN_a,CN_b),1)
-    totalCN = round(CN_a + CN_b,1)
-    # acn = cnfitter.relative_to_absolute_CN(x[-1], fitted_purity, fitted_ploidy)
-    acn = round(relative_to_absolute_CN(x[-1], fitted_purity, fitted_ploidy),1)
-    acn_int = round(acn)
-    x[-1] = acn
-    x.append(acn_int)
-    x.append(totalCN)
-    x.append(minorCN)
+
+# fitted_purity, fitted_ploidy = final_fit[0], final_fit[1]
+# test = copy.deepcopy(rel_copy_number_segments[:50])
+# for x in test:
+#     print(x)
+#     s_start,s_end,rcn = x[1],x[2],x[-1]
+#     baf_mean = statistics.mean([float(x[10]) for x in allele_counts if int(x[1]) >= s_start and int(x[2]) <= s_end])
+#     CN_a = (fitted_purity - 1 + (rcn*(1-baf_mean)*(2*(1-fitted_purity)+fitted_purity*fitted_ploidy))) / fitted_purity 
+#     CN_b = (fitted_purity - 1 + (rcn*(baf_mean)*(2*(1-fitted_purity)+fitted_purity*fitted_ploidy))) / fitted_purity 
+#     minorCN = round(min(CN_a,CN_b),1)
+#     totalCN = round(CN_a + CN_b,1)
+#     # acn = cnfitter.relative_to_absolute_CN(x[-1], fitted_purity, fitted_ploidy)
+#     acn = round(relative_to_absolute_CN(x[-1], fitted_purity, fitted_ploidy),1)
+#     acn_int = round(acn)
+#     x[-1] = acn
+#     x.append(acn_int)
+#     x.append(totalCN)
+#     x.append(minorCN)
+
+
+# def relative_to_absolute_minor_total_CN(chrom, rel_copy_number_segments, allele_counts, fitted_purity, fitted_ploidy):
+#     print(f"    ... estimating absolute minor and major allele copy number for {chrom} ...")
+#     acn_minor_major = []
+#     for x in rel_copy_number_segments:
+#         s_start, s_end, rcn = x[1],x[2],x[-1]
+#         baf_mean = statistics.mean([float(x[10]) for x in allele_counts if int(x[1]) >= s_start and int(x[2]) <= s_end])
+#         CN_a = (fitted_purity - 1 + (rcn*(1-baf_mean)*(2*(1-fitted_purity)+fitted_purity*fitted_ploidy))) / fitted_purity 
+#         CN_b = (fitted_purity - 1 + (rcn*(baf_mean)*(2*(1-fitted_purity)+fitted_purity*fitted_ploidy))) / fitted_purity 
+#         minorCN = round(min(CN_a,CN_b))
+#         totalCN = round(CN_a + CN_b)
+#         x[-1] = totalCN if totalCN > 0 else 0
+#         x.append(minorCN)
+#         acn_minor_major.append(x)
+#     return acn_minor_major
 
 
 # CONTINUE HERE TOMORROW:
