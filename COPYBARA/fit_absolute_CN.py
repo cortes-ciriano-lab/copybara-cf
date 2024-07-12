@@ -228,7 +228,7 @@ solutions = cnfitter.viable_solutions(fits_r, relative_CN, weights,
 
 # check if viable solutions were found. If not, terminate script and write out error message and arguments to file for inspection and adjustment
 if len(solutions) == 0:
-    print("No fits found. See No_fit_found_PARAMS.tsv in output")
+    print("No fits found. See No_fit_found_PARAMS_out.tsv in output")
     with open(f"{outdir}/No_fit_found_PARAMS.tsv", 'w') as params_out:
         params_out.write(f'No viable solution fullfilling set paramaters was found. \nPerform QC, review parameters below and rerun if required/appropriate with adjusted parameters.\n')
         params_out.write(f'\nPARAMETERS:\n')
