@@ -229,8 +229,8 @@ solutions = cnfitter.viable_solutions(fits_r, relative_CN, weights,
 # check if viable solutions were found. If not, terminate script and write out error message and arguments to file for inspection and adjustment
 if len(solutions) == 0:
     print("No fits found. See No_fit_found_PARAMS.tsv in output")
-    with open("No_fit_found_PARAMS.tsv", 'w') as params_out:
-        params_out.write(f'No viable solution fullfilling set paramaters was found. Perform QC, review parameters below and rerun if required/appropriate with adjusted parameters.\n')
+    with open(f"{outdir}/No_fit_found_PARAMS.tsv", 'w') as params_out:
+        params_out.write(f'No viable solution fullfilling set paramaters was found. \nPerform QC, review parameters below and rerun if required/appropriate with adjusted parameters.\n')
         params_out.write(f'\nPARAMETERS:\n')
         for key, value in vars(args).items():
                 params_out.write(f'{key}: {value}\n')
@@ -312,7 +312,7 @@ for r in abs_copy_number_segments:
     outfile3.write(Line)
 outfile3.close() 
 
-with open("PARAMS_out.tsv", 'w') as params_out:
+with open(f"{outdir}/PARAMS_out.tsv", 'w') as params_out:
         params_out.write('PARAMETERS:')
         for key, value in vars(args).items():
                 params_out.write(f'{key}: {value}\n')
