@@ -313,7 +313,7 @@ for r in abs_copy_number_segments:
 outfile3.close() 
 
 with open(f"{outdir}/PARAMS_out.tsv", 'w') as params_out:
-        params_out.write('PARAMETERS:')
+        params_out.write('PARAMETERS:\n')
         for key, value in vars(args).items():
                 params_out.write(f'{key}: {value}\n')
 
