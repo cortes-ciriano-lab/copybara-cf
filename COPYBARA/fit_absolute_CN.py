@@ -8,6 +8,7 @@ import copy
 import argparse
 import timeit
 import os
+import sys
 
 
 import CN_functions as cnfitter
@@ -224,8 +225,26 @@ solutions = cnfitter.viable_solutions(fits_r, relative_CN, weights,
                       max_proportion_zero = max_proportion_zero, 
                       min_proportion_close_to_whole_number = min_proportion_close_to_whole_number, 
                       max_distance_from_whole_number = max_distance_from_whole_number)
+
+# check if viable solutions were found. If not, terminate script and write out error message and arguments to file for inspection and adjustment
+if len(solutions) == 0:
+    print("No fits found. See No_fit_found_PARAMS.tsv in output")
+    with open("No_fit_found_PARAMS.tsv", 'w') as params_out:
+        params_out.write(f'No viable solution fullfilling set paramaters was found. Perform QC, review parameters below and rerun if required/appropriate with adjusted parameters.\n')
+        params_out.write(f'\nPARAMETERS:\n')
+        for key, value in vars(args).items():
+                params_out.write(f'{key}: {value}\n')
+        params_out.write(f'\nCandidate fits found prior to checking viability/acceptability using above parameters:\n')
+        header=['purity','ploidy','x','y','distance']
+        params_out.write('\t'.join(header)+'\n')
+        for r in fits_r:
+            Line = '\t'.join(str(e) for e in r) + '\n'
+            params_out.write(Line)
+    sys.exit(1) # Exit the script with a status code of 1 (indicating an error)
+
 solutions_ranked = cnfitter.rank_solutions(solutions,distance_precision=3)
 final_fit = solutions_ranked[0]
+print(f"        Data fitted to purity = {final_fit[0]} and ploidy = {final_fit[1]}.")
 
 
 # Convert relative to absolute copy number and obtain major and minor copy number values if allele counts provided
@@ -292,6 +311,13 @@ for r in abs_copy_number_segments:
     Line = '\t'.join(str(e) for e in r) + '\n'
     outfile3.write(Line)
 outfile3.close() 
+
+with open("PARAMS_out.tsv", 'w') as params_out:
+        params_out.write('PARAMETERS:')
+        for key, value in vars(args).items():
+                params_out.write(f'{key}: {value}\n')
+
+print("Copy number fitting completed successfully.")
 
 ###############
 # Add in code to redefine segment breaks based on rounded acn?
