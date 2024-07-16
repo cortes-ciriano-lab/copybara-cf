@@ -303,9 +303,9 @@ outfile2.close()
 
 outfile3 = open(f"{outdir}/{prefix}_segmented_absolute_copy_number.tsv", "w")
 if allele_counts_file == None:
-    header=['chr','start','end','segment_id', 'bin_count', 'sum_of_bin_lengths', 'weight', 'copyNumber']
+    header=['chromosome','start','end','segment_id', 'bin_count', 'sum_of_bin_lengths', 'weight', 'copyNumber']
 elif allele_counts_file != None:
-    header=['chr','start','end','segment_id', 'bin_count', 'sum_of_bin_lengths', 'weight', 'copyNumber', 'minorAlleleCopyNumber']
+    header=['chromosome','start','end','segment_id', 'bin_count', 'sum_of_bin_lengths', 'weight', 'copyNumber', 'minorAlleleCopyNumber']
 outfile3.write('\t'.join(header)+'\n')
 for r in abs_copy_number_segments:
     Line = '\t'.join(str(e) for e in r) + '\n'
