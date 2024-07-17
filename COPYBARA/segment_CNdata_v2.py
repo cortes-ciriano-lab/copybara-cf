@@ -1,3 +1,10 @@
+"""
+Script for CBS segmentation for copy number estimation
+Created: 02/03/2024
+Python 3.9.7
+Carolin Sauer
+"""
+
 from multiprocessing import Pool
 from multiprocessing import cpu_count
 import argparse
@@ -54,7 +61,7 @@ print(f"... CBS segmentation will use threads = {threads}. (threads = {args.thre
 ###
 # Add anscombe as optional parameter
 # Also add functionality to include and exclude y and sex chr in general. (estimate sex?)
-# Also plotting title with info and stats..
+# Also plotting title with info and stats.. plot fewer points etc
 
 #----
 # 2. Define functions
@@ -377,203 +384,3 @@ if __name__ == '__main__':
 stop = timeit.default_timer()
 Seconds = round(stop - start_t)
 print(f"Computation time: {Seconds} seconds\n") 
-
-
-###########################################################################################
-
-
-
-
-
-
-    # original_data = []
-    # input_ansc = []
-    # input_log2 = []
-    
-    # with open(input_path, "r") as file:
-        
-    #     for line in file:
-
-    #         fields = line.strip().split("\t")
-    #         original_data.append(fields)
-
-    #         val = float(fields[-1])
-    #         input_log2.append(val)
-    #         # anscombe transform to stabilise variance!
-    #         val_ansc = sqrt((2**val) + 3/8) # inverse log2 then anscombe transform
-    #         input_ansc.append(val_ansc)
-
-    
-
-    # This code only takes 1s to run - no multiprocessing needed. 
-    # loop through chromosomes to not smooth across different chromosomes
-    
-
-
-    
-
-    # L = segment(in_data, shuffles=1000, p = 0.1)
-    # print(L)
-    
-    # S, Sse = validate(input_ansc, L, shuffles=1000, p = 0.05)
-    # print(S)
-
-    # # M = merge_segments(sample, Sse, threshold_sd=0.5)
-    # M = merge_segments(input_ansc, Sse, quantile = 0.2)
-    # M = merge_segments(input_ansc, Sse, quantile = 0)
-
-    # print(M)
-
-    # BUILD OUTPUT DATA
-    # out_data_full = []
-    # # out_data_segmented = [] ### ADD THIS IN LATER!
-    # for i, (s_start,s_end) in enumerate(M):
-    #     # print(i, s_start, s_end)
-    #     seg=str(f"seg{i+1}")
-    #     # for row in original_data[s_start,s_end]:
-    #     #     val = float(row[-1])
-    #     cur_seg = in_data[s_start:s_end]
-    #     seg_vals = [float(row[-1]) for row in cur_seg]
-    #     seg_median = median(seg_vals)
-
-    #     for row in cur_seg:
-    #         # print(type(row))
-    #         row.append(seg)
-    #         row.append(str(seg_median))
-    #         out_data_full.append(row)
-
-    
-    
-
-# ############### PLOTTING ###############
-#     # define chromosomes and positions for plotting
-#     # chr_unique = np.unique([x[1] for x in original_data if x[1] != "chrY"])
-#     chr_unique = np.unique([x[1] for x in original_data])
-#     indeces = [(index, sublist[1]) for index, sublist in enumerate(original_data)]
-#     # print(chr_unique)
-#     # print(indeces)
-#     chr_positions = []
-#     for chr in chr_unique:
-#         tmp = [x for x in indeces if x[1] == chr]
-#         chr_break = max(x[0] for x in tmp)
-#         midpoint = mean([x[0] for x in tmp])
-#         chr_positions.append([chr, midpoint, chr_break])
-    
-#     # print(chr_positions)
-#     title=str(f"copy number (log2R) of sample {prefix} (No. segments = {len(M)})")
-#     ax = draw_segmented_data(input_log2,  M, chr_positions, title=title)
-#     # ax.tick_params(axis='x', rotation=45)
-#     ax.get_figure().savefig(f'{outdir}/{prefix}_segmented_copy_number_log2r_plot.png')
-
-    # # # ax.get_figure().savefig('DEV_20240220/out_test_20240220/CCSBEST325_read_counts_log2r_normalised_smoothened_level10_sd4-2_t0.025_p0.1valp0.05_t2.png')
-    
-    # ax.get_figure().savefig('DEV_20240220/out_test_20240220/CCSBEST325_read_counts_anscombe_normalised_smoothened_level10_sd4-2_t0.025_p0.1valp0.05_minseg5_merge_changept_ALL_quant0.2_median.v2.png')
-    # ax.get_figure().savefig('DEV_20240220/out_test2_20240227/CCSBEST328_read_counts_anscombe_normalised_smoothened_level10_sd4-2_t0.025_p0.1valp0.05_minseg5_merge_changept_ALL_quant0.25_median.v2.png')
-    # ax.get_figure().savefig('DEV_20240220/out_test3_colo829_20240228/colo829_reads0.5mio_TF0.75_read_counts_anscombe_normalised_smoothened_level10_sd4-2_t0.025_p0.1valp0.05_minseg5_merge_changept_ALL_quant0.25_median.v2.png')
-    # ax.get_figure().savefig('DEV_20240220/out_test_20240229/CCSBEST325_read_counts_log2r_smoothened_level10_sd4-2_t0.025_invlog2_anscombe_p0.1valp0.05_minseg5_merge_changept_ALL_quant0.25_median.v2.png')
-    
-    # ax.get_figure().savefig('CNAPS_presentation/cn_out/smp0003/SMP0003_read_counts_log2r_smoothened_level10_sd4-2_t0.025_invlog2_anscombe_p0.1valp0.05_minseg5_merge_changept_ALL_quant0.25_median.v2.png')
-
-    
-
-
-
-
-
-
-
-######################### OLD STUFF - delete later #########################
-
-# ### Merge segments based on SD threshold and difference of segment means
-# def merge_segments(x, Sse, threshold_sd=0.5):
-#     '''Merges adjacent segments if their means are not at least threshold_sd standard deviations apart.
-    
-#     :param x: The original data array.
-#     :param L: List of tuples representing the segments (start, end).
-#     :param threshold_sd: The number of standard deviations to use as the threshold for merging.
-#     :return: A new list of segments after merging.'''
-#     if not Sse:
-#         return []
-    
-#     # Calculate the overall standard deviation
-#     overall_sd = np.std(x)
-#     # Initialize the new list of segments with the first segment
-#     new_segments = [Sse[0]]
-
-#     for current_start, current_end in Sse[1:]:
-#         # Get the last segment in the new list
-#         last_start, last_end = new_segments[-1]
-        
-#         # Calculate means of the current and last segments
-#         last_mean = np.mean(x[last_start:last_end])
-#         current_mean = np.mean(x[current_start:current_end])
-        
-#         # Calculate the difference between the means
-#         mean_diff = abs(current_mean - last_mean)
-        
-#         # If the segments are not at least threshold_sd standard deviations apart, merge them
-#         if mean_diff < threshold_sd * overall_sd:
-#             # Merge the current segment with the last one in the new list
-#             new_segments[-1] = (last_start, current_end)
-#         else:
-#             # Otherwise, add the current segment as a new entry in the list
-#             new_segments.append((current_start, current_end))
-    
-#     return new_segments
-
-# ### Merge segments based on Xth percentile of changepoints between segments
-# def merge_segments(x, Sse, quantile = 0.5):
-#     '''Merges adjacent segments if their means are not at least threshold_sd standard deviations apart.
-    
-#     :param x: The original data array.
-#     :param L: List of tuples representing the segments (start, end).
-#     :param threshold_sd: The number of standard deviations to use as the threshold for merging.
-#     :return: A new list of segments after merging.'''
-#     if not Sse:
-#         return []
-    
-#     # Calculate the overall standard deviation
-#     # overall_sd = np.std(x)
-    
-#     med_changepoints = []
-    
-#     # initiate segment slider with first segment
-#     seg_slider = [Sse[0]]
-
-#     for current_start, current_end in Sse[1:]:
-#         # Get the last segment in the new list
-#         last_start, last_end = seg_slider[-1]
-#         # Calculate the difference between the medians
-#         median_diff = abs(np.median(x[current_start:current_end]) - np.median(x[last_start:last_end]))
-#         # append list collecting median change sizes between segments
-#         med_changepoints.append(median_diff)
-#         # update seg_slider to move to next segment
-#         seg_slider = [(current_start, current_end)]
-
-#     # calculate threshold
-#     threshold = np.quantile(med_changepoints, quantile)
-
-#     # Initialize the new list of segments with the first segment
-#     new_segments = [Sse[0]]
-
-#     for current_start, current_end in Sse[1:]:
-#         # Get the last segment in the new list
-#         last_start, last_end = new_segments[-1]
-        
-#         # Calculate medians of the current and last segments
-#         last_median = np.median(x[last_start:last_end])
-#         current_median = np.median(x[current_start:current_end])
-        
-#         # Calculate the difference between the medians
-#         median_diff = abs(current_median - last_median)
-      
-#         # If the segments are not at least threshold apart, merge them
-#         if median_diff <= threshold:
-#             # Merge the current segment with the last one in the new list
-#             new_segments[-1] = (last_start, current_end)
-#         else:
-#             # Otherwise, add the current segment as a new entry in the list
-#             new_segments.append((current_start, current_end))
-    
-#     return new_segments
-

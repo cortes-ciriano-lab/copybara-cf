@@ -1,3 +1,10 @@
+"""
+Script to smooth relative copy number values prior to segmentation
+Created: 15/01/2024
+Python 3.9.7
+Carolin Sauer
+"""
+
 import argparse
 import copy
 from math import sqrt
@@ -186,54 +193,3 @@ if __name__ == "__main__":
     print(f"Computation time: {Seconds} seconds\n") 
 
 
-
-
-
-# only use multiprocessing if more than 1 thread available/being used. 
-# if threads == 1:
-#     # loop through chromosomes
-#     print("multithreading skipped.")
-#     smoothedData = []
-#     for chr in chr_names:
-#         smoothed_chr = smoothen(chr, in_data, trim, smoothing_level)
-#         smoothedData.append(smoothed_chr)
-#     smoothedData = [x for xs in smoothedData for x in xs]
-# print(smoothedData)
-
-
-
-
-
-
-####################### OLD STUFF - delete late #######################
-
-
-# anscombe sqrt transform
-# outfile2 = open(f"DEV_20240220/out_test_20240229/CCSBEST325_read_counts_log2r_smoothened_level10_sd4-2_t0.025_invlog2_anscombe.tsv", "w")
-
-# outfile2 = open(f"CNAPS_presentation/cn_out/smo0206/SMO0206_read_counts_log2r_smoothened_level10_sd4-2_t0.025_invlog2_anscombe.tsv", "w")
-# # anscombe = smoothed
-# for r in smoothed:
-#     # print(r, log(r))
-#     # test = sqrt(float(r) + 3/8)
-#     r = str(sqrt((2**r) + 3/8)) # inverse log2 then anscombe transform
-#     Line = str(r) + '\n'
-#     # print(Line)
-#     outfile2.write(Line)        
-# outfile2.close()
-
-# anscombe sqrt transform followed by log2
-# outfile3 = open(f"DEV_20240220/out_test_20240229/CCSBEST325_read_counts_log2r_smoothened_level10_sd4-2_t0.025_invlog2_anscombe_log2.tsv", "w")
-
-# outfile3 = open(f"CNAPS_presentation/cn_out/smo0206/SMO0206_read_counts_log2r_smoothened_level10_sd4-2_t0.025_invlog2_anscombe_log2.tsv", "w")
-# for r in smoothed:
-#     # print(r)
-#     r = str(log2(sqrt((2**r) + 3/8))) # log2 anscombe transformed data
-#     Line = str(r) + '\n'
-#     # print(Line)
-#     outfile3.write(Line)        
-# outfile3.close()
-
-# stop = timeit.default_timer()
-# Seconds = round(stop - start_t)
-# print(f"Computation time: {Seconds} seconds\n") 

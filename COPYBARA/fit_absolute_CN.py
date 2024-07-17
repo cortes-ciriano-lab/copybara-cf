@@ -1,3 +1,10 @@
+"""
+Script to fit absolute copy number
+Created: 27/06/2023
+Python 3.9.7
+Carolin Sauer
+"""
+
 from multiprocessing import Pool
 from multiprocessing import cpu_count
 import numpy as np
@@ -43,7 +50,7 @@ parser.add_argument('--min_ps_length', type=int, default=500000, help='Minimum l
 args = parser.parse_args()
 
 ###############
-# ADD IN FITTING PARAMETERS... i.e. PS parameters for purity and ploidy estimation parameters...
+# ADD IN OTHER OPTIONAL FITTING PARAMETERS... e.g. size of purity search space (default +/- 0.1)... might want to increase to 0.15
 ###############
 
 input_file = args.input
@@ -325,57 +332,4 @@ print("Copy number fitting completed successfully.")
 stop = timeit.default_timer()
 Seconds = round(stop - start_t)
 print(f"Computation time (copy number fitting): {Seconds} seconds\n") 
-
-
-
-
-################# DEV AREA #################
-
-
-
-# fitted_purity, fitted_ploidy = final_fit[0], final_fit[1]
-# test = copy.deepcopy(rel_copy_number_segments[:50])
-# for x in test:
-#     print(x)
-#     s_start,s_end,rcn = x[1],x[2],x[-1]
-#     baf_mean = statistics.mean([float(x[10]) for x in allele_counts if int(x[1]) >= s_start and int(x[2]) <= s_end])
-#     CN_a = (fitted_purity - 1 + (rcn*(1-baf_mean)*(2*(1-fitted_purity)+fitted_purity*fitted_ploidy))) / fitted_purity 
-#     CN_b = (fitted_purity - 1 + (rcn*(baf_mean)*(2*(1-fitted_purity)+fitted_purity*fitted_ploidy))) / fitted_purity 
-#     minorCN = round(min(CN_a,CN_b),1)
-#     totalCN = round(CN_a + CN_b,1)
-#     # acn = cnfitter.relative_to_absolute_CN(x[-1], fitted_purity, fitted_ploidy)
-#     acn = round(relative_to_absolute_CN(x[-1], fitted_purity, fitted_ploidy),1)
-#     acn_int = round(acn)
-#     x[-1] = acn
-#     x.append(acn_int)
-#     x.append(totalCN)
-#     x.append(minorCN)
-
-
-# def relative_to_absolute_minor_total_CN(chrom, rel_copy_number_segments, allele_counts, fitted_purity, fitted_ploidy):
-#     print(f"    ... estimating absolute minor and major allele copy number for {chrom} ...")
-#     acn_minor_major = []
-#     for x in rel_copy_number_segments:
-#         s_start, s_end, rcn = x[1],x[2],x[-1]
-#         baf_mean = statistics.mean([float(x[10]) for x in allele_counts if int(x[1]) >= s_start and int(x[2]) <= s_end])
-#         CN_a = (fitted_purity - 1 + (rcn*(1-baf_mean)*(2*(1-fitted_purity)+fitted_purity*fitted_ploidy))) / fitted_purity 
-#         CN_b = (fitted_purity - 1 + (rcn*(baf_mean)*(2*(1-fitted_purity)+fitted_purity*fitted_ploidy))) / fitted_purity 
-#         minorCN = round(min(CN_a,CN_b))
-#         totalCN = round(CN_a + CN_b)
-#         x[-1] = totalCN if totalCN > 0 else 0
-#         x.append(minorCN)
-#         acn_minor_major.append(x)
-#     return acn_minor_major
-
-
-# CONTINUE HERE TOMORROW:
-## write function for minor and major AF and total CN
-## write output file and check format (for recon downstream)
-## multiprocess last step by chromosome
-
-# get chrom for individual chrom names
-# then for chrom in chr_names: chr_ac = [x for x in allele_counts if x[0] == chrom] ; chr_cn = [x for x in rel_copy_number_segments if x[0] == chrom]... 
-# then build args_in using fitted_purity fitted_ploidy chr_ac and chr_rel
-# store in new list of list and write out with given format! 
-# also implement 1 thread! 
 

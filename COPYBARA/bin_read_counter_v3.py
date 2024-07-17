@@ -1,3 +1,10 @@
+"""
+Script to count reads copy number estimation
+Created: 12/09/2023
+Python 3.9.7
+Carolin Sauer
+"""
+
 from multiprocessing import Pool
 from multiprocessing import cpu_count
 import pysam
@@ -9,17 +16,6 @@ import copy
 import statistics
 import math
 
-##############
-# TO DO
-##############
-
-# STEP 2 - normalisation [self,pon,mnorm] - add PON! (especially for cfDNA) (mnorm and self done!)
-
-# also add messages (print) to log, ie. which parameters used etc
-
-# THEN... smoothening | segmentation | tMAD | rascal fitting?? ploidy/purity | --> test on real samples and longitudinal!
-# Also add gene mapper? 
-##############
 
 #----
 # 1. Parse command line arguments
@@ -272,102 +268,4 @@ if __name__ == "__main__":
     stop = timeit.default_timer()
     Seconds = round(stop - start_t)
     print(f"Computation time: {Seconds} seconds\n") 
-
-
-
-
-######################################################################################################
-
-
-
-
-
-
-## HASHED out from here ##
-# # Remove bins with 0 reads (no sequencing data in this region). - need to be excluded for segmentation and log2 transformation
-# # If blacklisting == True or bases_filter == True this will also filter the results to exclude blacklisted regions.
-# outfile2 = open(f"{outdir}/{prefix}_read_counts_filtered.tsv", "w")
-# filtered_counts = [x for x in T_countData if x[-2] == 'True' and int(x[-1]) != 0]
-# for r in filtered_counts:
-#     Line = '\t'.join(r) + '\n'
-#     outfile2.write(Line)        
-# outfile2.close()
-
-# # Normalise reads by median
-# med = statistics.median([int(x[-1]) for x in filtered_counts])
-# std = statistics.stdev([int(x[-1]) for x in filtered_counts])
-
-# outfile3 = open(f"{outdir}/{prefix}_read_counts_mednorm.tsv", "w")
-# normalised_counts = filtered_counts
-# for r in normalised_counts:
-#     r[-1] = str(int(r[-1])/med) # median normalise readcounts
-#     # r[-1] = str(math.sqrt((int(r[-1])/med) + 3/8)) #anscombe sqrt transform
-#     # might want to change this to normalise to PoN/matched normals or make that an option...
-#     Line = '\t'.join(r) + '\n'
-#     outfile3.write(Line)
-# outfile3.close()
-
-# Log2 transform data (prior to smoothening) 
-# outfile4 = open(f"{outdir}/{prefix}_read_counts_log2r.tsv", "w")
-# log2r_counts = normalised_counts
-# for r in log2r_counts:
-#     r[-1] = str(math.log2(float(r[-1])))
-#     Line = '\t'.join(r) + '\n'
-#     outfile4.write(Line)
-# outfile4.close()
-
-## HASHED out until here ##
-##############################
-
-# stop = timeit.default_timer()
-# Seconds = round(stop - start_t)
-# print(f"Computation time: {Seconds} seconds\n") 
-
-
-
-
-### OLD STUFF - keep for now delete later ###
-
-
-# Log transform
-# outfile4 = open(f"{outdir}/{prefix}_read_counts_normalised_log.tsv", "w")
-# log_counts = normalised_counts
-# for r in log_counts:
-#     r[-1] = str(math.log(float(r[-1])))
-#     # might want to change this to normalis to PoN or make that an option...
-#     Line = '\t'.join(r) + '\n'
-#     outfile4.write(Line)
-# outfile4.close()
-
-# Log data if no smoothing is applied prior to CBS
-
-# Smoothen normalised bins
-# def smooth_outliers(normalised_data, smoothing_level=3):
-#     if smoothing_level <= 0:
-#         return normalised_data  # Skip smoothing and use original (normalised) data for CBS
-
-#     smoothed_counts = []
-#     half_window = smoothing_level // 2
-
-#     for val in range(len(normalised_data)):
-#         start = max(0, val - half_window)
-#         end = min(len(normalised_data), val + half_window + 1)
-#         window = normalised_data[start:end]
-#         smoothed_val = sum(window) / len(window)
-#         smoothed_counts.append(smoothed_val)
-        
-#     return smoothed_counts
-
-# data_to_smoothen = [float(x[-1]) for x in normalised_counts]
-# smoothed_counts = smooth_outliers(data_to_smoothen, smoothing_level)
-
-# outfile4 = open(f"{outdir}/{prefix}_binned_copy_number.tsv", "w")
-# binned_copy_number = normalised_counts
-# for i in range(len(binned_copy_number)):
-#     binned_copy_number[i][-1] = str(smoothed_counts[i])
-#     # print(binned_copy_number[i][-1], smoothed_counts[i])
-#     Line = '\t'.join(binned_copy_number[i]) + '\n'
-#     outfile4.write(Line)
-# outfile4.close()
-
 

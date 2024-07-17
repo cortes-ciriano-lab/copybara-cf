@@ -1,3 +1,10 @@
+"""
+Script to generate binned reference for copy number estimation
+Created: 31/08/2023
+Python 3.9.7
+Carolin Sauer
+"""
+
 from multiprocessing import Pool
 from multiprocessing import cpu_count
 import argparse

@@ -1,3 +1,11 @@
+"""
+Script to to count heterozygous SNPs
+(required prior to copy number fitting for purity estimation)
+Created: 24/06/2023
+Python 3.9.7
+Carolin Sauer
+"""
+
 from multiprocessing import Pool
 from multiprocessing import cpu_count
 import argparse
@@ -227,33 +235,4 @@ if __name__ == "__main__":
     Seconds = round(stop - start_t)
     print(f"Computation time (allele_counts_phased_hetSNPs): {Seconds} seconds\n") 
 
-
-
-
-
-
-
-## BY CHROMOSOME
-# with open(hets_bed_path) as bed:
-#         reader = csv.reader(bed, delimiter="\t")
-#         sites = list(reader)
-# chr_names = list(dict.fromkeys([x[0] for x in sites]))
-# ### TESTING ###
-# chr_names = ['chr19', 'chr20', 'chr21', 'chr22']
-# chr_in = [[chrom, bam_file_path, [x for x in sites if x[0] == chrom]] for chrom in chr_names]
-
-# ## only use multiprocessing if more than 1 thread available/being used. 
-# if threads == 1:
-#     # loop through chromosomes
-#     print("multithreading skipped.")
-#     allele_counts = []
-#     for contig in chr_in:
-#         chrom, bam, chr_sites = contig[0], contig[1], contig[2]
-#         # print(chrom)
-#         chr_res = allele_counter(chrom, bam, chr_sites)
-#         allele_counts.append(chr_res)
-# else:
-#     print(f"multithreading using {threads} threads.")
-#     with Pool(processes=threads) as pool:
-#         allele_counts = list(pool.starmap(allele_counter, chr_in))
 
