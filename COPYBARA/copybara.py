@@ -29,6 +29,16 @@ logo = """
 ▝▚▄▄▖▝▚▄▞▘▐▌    ▐▌  ▐▙▄▞▘▐▌ ▐▌▐▌ ▐▌▐▌ ▐▌  ▝▚▄▖▐▌  
 """
 
+"""
+Add in matched normal and panel of normal to args define in copybara run function and arugments of parser
+Add parameter to overrule and set ploidy if known from tumour
+Write code to estimate tMAD score!
+Gene mapping for genes of interest and categorise if gain amp loss del present 
+Correct tumour purity if purity 1 and ploidy 0 (or if completely flat profile, i.e. no changes present...)
+"""
+
+
+
 def copybara_run(args):
     """ main function for COPYBARA """
     if not args.sample:
@@ -89,18 +99,11 @@ def copybara_cna(args, as_workflow=False):
     # cna threads
     if not args.cna_threads:
         args.cna_threads = cpu_count()
-    # if args.cna_threads:
-    #     args.threads = args.cna_threads
-    # first do allele counting
-    if not args.allele_counts_het_snps:
-        allele_counts_bed_path = allele_counter.perform_allele_counting(outdir, args.sample, args.chromosomes,  args.ref, args.phased_vcf, args.tumour, args.ac_window, args.allele_mapq, args.allele_min_reads, tmpdir, args.cna_threads)
-        helper.time_function("Counted alleles of phased SNPs", checkpoints, time_str)
-    else:
-        allele_counts_bed_path = args.allele_counts_het_snps
-    # now generate bins
-    bin_annotations_path = bin_generator.generate_bins(outdir, args.sample, args.ref, args.chromosomes, args.cn_binsize, args.blacklist, args.breakpoints, args.cna_threads)
+
+    # 1. generate bins
+    bin_annotations_path = bin_generator.generate_bins(outdir, args.sample, args.ref, args.chromosomes, args.cn_binsize, args.blacklist, args.cna_threads)
     helper.time_function("Binned reference genome", checkpoints, time_str)
-    # perform the read counting
+    # 2. perform read counting across bins
     read_counts_path = read_counter.count_reads(outdir, args.tumour, args.normal, args.sample, bin_annotations_path, args.readcount_mapq, args.blacklisting, args.bl_threshold, args.bases_filter, args.bases_threshold, args.cna_threads)
     helper.time_function("Performed read counting", checkpoints, time_str)
     # smooth the copy number data
@@ -117,7 +120,7 @@ def copybara_cna(args, as_workflow=False):
         args.min_ps_size, args.min_ps_length, args.cna_threads)
     helper.time_function("Fit absolute copy number", checkpoints, time_str)
     # cleanup tmpdir
-    helper.clean_tmpdir(args.tmpdir, outdir)
+    # helper.clean_tmpdir(args.tmpdir, outdir)
     helper.time_function("Total time to perform copy number calling", checkpoints, time_str, final=True)
 
 def savana_main(args):

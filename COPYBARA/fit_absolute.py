@@ -14,7 +14,7 @@ import copy
 import sys
 
 
-import savana.cn_functions as cnfitter
+import COPYBARA.cn_functions as cnfitter
 
 
 def process_allele_counts(allele_counts_bed_path):

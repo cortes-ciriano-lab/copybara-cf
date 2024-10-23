@@ -1,10 +1,9 @@
 """
-Module containing misc. useful functions for SAVANA
-Created: 26/01/2022
-Python 3.9.6
-Hillary Elrick
+Module containing misc. useful functions for COPYBARA
+Created: 23/10/2024
+Python 3.9.7
+Carolin Sauer - Adapted from Hillary Elrick
 """
-#!/usr/bin/env python3
 
 import re
 import os
