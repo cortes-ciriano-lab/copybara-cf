@@ -20,41 +20,14 @@ def overlaps(a, b):
     '''
     return min(a[1], b[1]) - max(a[0], b[0]) + 1
 
-def parse_vcf(breakpoints_file, bp_dict):
-    '''
-    Generate dictionary from Savana output vcf with SV breakpoint positions for each chromosomes
-    '''
-    # Open the Savana VCF file containing SVs. (If it is gzipped, use gzip.open, otherwise use open)
-    open_vcf = gzip.open if breakpoints_file.endswith('.gz') else open
-    with open_vcf(breakpoints_file, 'rt') as file:
-        for line in file:
-            if line.startswith('#'):
-                continue  # Skip header lines
-            fields = line.split('\t')
-            chr = fields[0]  # Chromosome
-            pos = int(fields[1])  # Start position
-            if chr in bp_dict:
-                bp_dict[chr].append(pos)
-    return bp_dict
-
-def process_chromosome(chrom, chr_length, fasta_file_path, bin_size, blacklist, breakpoints = []):
+def process_chromosome(chrom, chr_length, fasta_file_path, bin_size, blacklist):
     '''
     Function to process each chromosome of interest (either in a loop or in parallel) to generate bins based on bin_size with annotated blacklist and unknown bases values. 
-    If a vcf file (e.g. with SV breakpoints from Savana) is provided, bins will be adjusted to those breakpoints.
     '''
     print(f"    Processing {chrom} ...")
 
     fasta_file = pysam.FastaFile(fasta_file_path)
     chr_starts = list(range(1, chr_length + 1, bin_size))
-
-    # append chr_starts with vcf breakpoint positions if provided
-    if breakpoints is not None:
-        print(f"    adding vcf breakpoints for {chrom} ...")
-        for bp in breakpoints:
-            chr_starts.append(bp)
-        # make sure all bin starts are unique (in case breakpoints = chr_start position) to avoid bins of 0kbp bin size.
-        chr_starts = list(set(chr_starts))
-        chr_starts.sort()
 
     # define bins
     chr_bins = []
@@ -76,10 +49,6 @@ def process_chromosome(chrom, chr_length, fasta_file_path, bin_size, blacklist, 
     for bin in chr_bins:
         start, end = bin
         cur_bin_size = float(end)-float(start)+1
-
-        # print(chrom,bin,cur_bin_size)
-        # if cur_bin_size == 0:
-        #     print(f"    ...ERROR! cur_bin_size = {cur_bin_size} ")
 
         # Estimate overlap with blacklist for each bin
         # Using overlap function
@@ -126,12 +95,7 @@ def generate_bins(outdir, sample, ref, chromosomes, bin_size, blacklist, breakpo
     print(f"... Bin generator will use threads = {new_threads}. (threads = {threads} defined; threads = {cpu_count()} available) ...")
     threads = new_threads
     bin_size = bin_size * int(1000) # in kb
-    # check if vcf file was provided
-    if breakpoints is not None:
-        binmode = "withVCF"
-        print(f"... using vcf file: '{breakpoints}' in addition to binning...")
-    else:
-        binmode = "standard"
+
     # a. Extract chormosome info and pass fasta file into chr_in list
     fasta = pysam.FastaFile(ref)
     contigs = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','X','Y']
@@ -142,13 +106,8 @@ def generate_bins(outdir, sample, ref, chromosomes, bin_size, blacklist, breakpo
         chr_names = [contigs[(int(x)-1)] for x in chromosomes]
     else:
         chr_names = contigs
-    # b. Extract breakpoints into dictionary from savana vcf to integrate into CN analysis if provided, and define input for main processing step
-    if (breakpoints is not None):
-        in_dict = { chrom : list([]) for chrom in chr_names }
-        bp_dict = parse_vcf(breakpoints, in_dict)
-        chr_in = [[chrom,fasta.get_reference_length(chrom),ref,bin_size,blacklist,bp_dict[chrom]] for chrom in chr_names]
-    else:
-        chr_in = [[chrom,fasta.get_reference_length(chrom),ref,bin_size,blacklist] for chrom in chr_names]
+    #   define input
+    chr_in = [[chrom,fasta.get_reference_length(chrom),ref,bin_size,blacklist] for chrom in chr_names]
     fasta.close()
 
     # c. Generate bins and count bases per bins for each chrom in parallel (run function using multithreader)
@@ -159,23 +118,18 @@ def generate_bins(outdir, sample, ref, chromosomes, bin_size, blacklist, breakpo
         chrData = []
         for contig in chr_in:
             chrom, chr_length, fasta_file_path = contig[0], contig[1], contig[2]
-            if (breakpoints is not None):
-                binned_chr = process_chromosome(chrom, chr_length, fasta_file_path, bin_size, blacklist, bp_dict[chrom])
-            elif (breakpoints is None):
-                binned_chr = process_chromosome(chrom, chr_length, fasta_file_path, bin_size, blacklist)
+            binned_chr = process_chromosome(chrom, chr_length, fasta_file_path, bin_size, blacklist)
             chrData.append(binned_chr)
     else:
         print(f"multithreading using {threads} threads.")
-        # with ThreadPoolExecutor(max_workers=24) as executor:
-        # chrData = list(executor.map(process_chromosome, chr_in))
         with Pool(processes=threads) as pool:
             chrData = list(pool.starmap(process_chromosome, chr_in))
 
     # c. Concat results into a single bed file
     if chromosomes != 'all':
-        outfile_name = f"{outdir}/{int(bin_size/1000)}kbp_bin_ref_subset_{sample}{binmode}.bed"
+        outfile_name = f"{outdir}/{int(bin_size/1000)}kbp_bin_ref_subset_{sample}.bed"
     else:
-        outfile_name = f"{outdir}/{int(bin_size/1000)}kbp_bin_ref_all_{sample}{binmode}.bed"
+        outfile_name = f"{outdir}/{int(bin_size/1000)}kbp_bin_ref_all_{sample}.bed"
 
     outfile = open(outfile_name, "w")
 
