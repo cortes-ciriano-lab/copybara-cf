@@ -34,10 +34,16 @@ def binned_read_counting(curr_chunk, bed_chunk, alns, nmode, blacklisting, bl_th
     # Open the BAM file using pysam
     bam_T = pysam.AlignmentFile(alns['tumour'], "rb")
     bam_N = pysam.AlignmentFile(alns['normal'], "rb") if nmode == "mnorm" and len(alns) == 2 else None
-
-    # Read the BED file to get regions and start/end positions for each chromosome
-    # bed_file =  pybedtools.BedTool(bed).filter(lambda b: b.chrom == chr)
-
+    # PoN = pysam.AlignmentFile(alns['pon'], "r") if nmode == "pon" and len(alns) == 2 else None
+    if nmode == "pon" and len(alns) == 2:
+        PoN = []
+        with open(alns['pon'], "r") as file:
+            next(file)
+            for line in file:
+                fields = line.strip().split("\t")
+                PoN.append(fields)
+   
+    # initiate read counter
     chr_read_counts = []
     for bin in bed_chunk:
         chrom, start, end, bases = bin[0], int(bin[1]), int(bin[2]), float(bin[3])
@@ -68,14 +74,19 @@ def binned_read_counting(curr_chunk, bed_chunk, alns, nmode, blacklisting, bl_th
         chunk_read_count_T = count_reads_in_curr_bin(bam_T, chrom, start, end, readcount_mapq)
         chunk_read_count_N = count_reads_in_curr_bin(bam_N, chrom, start, end, readcount_mapq) if bam_N else None
 
-        # if nmode == "mnorm" and len(aln_files) == 2:
-        #     chr_read_counts.append([bin_name, chrom, str(start), str(end), str(bases), str(use), str(chunk_read_count_T), str(chunk_read_count_N)])
-        # elif nmode != "mnorm" and len(aln_files) == 1:
-        #     chr_read_counts.append([bin_name, chrom, str(start), str(end), str(bases), str(use), str(chunk_read_count_T)])
         if blacklisting == True:
             chr_read_counts.append([bin_name, chrom, str(start), str(end), str(bases), str(blacklist), str(use), str(chunk_read_count_T), str(chunk_read_count_N)])
         else:
             chr_read_counts.append([bin_name, chrom, str(start), str(end), str(bases), str(use), str(chunk_read_count_T), str(chunk_read_count_N)])
+
+        # replace None values (lack of matched normal) with PoN count values if provided. PoN will need to be generated seperately, using the same bin size.
+        if nmode == "pon": 
+            print('         PoN read counts being added for normalisation')
+            if len(PoN) != len(chr_read_counts):
+                print('ERROR: PoN will have to be generated using the same bin size as used for read counting. See documentation on how to generate PoN.')
+            if len(PoN) == len(chr_read_counts):
+                for id,r in enumerate(chr_read_counts):
+                    r[-1] = PoN[id][-1]
 
     # Close BAM file and return out
     bam_T.close()
@@ -94,11 +105,10 @@ def filter_and_normalise(nmode, countData):
         for r in normalised_counts:
             r[-2] = str(math.log2(int(r[-2])/med_self)) # median normalise readcounts
             del r[-1]
-    # elif nmode == "pon":
-    #     print("This function is yet to be implemented...")
-    elif nmode == "mnorm":
+    elif nmode == "mnorm" or nmode == "pon":
         filtered_counts = [x for x in countData if x[-3] == 'True' and int(x[-2]) != 0 and int(x[-1]) != 0]
-        cov_scaler = statistics.median([math.log2(int(x[-2])/int(x[-1])) for x in filtered_counts])
+        # cov_scaler = statistics.median([math.log2(int(x[-2])/int(x[-1])) for x in filtered_counts])
+        cov_scaler = math.log2(statistics.median([(int(x[-2])/int(x[-1])) for x in filtered_counts]))
         normalised_counts = copy.deepcopy(filtered_counts)
         for r in normalised_counts:
             n = str(math.log2(int(r[-2])/int(r[-1])) - cov_scaler)
@@ -122,7 +132,7 @@ def chunkify_bed(bed_file, chunk_size):
         chunks.append(pybedtools.BedTool(current_chunk))
     return chunks
 
-def count_reads(outdir, tumour, normal, sample, bin_annotations_path, readcount_mapq, blacklisting, bl_threshold, bases_filter, bases_threshold, threads):
+def count_reads(outdir, tumour, normal, panel_of_normals, sample, bin_annotations_path, readcount_mapq, blacklisting, bl_threshold, bases_filter, bases_threshold, threads):
     """ Perform binned read counting on bam file/files per chromosome """
 
     # check and define threads
@@ -130,18 +140,19 @@ def count_reads(outdir, tumour, normal, sample, bin_annotations_path, readcount_
     print(f"... Bin read counter will use threads = {new_threads}. (threads = {threads} defined; threads = {cpu_count()} available) ...")
     threads = new_threads
 
-    if normal is not None:
+    if normal is not None and panel_of_normals is None:
         nmode = "mnorm" #matched normal will be used for logR normalisation
         aln_files = {
                 'tumour': tumour,
                 'normal': normal
             }
-    # elif panel_of_normals is not None:
-    #     nmode = "pon" #panel of normals will be used for logR normalisation
-    #     aln_files = {
-    #             'tumour': tumour
-    #         }
-    elif normal is None: #and panel_of_normals is None:
+    elif normal is None and panel_of_normals is not None:
+        nmode = "pon" #panel of normals will be used for logR normalisation
+        aln_files = {
+                'tumour': tumour,
+                'pon': panel_of_normals
+            }
+    elif normal is None and panel_of_normals is None:
         nmode = "self"
         aln_files = {
                 'tumour': tumour

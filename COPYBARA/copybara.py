@@ -23,14 +23,11 @@ import COPYBARA.fit_absolute as fit_absolute
 import COPYBARA.tmad as tmad
 import COPYBARA.helper as helper
 
-logo1 = """
+logo = """
  ▗▄▄▖ ▗▄▖ ▗▄▄▖▗▖  ▗▖▗▄▄▖  ▗▄▖ ▗▄▄▖  ▗▄▖     
 ▐▌   ▐▌ ▐▌▐▌ ▐▌▝▚▞▘ ▐▌ ▐▌▐▌ ▐▌▐▌ ▐▌▐▌ ▐▌      ▐▌▀▀▘   
 ▐▌   ▐▌ ▐▌▐▛▀▘  ▐▌  ▐▛▀▚▖▐▛▀▜▌▐▛▀▚▖▐▛▀▜▌▀▀▗▞▀▘▐▛▀▘ 
 ▝▚▄▄▖▝▚▄▞▘▐▌    ▐▌  ▐▙▄▞▘▐▌ ▐▌▐▌ ▐▌▐▌ ▐▌  ▝▚▄▖▐▌  
-"""
-
-logo2 = """
 """
 
 """
@@ -100,7 +97,7 @@ def copybara_main(args):
     log2r_cn_path = segment.segment_copy_number(outdir, smoothened_cn_path, args.min_segment_size, args.shuffles, args.p_seg, args.p_val, args.quantile, args.threads)
     helper.time_function("Performed CBS", checkpoints, time_str)
     # fit absolute copy number
-    fit_absolute.fit_absolute_cn(outdir, log2r_cn_path, allele_counts_bed_path, args.sample,
+    fit_absolute.fit_absolute_cn(outdir, log2r_cn_path, args.sample,
         args.min_ploidy, args.max_ploidy, args.ploidy_step, args.min_cellularity, args.max_cellularity, args.cellularity_step, args.cellularity_buffer, args.overrule_cellularity,
         args.distance_function, args.distance_filter_scale_factor, args.distance_precision,
         args.max_proportion_zero, args.min_proportion_close_to_whole_number, args.max_distance_from_whole_number, args.main_cn_step_change,
@@ -177,7 +174,7 @@ def parse_args(args):
 
 def main(args=None):
     """ main function for COPYBARA - collects command line arguments and executes algorithm """
-    print(logo1)
+    print(logo)
     print(f'Version {helper.__version__}')
     src_location = __file__
     print(f'Source: {src_location}\n')
