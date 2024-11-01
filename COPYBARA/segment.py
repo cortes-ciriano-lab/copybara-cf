@@ -268,7 +268,7 @@ def segment_copy_number(outdir, smoothened_cn_path, min_segment_size, shuffles, 
     ''' segment the copy number '''
     # check and define threads
     new_threads = min(threads, cpu_count())
-    print(f"... Bin read counter will use threads = {new_threads}. (threads = {threads} defined; threads = {cpu_count()} available) ...")
+    print(f"... Copy number segmentation will use threads = {new_threads}. (threads = {threads} defined; threads = {cpu_count()} available) ...")
     threads = new_threads
     log.setLevel(logging.INFO)
 
