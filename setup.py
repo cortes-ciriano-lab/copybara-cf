@@ -1,0 +1,38 @@
+"""
+Setup file for package publishing
+Created: 06/11/2024
+Python 3.9.7
+Carolin Sauer
+modified from Hillary Elrick
+"""
+import setuptools
+
+from copybara import helper
+
+with open("README.md", encoding="utf-8") as fh:
+    long_description = fh.read()
+
+setuptools.setup(
+    name="COPYBARA-cf",
+    version=f"{helper.__version__}",
+    author="Carolin Sauer",
+    author_email="csauer@ebi.ac.uk",
+    url="https://github.com/cmsauer/COPYBARA",
+    description="COPYBARA-cf - copy number analysis for cfDNA long read sequencing data",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    packages=setuptools.find_packages(),
+    entry_points={
+        'console_scripts': [
+            'copybara=copybara.copybara:main',
+        ]
+    },
+    include_package_data=True,
+    classifiers=(
+        "Programming Language :: Python :: 3.9",
+        "Operating System :: Unix",
+        "Development Status :: 5 - Production/Stable",
+        "Intended Audience :: Science/Research",
+        "Topic :: Scientific/Engineering :: Bio-Informatics"
+    ),
+)
