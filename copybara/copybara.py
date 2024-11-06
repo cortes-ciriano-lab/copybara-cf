@@ -20,7 +20,7 @@ import copybara.read_counter as read_counter
 import copybara.smooth as smooth
 import copybara.segment as segment
 import copybara.fit_absolute as fit_absolute
-import copybara.tmad as tmad
+# import copybara.tmad as tmad
 import copybara.helper as helper
 
 logo = """

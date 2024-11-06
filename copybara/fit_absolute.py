@@ -14,7 +14,7 @@ import copy
 import sys
 
 
-import COPYBARA.cn_functions as cnfitter
+import copybara.cn_functions as cnfitter
 
 def process_log2r_input(log2r_cn_path):
     rel_copy_number = []

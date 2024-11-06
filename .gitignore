@@ -1,1 +1,6 @@
 __pycache__
+COPYBARA_cf.egg-info
+.archive*
+.vscode
+.DS_Store
+._*
