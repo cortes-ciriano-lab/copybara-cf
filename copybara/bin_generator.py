@@ -86,7 +86,7 @@ def process_chromosome(chrom, chr_length, fasta_file_path, bin_size, blacklist):
     fasta_file.close()
     return(List_of_bins)
 
-def generate_bins(outdir, sample, ref, chromosomes, bin_size, blacklist, breakpoints, threads):
+def generate_bins(outdir, sample, ref, chromosomes, bin_size, blacklist, threads):
     '''
     Main function to process and bin fasta file
     '''

@@ -48,7 +48,7 @@ def process_log2r_input(log2r_cn_path):
 
 def fit_absolute_cn(outdir, log2r_cn_path, sample,
     min_ploidy, max_ploidy, ploidy_step, 
-    min_cellularity, max_cellularity, cellularity_step, cellularity_buffer, overrule_cellularity,
+    min_cellularity, max_cellularity, cellularity_step,
     distance_function, distance_filter_scale_factor, distance_precision,
     max_proportion_zero, min_proportion_close_to_whole_number, max_distance_from_whole_number, main_cn_step_change,
     threads):
@@ -86,7 +86,7 @@ def fit_absolute_cn(outdir, log2r_cn_path, sample,
         # max_cellularity = round(min(1,cellularity + cellularity_buffer),digs)
 
     # needs coding in properly...
-    min_cellularity = 0
+    min_cellularity = 0.01
     max_cellularity = 1
 
     #----
@@ -133,40 +133,40 @@ def fit_absolute_cn(outdir, log2r_cn_path, sample,
 
 
     # Convert relative to absolute copy number and obtain major and minor copy number values if allele counts provided
-    if allele_counts_bed_path == None:
-        print("     ... No phased hetSNPs allele counts provided. Only total absolute copy number will be estimated. Consider providing hetSNPs allele counts if possible. See documentation for instructions on how to generate these.")
-        fitted_purity, fitted_ploidy = final_fit[0], final_fit[1]
-        abs_copy_number_segments = copy.deepcopy(rel_copy_number_segments)
-        for x in abs_copy_number_segments:
-            acn = round(cnfitter.relative_to_absolute_CN(x[-1], fitted_purity, fitted_ploidy),4)
-            x[-1] = acn if acn > 0 else 0
-        # set negative values to 0
-        for x in abs_copy_number_segments:
-            if x[-1] < 0:
-                x[-1] = 0
+    # if allele_counts_bed_path == None:
+        # print("     ... No phased hetSNPs allele counts provided. Only total absolute copy number will be estimated. Consider providing hetSNPs allele counts if possible. See documentation for instructions on how to generate these.")
+    fitted_purity, fitted_ploidy = final_fit[0], final_fit[1]
+    abs_copy_number_segments = copy.deepcopy(rel_copy_number_segments)
+    for x in abs_copy_number_segments:
+        acn = round(cnfitter.relative_to_absolute_CN(x[-1], fitted_purity, fitted_ploidy),4)
+        x[-1] = acn if acn > 0 else 0
+    # set negative values to 0
+    for x in abs_copy_number_segments:
+        if x[-1] < 0:
+            x[-1] = 0
 
-    elif allele_counts_bed_path != None:
-        print("     ... Allele counts for phased hetSNPs provided. Minor and total absolute copy number are being estimated ...")
-        fitted_purity, fitted_ploidy = final_fit[0], final_fit[1]
-        # prepare for multiprocessing
-        chr_names = list(dict.fromkeys([x[0] for x in rel_copy_number_segments]))
-        # only use multiprocessing if more than 1 thread available/being used.
-        if threads == 1:
-            # loop through chromosomes
-            print("multithreading skipped.")
-            abs_copy_number_segments = []
-            for chrom in chr_names:
-                cn_chr = [x for x in rel_copy_number_segments if x[0] == chrom]
-                ac_chr = [x for x in allele_counts if x[0] == chrom]
-                cur_chr = cnfitter.relative_to_absolute_minor_total_CN(chrom, cn_chr, ac_chr, fitted_purity, fitted_ploidy)
-                abs_copy_number_segments.append(cur_chr)
-            abs_copy_number_segments = [x for xs in abs_copy_number_segments for x in xs]
+    # elif allele_counts_bed_path != None:
+    #     print("     ... Allele counts for phased hetSNPs provided. Minor and total absolute copy number are being estimated ...")
+    #     fitted_purity, fitted_ploidy = final_fit[0], final_fit[1]
+    #     # prepare for multiprocessing
+    #     chr_names = list(dict.fromkeys([x[0] for x in rel_copy_number_segments]))
+    #     # only use multiprocessing if more than 1 thread available/being used.
+    #     if threads == 1:
+    #         # loop through chromosomes
+    #         print("multithreading skipped.")
+    #         abs_copy_number_segments = []
+    #         for chrom in chr_names:
+    #             cn_chr = [x for x in rel_copy_number_segments if x[0] == chrom]
+    #             ac_chr = [x for x in allele_counts if x[0] == chrom]
+    #             cur_chr = cnfitter.relative_to_absolute_minor_total_CN(chrom, cn_chr, ac_chr, fitted_purity, fitted_ploidy)
+    #             abs_copy_number_segments.append(cur_chr)
+    #         abs_copy_number_segments = [x for xs in abs_copy_number_segments for x in xs]
 
-        else:
-            print(f"multithreading using {threads} threads.")
-            args_in = [[chrom, [x for x in rel_copy_number_segments if x[0] == chrom], [x for x in allele_counts if x[0] == chrom], fitted_purity, fitted_ploidy] for chrom in chr_names]
-            with Pool(processes=threads) as pool:
-                abs_copy_number_segments = [x for xs in list(pool.starmap(cnfitter.relative_to_absolute_minor_total_CN, args_in)) for x in xs]
+    #     else:
+    #         print(f"multithreading using {threads} threads.")
+    #         args_in = [[chrom, [x for x in rel_copy_number_segments if x[0] == chrom], [x for x in allele_counts if x[0] == chrom], fitted_purity, fitted_ploidy] for chrom in chr_names]
+    #         with Pool(processes=threads) as pool:
+    #             abs_copy_number_segments = [x for xs in list(pool.starmap(cnfitter.relative_to_absolute_minor_total_CN, args_in)) for x in xs]
 
 
     # Prepare and write out results
@@ -187,10 +187,10 @@ def fit_absolute_cn(outdir, log2r_cn_path, sample,
     outfile2.close()
 
     outfile3 = open(f"{outdir}/{sample}_segmented_absolute_copy_number.tsv", "w")
-    if allele_counts_bed_path == None:
-        header=['chromosome','start','end','segment_id', 'bin_count', 'sum_of_bin_lengths', 'weight', 'copyNumber']
-    elif allele_counts_bed_path != None:
-        header=['chromosome','start','end','segment_id', 'bin_count', 'sum_of_bin_lengths', 'weight', 'copyNumber', 'minorAlleleCopyNumber', 'meanBAF', 'no_hetSNPs']
+    # if allele_counts_bed_path == None:
+    header=['chromosome','start','end','segment_id', 'bin_count', 'sum_of_bin_lengths', 'weight', 'copyNumber']
+    # elif allele_counts_bed_path != None:
+    #     header=['chromosome','start','end','segment_id', 'bin_count', 'sum_of_bin_lengths', 'weight', 'copyNumber', 'minorAlleleCopyNumber', 'meanBAF', 'no_hetSNPs']
     outfile3.write('\t'.join(header)+'\n')
     for r in abs_copy_number_segments:
         Line = '\t'.join(str(e) for e in r) + '\n'

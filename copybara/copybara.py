@@ -50,17 +50,17 @@ def copybara_main(args):
         args.threads = cpu_count()
 
     # check if files are bam or cram (must have indices)
-    if args.bam.endswith('bam') and args.nbam.endswith('bam'):
+    if args.bam.endswith('bam'): #and args.normal_bam.endswith('bam'):
         args.is_cram = False
         aln_files = {
             'tbam': pysam.AlignmentFile(args.bam, "rb"),
-            'nbam': pysam.AlignmentFile(args.nbam, "rb")
+            # 'nbam': pysam.AlignmentFile(args.normal_bam, "rb")
         }
-    elif args.bam.endswith('cram') and args.nbam.endswith('cram'):
+    elif args.bam.endswith('cram'): #and args.normal_bam.endswith('cram'):
         args.is_cram = True
         aln_files = {
             'tbam': pysam.AlignmentFile(args.bam, "rc"),
-            'nbam': pysam.AlignmentFile(args.nbam, "rc")
+            # 'nbam': pysam.AlignmentFile(args.normal_bam, "rc")
         }
     else:
         sys.exit('Unrecognized file extension. Input files must be BAM/CRAM.')
@@ -88,7 +88,7 @@ def copybara_main(args):
     bin_annotations_path = bin_generator.generate_bins(outdir, args.sample, args.ref, args.chromosomes, args.cn_binsize, args.blacklist, args.threads)
     helper.time_function("Binned reference genome", checkpoints, time_str)
     # 2. perform read counting across bins
-    read_counts_path = read_counter.count_reads(outdir, args.tumour, args.normal, args.sample, bin_annotations_path, args.readcount_mapq, args.blacklisting, args.bl_threshold, args.bases_filter, args.bases_threshold, args.threads)
+    read_counts_path = read_counter.count_reads(outdir, args.bam, args.normal_bam, args.panel_of_normal ,args.sample, bin_annotations_path, args.mapq, args.blacklisting, args.bl_threshold, args.bases_filter, args.bases_threshold, args.threads)
     helper.time_function("Performed read counting", checkpoints, time_str)
     # smooth the copy number data
     smoothened_cn_path = smooth.smooth_copy_number(outdir, read_counts_path, args.smoothing_level, args.trim)
@@ -98,10 +98,10 @@ def copybara_main(args):
     helper.time_function("Performed CBS", checkpoints, time_str)
     # fit absolute copy number
     fit_absolute.fit_absolute_cn(outdir, log2r_cn_path, args.sample,
-        args.min_ploidy, args.max_ploidy, args.ploidy_step, args.min_cellularity, args.max_cellularity, args.cellularity_step, args.cellularity_buffer, args.overrule_cellularity,
+        args.min_ploidy, args.max_ploidy, args.ploidy_step, args.min_cellularity, args.max_cellularity, args.cellularity_step, 
         args.distance_function, args.distance_filter_scale_factor, args.distance_precision,
         args.max_proportion_zero, args.min_proportion_close_to_whole_number, args.max_distance_from_whole_number, args.main_cn_step_change,
-        args.min_ps_size, args.min_ps_length, args.threads)
+        args.threads)
     helper.time_function("Fit absolute copy number", checkpoints, time_str)
     # cleanup tmpdir
     # helper.clean_tmpdir(args.tmpdir, outdir)
@@ -114,10 +114,10 @@ def parse_args(args):
     global_parser.add_argument('--version', action='version', version=f'COPYBARA {helper.__version__}')
     
     # arguments for default copybara run
-    global_parser.add_argument('-bam', '--tumour', nargs='?', type=str, required=True, help='BAM file (must have index)')
+    global_parser.add_argument('-b', '--bam', nargs='?', type=str, required=True, help='BAM file (must have index)')
     control_group = global_parser.add_mutually_exclusive_group()
-    control_group.add_argument('-nbam','--normal', nargs='?', type=str, required=False, help='Matched normal BAM file if available (must have index)')
-    control_group.add_argument('-pon','--panel_of_normal', nargs='?', type=str, required=False, help='Panel of normal if available')
+    control_group.add_argument('-nb','--normal_bam', nargs='?', type=str, default=None, required=False, help='Matched normal BAM file if available (must have index)')
+    control_group.add_argument('-pon','--panel_of_normal', nargs='?', type=str, default=None, required=False, help='Panel of normal if available')
     
     global_parser.add_argument('--ref', nargs='?', type=str, required=True, help='Full path to reference genome')
     global_parser.add_argument('--ref_index', nargs='?', type=str, required=False, help='Full path to reference genome fasta index (ref path + ".fai" by default)')
@@ -131,8 +131,8 @@ def parse_args(args):
     
     global_parser.add_argument('--sample', nargs='?', type=str, help='Name to prepend to output files (default=tumour BAM filename without extension)')
     
-    global_parser.add_argument('-w', '--cn_binsize', type=int, default=10, help='Bin window size in kbp', required=False)
-    global_parser.add_argument('-b', '--blacklist', type=str, help='Path to the blacklist file', required=False)
+    global_parser.add_argument('-w', '--cn_binsize', type=int, default=100, help='Bin window size in kbp', required=False)
+    global_parser.add_argument('-bl', '--blacklist', type=str, help='Path to the blacklist file', required=False)
     global_parser.add_argument('-c', '--chromosomes', nargs='+', default='all', help='Contigs/chromosomes to consider. (optional, default=all). To run only a subset of chromosomes, specify the chromosome numbers separated by spaces. For x and y chromosomes, use 23 and 24, respectively.  E.g. use "-c 1 4 23 24" to run chromosomes 1, 4, X and Y', required=False)
     global_parser.add_argument('--no_blacklist', dest='blacklisting', action='store_false')
     global_parser.set_defaults(blacklisting=True)
@@ -148,16 +148,16 @@ def parse_args(args):
     global_parser.add_argument('-pv', '--p_val', type=float,  default=0.01, help='p-value used to test validity of candidate segments from CBS using (shuffles) number of permutations (default = 0.01).', required=False)
     global_parser.add_argument('-qt', '--quantile', type=float,  default=0.2, help='Quantile of changepoint (absolute median differences across all segments) used to estimate threshold for segment merging (default = 0.2; set to 0 to avoid segment merging).', required=False)
     global_parser.add_argument('--min_ploidy', type=float, default=1.5, help='Minimum ploidy to be considered for copy number fitting.', required=False)
-    global_parser.add_argument('--max_ploidy', type=float, default=5, help='Maximum ploidy to be considered for copy number fitting.', required=False)
+    global_parser.add_argument('--max_ploidy', type=float, default=4.5, help='Maximum ploidy to be considered for copy number fitting.', required=False)
     global_parser.add_argument('--ploidy_step', type=float, default=0.01, help='Ploidy step size for grid search space used during for copy number fitting.', required=False)
     
     global_parser.add_argument('--set_ploidy', type=float, default=None, help='Set to sample`s ploidy if known.', required=False)   
     
-    global_parser.add_argument('--min_cellularity', type=float, default=0.2, help='Minimum cellularity to be considered for copy number fitting. If hetSNPs allele counts are provided, this is estimated during copy number fitting. Alternatively, a purity value can be provided if the purity of the sample is already known.', required=False)
+    global_parser.add_argument('--min_cellularity', type=float, default=0.01, help='Minimum cellularity to be considered for copy number fitting. If hetSNPs allele counts are provided, this is estimated during copy number fitting. Alternatively, a purity value can be provided if the purity of the sample is already known.', required=False)
     global_parser.add_argument('--max_cellularity', type=float, default=1, help='Maximum cellularity to be considered for copy number fitting. If hetSNPs allele counts are provided, this is estimated during copy number fitting. Alternatively, a purity value can be provided if the purity of the sample is already known.', required=False)
     global_parser.add_argument('--cellularity_step', type=float, default=0.01, help='Cellularity step size for grid search space used during for copy number fitting.', required=False)
-    global_parser.add_argument('--cellularity_buffer', type=float, default=0.1, help='Cellularity buffer to define purity grid search space during copy number fitting (default = 0.1).', required=False)
-    global_parser.add_argument('--overrule_cellularity', type=float, default=None, help='Set to sample`s purity if known. This value will overrule the cellularity estimated using hetSNP allele counts (not used by default).', required=False)   
+    # global_parser.add_argument('--cellularity_buffer', type=float, default=0.1, help='Cellularity buffer to define purity grid search space during copy number fitting (default = 0.1).', required=False)
+    # global_parser.add_argument('--overrule_cellularity', type=float, default=None, help='Set to sample`s purity if known. This value will overrule the cellularity estimated using hetSNP allele counts (not used by default).', required=False)   
     global_parser.add_argument('--distance_function', type=str, default='RMSD', help='Distance function to be used for copy number fitting.', choices=['RMSD', 'MAD'], required=False)
     global_parser.add_argument('--distance_filter_scale_factor', type=float, default=1.25, help='Distance filter scale factor to only include solutions with distances < scale factor * min(distance).', required=False)
     global_parser.add_argument('--distance_precision', type=int, default=3, help='Number of digits to round distance functions to', required=False)
