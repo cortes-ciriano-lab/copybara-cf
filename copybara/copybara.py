@@ -40,11 +40,14 @@ Correct tumour purity if purity 1 and ploidy 0 (or if completely flat profile, i
 
 def copybara_main(args):
     """ main function for copy number analysis """
+    print(f'blacklisting = {args.blacklisting}\nblacklist: {args.blacklist}')
+    # print(f'minploidy={args.min_ploidy}, maxploidy={args.max_ploidy}')
     if not args.sample:
         # set sample name to default
         args.sample = os.path.splitext(os.path.basename(args.bam))[0]
     print(f'Running as sample {args.sample}')
     outdir = helper.check_outdir(args.outdir, args.overwrite, illegal=None)
+    
     # set number of threads to cpu count if none set
     if not args.threads:
         args.threads = cpu_count()
@@ -76,10 +79,6 @@ def copybara_main(args):
         args.ref_index = f'{args.ref}.fai' if not args.ref_index else args.ref_index
         print(f'Found {args.ref_index} to use as reference fasta index')
     
-     # threads
-    if not args.threads:
-        args.threads = cpu_count()
-
     # initialize timing
     checkpoints = [time()]
     time_str = []
@@ -147,13 +146,14 @@ def parse_args(args):
     global_parser.add_argument('-ps', '--p_seg', type=float,  default=0.05, help='p-value used to test segmentation statistic for a given interval during CBS using (shuffles) number of permutations (default = 0.05).', required=False)
     global_parser.add_argument('-pv', '--p_val', type=float,  default=0.01, help='p-value used to test validity of candidate segments from CBS using (shuffles) number of permutations (default = 0.01).', required=False)
     global_parser.add_argument('-qt', '--quantile', type=float,  default=0.2, help='Quantile of changepoint (absolute median differences across all segments) used to estimate threshold for segment merging (default = 0.2; set to 0 to avoid segment merging).', required=False)
-    global_parser.add_argument('--min_ploidy', type=float, default=1.5, help='Minimum ploidy to be considered for copy number fitting.', required=False)
-    global_parser.add_argument('--max_ploidy', type=float, default=4.5, help='Maximum ploidy to be considered for copy number fitting.', required=False)
-    global_parser.add_argument('--ploidy_step', type=float, default=0.01, help='Ploidy step size for grid search space used during for copy number fitting.', required=False)
+    global_parser.add_argument('--min_ploidy', type=float, default=1.6, help='Minimum ploidy to be considered for copy number fitting.', required=False)
+    global_parser.add_argument('--max_ploidy', type=float, default=3, help='Maximum ploidy to be considered for copy number fitting.', required=False)
+    global_parser.add_argument('--ploidy_step', type=float, default=0.1, help='Ploidy step size for grid search space used during for copy number fitting.', required=False)
     
     global_parser.add_argument('--set_ploidy', type=float, default=None, help='Set to sample`s ploidy if known.', required=False)   
-    
-    global_parser.add_argument('--min_cellularity', type=float, default=0.01, help='Minimum cellularity to be considered for copy number fitting. If hetSNPs allele counts are provided, this is estimated during copy number fitting. Alternatively, a purity value can be provided if the purity of the sample is already known.', required=False)
+    # global_parser.add_argument('--ploidy_buffer', type=float, default=0.3, help='Ploidy buffer to define ploidy grid search space during copy number fitting when --set_ploidy is provided (default = 0.3).', required=False)
+
+    global_parser.add_argument('--min_cellularity', type=float, default=0, help='Minimum cellularity to be considered for copy number fitting. If hetSNPs allele counts are provided, this is estimated during copy number fitting. Alternatively, a purity value can be provided if the purity of the sample is already known.', required=False)
     global_parser.add_argument('--max_cellularity', type=float, default=1, help='Maximum cellularity to be considered for copy number fitting. If hetSNPs allele counts are provided, this is estimated during copy number fitting. Alternatively, a purity value can be provided if the purity of the sample is already known.', required=False)
     global_parser.add_argument('--cellularity_step', type=float, default=0.01, help='Cellularity step size for grid search space used during for copy number fitting.', required=False)
     # global_parser.add_argument('--cellularity_buffer', type=float, default=0.1, help='Cellularity buffer to define purity grid search space during copy number fitting (default = 0.1).', required=False)

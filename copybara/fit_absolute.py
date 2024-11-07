@@ -86,8 +86,8 @@ def fit_absolute_cn(outdir, log2r_cn_path, sample,
         # max_cellularity = round(min(1,cellularity + cellularity_buffer),digs)
 
     # needs coding in properly...
-    min_cellularity = 0.01
-    max_cellularity = 1
+    # min_cellularity = 0.01
+    # max_cellularity = 1
 
     #----
     # 4. Estimate ploidy and fit ACN using estimated sample purity
