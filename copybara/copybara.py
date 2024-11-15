@@ -84,7 +84,7 @@ def copybara_main(args):
     time_str = []
    
     # 1. generate bins
-    bin_annotations_path = bin_generator.generate_bins(outdir, args.sample, args.ref, args.chromosomes, args.cn_binsize, args.blacklist, args.threads)
+    bin_annotations_path = bin_generator.generate_bins(outdir, args.sample, args.ref, args.chromosomes, args.cn_binsize, args.blacklist, args.blacklist_buffer, args.threads)
     helper.time_function("Binned reference genome", checkpoints, time_str)
     # 2. perform read counting across bins
     read_counts_path = read_counter.count_reads(outdir, args.bam, args.normal_bam, args.panel_of_normal ,args.sample, bin_annotations_path, args.mapq, args.blacklisting, args.bl_threshold, args.bases_filter, args.bases_threshold, args.threads)
@@ -130,12 +130,13 @@ def parse_args(args):
     
     global_parser.add_argument('--sample', nargs='?', type=str, help='Name to prepend to output files (default=tumour BAM filename without extension)')
     
-    global_parser.add_argument('-w', '--cn_binsize', type=int, default=100, help='Bin window size in kbp', required=False)
-    global_parser.add_argument('-bl', '--blacklist', type=str, help='Path to the blacklist file', required=False)
+    global_parser.add_argument('-w', '--cn_binsize', type=int, default=500, help='Bin window size in kbp', required=False)
     global_parser.add_argument('-c', '--chromosomes', nargs='+', default='all', help='Contigs/chromosomes to consider. (optional, default=all). To run only a subset of chromosomes, specify the chromosome numbers separated by spaces. For x and y chromosomes, use 23 and 24, respectively.  E.g. use "-c 1 4 23 24" to run chromosomes 1, 4, X and Y', required=False)
+    global_parser.add_argument('-bl', '--blacklist', type=str, help='Path to the blacklist file', required=False)
+    global_parser.add_argument('--blacklist_buffer', type=int, default=10000, help='Length of region (in bp) flanking the centromere to be excluded. (default = 10000)', required=False)
     global_parser.add_argument('--no_blacklist', dest='blacklisting', action='store_false')
     global_parser.set_defaults(blacklisting=True)
-    global_parser.add_argument('-blt', '--bl_threshold', type=int,  default='5', help='Percentage overlap between bin and blacklist threshold to tolerate for read counting (default = 0, i.e. no overlap tolerated). Please specify percentage threshold as integer, e.g. "-t 5" ', required=False)
+    global_parser.add_argument('-blt', '--bl_threshold', type=int,  default='1', help='Percentage overlap between bin and blacklist threshold to tolerate for read counting (default = 0, i.e. no overlap tolerated). Please specify percentage threshold as integer, e.g. "-t 5" ', required=False)
     global_parser.add_argument('--no_basesfilter', dest='bases_filter', action='store_false')
     global_parser.set_defaults(bases_filter=True)
     global_parser.add_argument('-bt', '--bases_threshold', type=int,  default='75', help='Percentage of known bases per bin required for read counting (default = 0, i.e. no filtering). Please specify percentage threshold as integer, e.g. "-bt 95" ', required=False)

@@ -20,7 +20,7 @@ def overlaps(a, b):
     '''
     return min(a[1], b[1]) - max(a[0], b[0]) + 1
 
-def process_chromosome(chrom, chr_length, fasta_file_path, bin_size, blacklist):
+def process_chromosome(chrom, chr_length, fasta_file_path, bin_size, blacklist, blacklist_buffer):
     '''
     Function to process each chromosome of interest (either in a loop or in parallel) to generate bins based on bin_size with annotated blacklist and unknown bases values. 
     '''
@@ -40,7 +40,7 @@ def process_chromosome(chrom, chr_length, fasta_file_path, bin_size, blacklist):
     # estimate overlap with blacklist if blacklist is provided
     if (blacklist is not None):
         blacklist_chr = pybedtools.BedTool(blacklist).filter(lambda b: b.chrom == chrom)
-        blacklist_chr_list = [[int(row[1]), int(row[2])] for row in blacklist_chr]
+        blacklist_chr_list = [[int(row[1])-int(blacklist_buffer), int(row[2])+int(blacklist_buffer)] for row in blacklist_chr]
     else:
         pass
 
@@ -86,7 +86,7 @@ def process_chromosome(chrom, chr_length, fasta_file_path, bin_size, blacklist):
     fasta_file.close()
     return(List_of_bins)
 
-def generate_bins(outdir, sample, ref, chromosomes, bin_size, blacklist, threads):
+def generate_bins(outdir, sample, ref, chromosomes, bin_size, blacklist, blacklist_buffer, threads):
     '''
     Main function to process and bin fasta file
     '''
@@ -108,7 +108,7 @@ def generate_bins(outdir, sample, ref, chromosomes, bin_size, blacklist, threads
     else:
         chr_names = contigs
     #   define input
-    chr_in = [[chrom,fasta.get_reference_length(chrom),ref,bin_size,blacklist] for chrom in chr_names]
+    chr_in = [[chrom,fasta.get_reference_length(chrom),ref,bin_size,blacklist,blacklist_buffer] for chrom in chr_names]
     fasta.close()
 
     # c. Generate bins and count bases per bins for each chrom in parallel (run function using multithreader)
@@ -119,7 +119,7 @@ def generate_bins(outdir, sample, ref, chromosomes, bin_size, blacklist, threads
         chrData = []
         for contig in chr_in:
             chrom, chr_length, fasta_file_path = contig[0], contig[1], contig[2]
-            binned_chr = process_chromosome(chrom, chr_length, fasta_file_path, bin_size, blacklist)
+            binned_chr = process_chromosome(chrom, chr_length, fasta_file_path, bin_size, blacklist, blacklist_buffer)
             chrData.append(binned_chr)
     else:
         print(f"multithreading using {threads} threads.")
