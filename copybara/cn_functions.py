@@ -22,6 +22,98 @@ def is_constant(x):
     return np.all(x == x[0])
 
 
+# def Modes(x, min_size=0.1):
+#     '''
+#     The Modes function is a simple, deterministic function that differences the kernel density of x and reports a number of modes equal to half the number of changes in direction, 
+#     although the min.size function can be used to reduce the number of modes returned, and defaults to 0.1, eliminating modes that do not have at least 10% of the distributional area. 
+#     The Modes function returns a list with three components: modes, modes.dens, and size. 
+#     The elements in each component are ordered according to the decreasing density of the modes. The modes component is a vector of the values of x associated with the modes. 
+#     The modes.dens component is a vector of the kernel density estimates at the modes. 
+#     The size component is a vector of the proportion of area underneath each mode. 
+#     Function adapted from the Modes() function of the "LaplacesDemon" R package
+#     '''
+#     if x is None:
+#         raise ValueError("The x argument is required.")
+#     # Convert input to a numpy array of floats and filter out non-finite values
+#     x = np.asarray(x).astype(float)
+#     x = x[np.isfinite(x)]
+#     # Check if the input array is constant
+#     if is_constant(x):
+#         return {'modes': [np.nan], 'mode_dens': [np.nan], 'size': [1]}
+#     # Compute the kernel density estimate
+#     density = gaussian_kde(x)
+#     # Create a grid of 1000 points over the range of the data
+#     x_grid = np.linspace(np.min(x), np.max(x), 1000)
+#     # Evaluate the density over the grid
+#     dens_y = density(x_grid)
+#     # Compute the differences between consecutive density values
+#     dens_y_diff = np.diff(dens_y)
+#     # Identify where the density is increasing (1) or not increasing (0)
+#     incr = np.where(dens_y_diff > 0, 1, 0)
+#     # Initialize the list of segment boundaries
+#     begin = [0]
+#     for i in range(1, len(incr)):
+#         if incr[i] != incr[i - 1]:
+#             begin.append(i)
+#     # Add the end of the array as the final boundary
+#     begin.append(len(incr))
+#     #
+#     size = []
+#     modes = []
+#     mode_dens = []
+#     # Sum of all density values for normalization
+#     dens_y_sum = np.sum(dens_y)
+#     #
+#     j = 0
+#     while j < len(begin) - 1:
+#         start_idx = begin[j] # Define the start and end of the current segment
+#         end_idx = begin[j + 2] if j + 2 < len(begin) else len(dens_y) # Extract the segment of the density
+#         segment = dens_y[start_idx:end_idx]  # Calculate the size of the segment
+#         segment_size = np.sum(segment) / dens_y_sum
+#         if segment_size >= min_size: # Define the grid points and density values for the segment
+#             kde_x = x_grid[start_idx:end_idx]
+#             kde_y = segment
+#             mode_idx = np.argmax(kde_y) # Find the index of the mode (maximum density) within the segment
+#             modes.append(kde_x[mode_idx]) # Store the mode and its density
+#             mode_dens.append(kde_y[mode_idx])
+#             size.append(segment_size) # Store the size of the segment
+#         j += 2
+#     # Order the results by density in descending order
+#     order = np.argsort(mode_dens)[::-1]
+#     size = np.array(size)[order]
+#     modes = np.array(modes)[order]
+#     mode_dens = np.array(mode_dens)[order]
+#     # Normalize the sizes to sum to 1 if their sum exceeds 1
+#     if np.sum(size) > 1:
+#         size = size / np.sum(size)
+#     # Return dictionary
+#     return {'modes': modes, 'mode_dens': mode_dens, 'size': size}
+
+
+# Modified Modes function using r density default function
+def r_density_default(data, n=512):
+    """
+    Implements R's density.default function in Python.
+    Parameters:
+        data (array-like): Input data.
+        n (int): Number of equally spaced points to evaluate the density (default: 512).
+    Returns:
+        x (ndarray): Points where the density is evaluated.
+        y (ndarray): Estimated density values.
+    """
+    # Convert data to numpy array
+    data = np.asarray(data)
+    # R's default bandwidth selection (nrd0)
+    iqr = np.subtract(*np.percentile(data, [75, 25]))  # Interquartile range
+    std_dev = np.std(data, ddof=1)                    # Sample standard deviation
+    bandwidth = 0.9 * min(std_dev, iqr / 1.34) * len(data) ** (-1 / 5)
+    # Gaussian KDE with the specified bandwidth
+    kde = gaussian_kde(data, bw_method=bandwidth / np.std(data, ddof=1))
+    # Generate evaluation points
+    x = np.linspace(data.min() - 3 * bandwidth, data.max() + 3 * bandwidth, n)
+    y = kde(x)
+    return x, y
+
 def Modes(x, min_size=0.1):
     '''
     The Modes function is a simple, deterministic function that differences the kernel density of x and reports a number of modes equal to half the number of changes in direction, 
@@ -40,12 +132,14 @@ def Modes(x, min_size=0.1):
     # Check if the input array is constant
     if is_constant(x):
         return {'modes': [np.nan], 'mode_dens': [np.nan], 'size': [1]}
-    # Compute the kernel density estimate
-    density = gaussian_kde(x)
-    # Create a grid of 1000 points over the range of the data
-    x_grid = np.linspace(np.min(x), np.max(x), 1000)
-    # Evaluate the density over the grid
-    dens_y = density(x_grid)
+    # # Compute the kernel density estimate
+    # density = gaussian_kde(x)
+    # # Create a grid of 1000 points over the range of the data
+    # x_grid = np.linspace(np.min(x), np.max(x), 1000)
+    # # Evaluate the density over the grid
+    # dens_y = density(x_grid)
+    # Compute density using default density r function implementation
+    dens_x,dens_y = r_density_default(x, n=512)
     # Compute the differences between consecutive density values
     dens_y_diff = np.diff(dens_y)
     # Identify where the density is increasing (1) or not increasing (0)
@@ -71,7 +165,7 @@ def Modes(x, min_size=0.1):
         segment = dens_y[start_idx:end_idx]  # Calculate the size of the segment
         segment_size = np.sum(segment) / dens_y_sum
         if segment_size >= min_size: # Define the grid points and density values for the segment
-            kde_x = x_grid[start_idx:end_idx]
+            kde_x = dens_x[start_idx:end_idx]
             kde_y = segment
             mode_idx = np.argmax(kde_y) # Find the index of the mode (maximum density) within the segment
             modes.append(kde_x[mode_idx]) # Store the mode and its density
