@@ -61,7 +61,7 @@ def define_purity_search_space(rel_cn,bc_thres,dens_thres,min_copy_number,max_co
     elif len(bc_out) != 0:
         # if multimodal chromosomes identified:
         # look at distribution and find maxima... using density default function from R
-        dens_x,dens_y = r_density_default(bc_out, n=512)
+        dens_x,dens_y = cnfitter.r_density_default(bc_out, n=512)
         # Filter density by min/max copy number thresholds
         filtered_density = [(x, y) for x, y in zip(dens_x,dens_y) if (min_copy_number is None or x >= min_copy_number) and (max_copy_number is None or x <= max_copy_number)]
         # Finding maxima

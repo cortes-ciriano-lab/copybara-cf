@@ -96,11 +96,24 @@ def copybara_main(args):
     log2r_cn_path = segment.segment_copy_number(outdir, smoothened_cn_path, args.min_segment_size, args.shuffles, args.p_seg, args.p_val, args.quantile, args.threads)
     helper.time_function("Performed CBS", checkpoints, time_str)
     # fit absolute copy number
+    bc_thres=0.25,
+    dens_thres=0.2
+    min_copy_number=-2
+    max_copy_number=2
+    lower_threshold=0
     fit_absolute.fit_absolute_cn(outdir, log2r_cn_path, args.sample,
+        bc_thres,dens_thres,min_copy_number,max_copy_number,lower_threshold,
         args.min_ploidy, args.max_ploidy, args.ploidy_step, args.min_cellularity, args.max_cellularity, args.cellularity_step, 
         args.distance_function, args.distance_filter_scale_factor, args.distance_precision,
         args.max_proportion_zero, args.min_proportion_close_to_whole_number, args.max_distance_from_whole_number, args.main_cn_step_change,
         args.threads)
+    # outdir, log2r_cn_path, sample,
+    # bc_thres,dens_thres,min_copy_number,max_copy_number,lower_threshold,
+    # min_ploidy, max_ploidy, ploidy_step, 
+    # min_cellularity, max_cellularity, cellularity_step,
+    # distance_function, distance_filter_scale_factor, distance_precision,
+    # max_proportion_zero, min_proportion_close_to_whole_number, max_distance_from_whole_number, main_cn_step_change,
+    # threads
     helper.time_function("Fit absolute copy number", checkpoints, time_str)
     # cleanup tmpdir
     # helper.clean_tmpdir(args.tmpdir, outdir)
