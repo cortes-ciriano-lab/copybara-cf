@@ -16,6 +16,101 @@ import sys
 
 import copybara.cn_functions as cnfitter
 
+def process_input_for_purity_estimation(log2r_cn_path):
+    rel_cn = []
+    with open(log2r_cn_path, "r") as file:
+        next(file)
+        for line in file:
+            fields = line.strip().split("\t")
+            chrom,start,end,cn,seg_id,seg_cn=fields[1],int(fields[2]),int(fields[3]),float(fields[-3]),fields[-2],float(fields[-1])
+            rel_cn.append([chrom,start,end,cn,seg_id,seg_cn])
+    return rel_cn
+
+
+def define_purity_search_space(rel_cn,bc_thres,dens_thres,min_copy_number,max_copy_number,lower_threshold):
+    chr_names = list(dict.fromkeys([x[0] for x in rel_cn]))
+    bc_out = []
+    for CHROM in chr_names:
+        if CHROM == 'chrX' or CHROM == 'chrY':
+            continue
+        # print(CHROM)
+        chr_rel_cn = [x[-3] for x in rel_cn if x[0] == CHROM]
+        # apply min and max copy number thresholds for purity estimation
+        if min_copy_number is not None:
+            assert isinstance(min_copy_number, (int, float)) and np.isscalar(min_copy_number)
+            chr_rel_cn = [cn for cn in chr_rel_cn if cn >= min_copy_number]
+        if max_copy_number is not None:
+            assert isinstance(max_copy_number, (int, float)) and np.isscalar(max_copy_number)
+            chr_rel_cn = [cn for cn in chr_rel_cn if cn <= max_copy_number]
+        try:
+            # modes_result = Modes(chr_rel_cn)
+            # print(CHROM, is_unimodal(chr_rel_cn))
+            if  cnfitter.is_unimodal(chr_rel_cn) == False:
+                print(CHROM)
+                chr_bc = cnfitter.bimodality_coefficient(chr_rel_cn)
+                # print(CHROM, chr_bc, cnfitter.is_unimodal(chr_rel_cn))
+                if chr_bc >= bc_thres:
+                    bc_out.append(chr_rel_cn)
+        except:
+            continue
+    bc_out = [x for xs in bc_out for x in xs]
+    # test if all chromosomes unimodal and define out:
+    if len(bc_out) == 0:
+        print("All chromosomes show unimodal distribution. Minimum purity = 0; maximum purity = 0.15")
+        pur_centre = 0
+    elif len(bc_out) != 0:
+        # if multimodal chromosomes identified:
+        # look at distribution and find maxima... using density default function from R
+        dens_x,dens_y = r_density_default(bc_out, n=512)
+        # Filter density by min/max copy number thresholds
+        filtered_density = [(x, y) for x, y in zip(dens_x,dens_y) if (min_copy_number is None or x >= min_copy_number) and (max_copy_number is None or x <= max_copy_number)]
+        # Finding maxima
+        maxima = []
+        for i in range(1, len(filtered_density) - 1):
+            if filtered_density[i][1] > filtered_density[i - 1][1] and filtered_density[i][1] > filtered_density[i + 1][1]:
+                maxima.append(filtered_density[i])
+        # Filter maxima by lower_threshold
+        maxima = [(x, d) for x, d in maxima if d >= lower_threshold * max(dens_y)]
+        # Select maxima with density > 0.2 and sort by density
+        maxima_select = sorted([m for m in maxima if m[1] > dens_thres], key=lambda m: -m[1])
+        # # PLOTTING
+        # copy_number_array = np.array(bc_out)
+        # plt.figure(figsize=(8, 5))
+        # plt.hist(copy_number_array, bins=30, density=True, alpha=0.5, label="Histogram")
+        # plt.plot(dens_x, dens_y, label="Density", color='blue')
+        # for x, _ in maxima_select:
+        #     plt.axvline(x=x, color='red', linestyle='--', label=f"Maxima at {x:.2f}")
+        # plt.xlim(min_copy_number, max_copy_number)
+        # plt.legend()
+        # plt.show()
+        # Compute pur_centre and estimate min and max purity search space
+        if len(maxima_select) == 1:
+            print("unimodal distribution. Minimum purity = 0; maximum purity = 0.15")
+            pur_centre = 0
+        if len(maxima_select) == 2:
+            pur_centre = abs(maxima_select[0][0] - maxima_select[1][0])
+        if len(maxima_select) > 2:
+            maxval = maxima_select[0][0]
+            try:
+                # lowerval = max([m[0] for m in maxima_select[1:] if m[0] < maxval])
+                lowerval = statistics.mean([m[0] for m in maxima_select[1:] if m[0] < maxval])
+            except:
+                lowerval = None
+            try:
+                # upperval = min([m[0] for m in maxima_select[1:] if m[0] > maxval])
+                upperval = statistics.mean([m[0] for m in maxima_select[1:] if m[0] > maxval])
+            except:
+                upperval = None
+            if upperval == None and lowerval != None:
+                pur_centre = abs(maxval-lowerval)
+            elif upperval != None and lowerval == None:
+                pur_centre = abs(maxval-upperval)
+            elif upperval != None and lowerval != None:
+                pur_centre = max([abs(maxval-lowerval),abs(maxval-upperval)])
+    min_purity,max_purity = round(max(pur_centre-0.15,0),2) , round(min(pur_centre+0.15,1),2)
+    return(pur_centre,min_purity,max_purity)
+
+
 def process_log2r_input(log2r_cn_path):
     rel_copy_number = []
     with open(log2r_cn_path, "r") as file:
@@ -47,53 +142,32 @@ def process_log2r_input(log2r_cn_path):
     return rel_copy_number_segments
 
 def fit_absolute_cn(outdir, log2r_cn_path, sample,
+    bc_thres,dens_thres,min_copy_number,max_copy_number,lower_threshold,
     min_ploidy, max_ploidy, ploidy_step, 
     min_cellularity, max_cellularity, cellularity_step,
     distance_function, distance_filter_scale_factor, distance_precision,
     max_proportion_zero, min_proportion_close_to_whole_number, max_distance_from_whole_number, main_cn_step_change,
     threads):
     '''
-    # 3. Estimate purity using phased heterozygous SNPs
-    ### Method/principles based on: https://doi.org/10.1371/journal.pone.0045835
+    Fit absolute copy number and estimate purity and ploidy fit.
     '''
     # check and define threads
     new_threads = min(threads, cpu_count())
     print(f"... CN fitting will use threads = {new_threads}. (threads = {threads} defined; threads = {cpu_count()} available) ...")
     threads = new_threads
 
-    ## NEEDS DELETING AS no hetSNPs allele counts for cfDNA
-    # # Open and prepare data to estimate cellularity if phased hetSNPs allele counts were provided.
-    # if allele_counts_bed_path == None:
-    #     print("     ... No phased hetSNPs allele counts were provided. Cellularity is estimated using grid search. Note that this is less accurate. Please provide hetSNPs allele counts if possible. See documentation for instructions on how to generate these.")
-    # elif allele_counts_bed_path != None:
-    #     print("     ... Allele counts for phased hetSNPs provided and being processed to estimate sample purity ...")
-
-    #     allele_counts, phasesets = process_allele_counts(allele_counts_bed_path)
-    #     # Estimate depth cutoff to exclude potentially amplified/gained regions as those will impact BAF distribution
-    #     ac_mean_depth = statistics.mean([x[-1] for x in allele_counts])
-    #     dp_cutoff = 2 * ac_mean_depth
-    #     # no_hetSNPs = len(allele_counts)
-
-    #     phasesets_dict, ps_summary = process_phased_hetSNPs(phasesets, allele_counts, dp_cutoff, min_ps_size=min_ps_size, min_ps_length=min_ps_length)
-
-    #     cellularity = estimate_cellularity(phasesets_dict, ps_summary)
-    #     digs = len(str(cellularity_step))-2 if isinstance(cellularity_step,int) != True else 1
-    #     print(f"        estimated cellularity using hetSNPs = {round(cellularity,digs)}.")
-        # if overrule_cellularity != None:
-        #     cellularity = int(overrule_cellularity)
-        #     print(f"        cellularity overruled by user with cellularity = {cellularity}.")
-        # min_cellularity = round(max(0,cellularity - cellularity_buffer),digs)
-        # max_cellularity = round(min(1,cellularity + cellularity_buffer),digs)
-
-    # needs coding in properly...
-    # min_cellularity = 0.01
-    # max_cellularity = 1
+    #----
+    # 3. Determine purity centre and search space based on chromosomes with multimodal CN data
+    #----
+    rel_cn = process_input_for_purity_estimation(log2r_cn_path)
+    cellularity,min_cellularity,max_cellularity=define_purity_search_space(rel_cn,bc_thres,dens_thres,min_copy_number,max_copy_number,lower_threshold)
+    print(cellularity,min_cellularity,max_cellularity)
+    print(f"        Purity centre for copy number fitting = {cellularity}. Purity search space: {min_cellularity}-{max_cellularity}.")
 
     #----
     # 4. Estimate ploidy and fit ACN using estimated sample purity
     ### Method/principles based on rascal R package: https://www.biorxiv.org/content/10.1101/2021.07.19.452658v1
     #----
-
     rel_copy_number_segments = process_log2r_input(log2r_cn_path)
 
     # Prepare input for copy number fitting
@@ -145,33 +219,10 @@ def fit_absolute_cn(outdir, log2r_cn_path, sample,
         if x[-1] < 0:
             x[-1] = 0
 
-    # elif allele_counts_bed_path != None:
-    #     print("     ... Allele counts for phased hetSNPs provided. Minor and total absolute copy number are being estimated ...")
-    #     fitted_purity, fitted_ploidy = final_fit[0], final_fit[1]
-    #     # prepare for multiprocessing
-    #     chr_names = list(dict.fromkeys([x[0] for x in rel_copy_number_segments]))
-    #     # only use multiprocessing if more than 1 thread available/being used.
-    #     if threads == 1:
-    #         # loop through chromosomes
-    #         print("multithreading skipped.")
-    #         abs_copy_number_segments = []
-    #         for chrom in chr_names:
-    #             cn_chr = [x for x in rel_copy_number_segments if x[0] == chrom]
-    #             ac_chr = [x for x in allele_counts if x[0] == chrom]
-    #             cur_chr = cnfitter.relative_to_absolute_minor_total_CN(chrom, cn_chr, ac_chr, fitted_purity, fitted_ploidy)
-    #             abs_copy_number_segments.append(cur_chr)
-    #         abs_copy_number_segments = [x for xs in abs_copy_number_segments for x in xs]
-
-    #     else:
-    #         print(f"multithreading using {threads} threads.")
-    #         args_in = [[chrom, [x for x in rel_copy_number_segments if x[0] == chrom], [x for x in allele_counts if x[0] == chrom], fitted_purity, fitted_ploidy] for chrom in chr_names]
-    #         with Pool(processes=threads) as pool:
-    #             abs_copy_number_segments = [x for xs in list(pool.starmap(cnfitter.relative_to_absolute_minor_total_CN, args_in)) for x in xs]
-
-
-    # Prepare and write out results
-    ## ranked solutions, final fit, and converted segmented absolute copy number
-
+    #----
+    # 5. Prepare and write out results
+    ### ranked solutions, final fit, and converted segmented absolute copy number
+    #----
     outfile1 = open(f"{outdir}/{sample}_ranked_solutions.tsv", "w")
     header=['purity','ploidy','distance','rank']
     outfile1.write('\t'.join(header)+'\n')
@@ -181,8 +232,9 @@ def fit_absolute_cn(outdir, log2r_cn_path, sample,
     outfile1.close()
 
     outfile2 = open(f"{outdir}/{sample}_fitted_purity_ploidy.tsv", "w")
+    header=['purity','ploidy','distance','rank', 'purity_centre', 'min_purity', 'max_purity']
     outfile2.write('\t'.join(header)+'\n')
-    Line = '\t'.join(str(e) for e in final_fit) + '\n'
+    Line = '\t'.join(str(e) for e in final_fit) + f'\t{cellularity}' + f'\t{min_cellularity}' + f'\t{max_cellularity}' + '\n'
     outfile2.write(Line)
     outfile2.close()
 
@@ -205,6 +257,3 @@ def fit_absolute_cn(outdir, log2r_cn_path, sample,
                     params_out.write(f'{key}: {value}\n')
     """
 
-    ###############
-    # Add in code to redefine segment breaks based on rounded acn?
-    ###############
