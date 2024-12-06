@@ -7,6 +7,7 @@ Carolin Sauer
 
 from multiprocessing import Pool
 from multiprocessing import cpu_count
+from scipy.interpolate import UnivariateSpline
 import pysam
 import pybedtools
 import copy
@@ -46,7 +47,7 @@ def binned_read_counting(curr_chunk, bed_chunk, alns, nmode, blacklisting, bl_th
     # initiate read counter
     chr_read_counts = []
     for bin in bed_chunk:
-        chrom, start, end, bases = bin[0], int(bin[1]), int(bin[2]), float(bin[3])
+        chrom, start, end, gc, bases = bin[0], int(bin[1]), int(bin[2]), float(bin[3]), float(bin[4])
         bin_name = f"{chrom}:{start}_{end}"
         # Filtering of bins by assigning each bin to boolean 'use' variable
         if blacklisting == False:
@@ -59,7 +60,7 @@ def binned_read_counting(curr_chunk, bed_chunk, alns, nmode, blacklisting, bl_th
                     use = False
 
         elif blacklisting == True:
-            blacklist = float(bin[4])
+            blacklist = float(bin[5])
             if bases_filter == False:
                 if blacklist <= bl_threshold:
                     use = True
@@ -75,9 +76,9 @@ def binned_read_counting(curr_chunk, bed_chunk, alns, nmode, blacklisting, bl_th
         chunk_read_count_N = count_reads_in_curr_bin(bam_N, chrom, start, end, readcount_mapq) if bam_N else None
 
         if blacklisting == True:
-            chr_read_counts.append([bin_name, chrom, str(start), str(end), str(bases), str(blacklist), str(use), str(chunk_read_count_T), str(chunk_read_count_N)])
+            chr_read_counts.append([bin_name, chrom, str(start), str(end), str(gc), str(bases), str(blacklist), str(use), str(chunk_read_count_T), str(chunk_read_count_N)])
         else:
-            chr_read_counts.append([bin_name, chrom, str(start), str(end), str(bases), str(use), str(chunk_read_count_T), str(chunk_read_count_N)])
+            chr_read_counts.append([bin_name, chrom, str(start), str(end), str(gc), str(bases), str(use), str(chunk_read_count_T), str(chunk_read_count_N)])
 
         # replace None values (lack of matched normal) with PoN count values if provided. PoN will need to be generated seperately, using the same bin size.
         if nmode == "pon": 
@@ -94,11 +95,66 @@ def binned_read_counting(curr_chunk, bed_chunk, alns, nmode, blacklisting, bl_th
         bam_N.close()
     return(chr_read_counts)
 
+def correct_counts(gc_content,counts,smoothness=0.1):
+    # Smoothing spline
+    spline = UnivariateSpline(gc_content, counts, s=smoothness)
+    # Calculate expected counts based on the spline
+    # expected_counts_interim = spline(gc_content)
+    expected_counts = spline(gc_content)
+    print(expected_counts)
+    # # Avoid division by zero
+    # expected_counts = []
+    # for value in expected_counts_interim:
+    #     if value == 0:
+    #         value = float('NaN')
+    #     expected_counts.append(value)
+    # expected_counts[expected_counts == 0] = float('NaN')
+    # Correct read counts
+    corrected_counts = []
+    for id,val in enumerate(counts):
+        corrected = val / expected_counts[id]
+        corrected_counts.append(corrected)
+    return corrected_counts
+
+
+def correct_gc_bias(nmode,countData,smoothness=0.1):
+    '''
+    Model GC bias to estimate GC correction for each bin and correct raw read counts
+    '''
+    # add 'row number' to start of count data for later sorting
+    for id,r in enumerate(countData):
+        r.insert(0,id)
+    # sort by gc content
+    countData.sort(key = lambda x: float(x[5]))
+    #
+    # Prepare input for smoothing spline to model GC bias
+    gc_content = [float(x[5]) for x in countData]
+    t_counts = [int(x[-2]) for x in countData]
+    #
+    corrected_counts_t = correct_counts(gc_content,t_counts,smoothness)
+    #
+    # replace count values with corrected values
+    for id,r in enumerate(countData):
+        r[-2] = str(corrected_counts_t[id])
+    # 
+    # repeat same for normal counts (if available)
+    if nmode == "mnorm" or nmode == "pon":
+        n_counts = [int(x[-1]) for x in countData]
+        corrected_counts_n = correct_counts(gc_content,n_counts,smoothness)
+        # replace count values with corrected values
+        for id,r in enumerate(countData):
+            r[-1] = str(corrected_counts_n[id])
+    #
+    # undo sorting by gc content
+    countData.sort(key = lambda x: x[0])
+    countData = [x[1:] for x in countData]
+    return countData
+
 def filter_and_normalise(nmode, countData):
     """ perform filtering, normalisation and transformation """
     ## filtering: Remove bins with 0 reads (no sequencing data in this region). - need to be excluded for segmentation and log2 transformation
     if nmode == "self":
-        filtered_counts = [x for x in countData if x[-3] == 'True' and int(x[-2]) != 0]
+        filtered_counts = [x for x in countData if x[-3] == 'True' and float(x[-2]) != 0 and x[-2] != 'nan']
         med_self = statistics.median([int(x[-2]) for x in filtered_counts]) #estimate genome wide median for selfnormalisation
         # Normalise and log2 transform
         normalised_counts = copy.deepcopy(filtered_counts)
@@ -186,16 +242,33 @@ def count_reads(outdir, tumour, normal, panel_of_normals, sample, bin_annotation
         with Pool(processes=threads) as pool:
             countData = [x for xs in list(pool.starmap(binned_read_counting, args_in)) for x in xs]
 
-    filtered_counts, normalised_counts = filter_and_normalise(nmode=nmode, countData=countData)
+    countData_corrected = correct_gc_bias(nmode,countData,smoothness=0.1)
+
+    ##################################
+    # test write out for DEV ###
+    outfile = open(f"{outdir}/{sample}_CORRECTED_read_counts.tsv", "w")
+    if blacklisting == True:
+        header=['bin', 'chromosome','start','end', 'gc_content', 'known_bases', 'overlap_blacklist', 'use_bin', 'tumour_read_count_cor', 'normal_read_count_cor']
+    else: 
+        header=['bin', 'chromosome','start','end', 'gc_content', 'perc_known_bases', 'use_bin', 'tumour_read_count_cor', 'normal_read_count_cor']
+    outfile.write('\t'.join(header)+'\n')
+    for r in countData_corrected:
+        Line = '\t'.join(r) + '\n'
+        outfile.write(Line)
+    outfile.close()
+    ##################################
+
+
+    filtered_counts, normalised_counts = filter_and_normalise(nmode=nmode, countData=countData_corrected)
 
     #----
     # 4. Get results and write out
     #----
     outfile = open(f"{outdir}/{sample}_raw_read_counts.tsv", "w")
     if blacklisting == True:
-        header=['bin', 'chromosome','start','end','known_bases', 'overlap_blacklist', 'use_bin', 'tumour_read_count', 'normal_read_count']
+        header=['bin', 'chromosome','start','end', 'gc_content', 'known_bases', 'overlap_blacklist', 'use_bin', 'tumour_read_count', 'normal_read_count']
     else: 
-        header=['bin', 'chromosome','start','end','perc_known_bases', 'use_bin', 'tumour_read_count', 'normal_read_count']
+        header=['bin', 'chromosome','start','end', 'gc_content', 'perc_known_bases', 'use_bin', 'tumour_read_count', 'normal_read_count']
     outfile.write('\t'.join(header)+'\n')
     for r in countData:
         Line = '\t'.join(r) + '\n'
@@ -213,9 +286,9 @@ def count_reads(outdir, tumour, normal, panel_of_normals, sample, bin_annotation
     log2_ratio_readcounts_path = f"{outdir}/{sample}_read_counts_{nmode}_log2r.tsv"
     outfile3 = open(log2_ratio_readcounts_path, "w")
     if blacklisting == True:
-        header=['bin', 'chromosome','start','end','known_bases', 'overlap_blacklist', 'use_bin', 'log2r_copynumber']
+        header=['bin', 'chromosome','start','end', 'gc_content', 'known_bases', 'overlap_blacklist', 'use_bin', 'log2r_copynumber']
     else: 
-        header=['bin', 'chromosome','start','end','perc_known_bases', 'use_bin', 'log2r_copynumber']
+        header=['bin', 'chromosome','start','end', 'gc_content', 'known_bases', 'use_bin', 'log2r_copynumber']
     outfile3.write('\t'.join(header)+'\n')
     for r in normalised_counts:
         Line = '\t'.join(r) + '\n'

@@ -332,7 +332,7 @@ def segment_copy_number(outdir, smoothened_cn_path, min_segment_size, shuffles, 
     seg_postions = []
     current_segment = None
     start_index = 0
-    for i, (bin,chr,S,E,kb,bl,u,cn,segment,cnseg) in enumerate(segmentedData):
+    for i, (bin,chr,S,E,gc,kb,bl,u,cn,segment,cnseg) in enumerate(segmentedData):
         if segment != current_segment:
             if current_segment is not None:
                 # Save the end index of the previous segment

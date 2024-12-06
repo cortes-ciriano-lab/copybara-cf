@@ -73,15 +73,19 @@ def process_chromosome(chrom, chr_length, fasta_file_path, bin_size, blacklist, 
         # Estimate number/fraction of known bases for each bin
         chr_bin_seq = fasta_file.fetch(chrom, start, end)
         acgt_len = 0
+        gc_len = 0
         for base in chr_bin_seq:
             if base.upper() in 'ACTG':
                 acgt_len += 1
+            if base.upper() in 'CG':
+                gc_len += 1
         chr_bases = acgt_len / cur_bin_size * 100
+        gc_content = gc_len / cur_bin_size
 
         if blacklist is not None:
-            List_of_bins.append([chrom, str(start), str(end), str(chr_bases), str(overlap_pct)])
+            List_of_bins.append([chrom, str(start), str(end), str(gc_content), str(chr_bases), str(overlap_pct)])
         else:
-            List_of_bins.append([chrom, str(start), str(end), str(chr_bases)])
+            List_of_bins.append([chrom, str(start), str(end), str(gc_content), str(chr_bases)])
 
     fasta_file.close()
     return(List_of_bins)
