@@ -379,12 +379,16 @@ def is_acceptable_fit(purity, ploidy, relative_CN, weights, max_proportion_zero 
         return False
     # Remove fits which result in overstretchin/overfitting of copy number states (i.e. copy number state skipping) normally caused by oversegmentation
     most_common = statistics.mode(acn_int)
-    second_most_common = statistics.mode([x for x in acn_int if x != most_common])
-    if abs(most_common - second_most_common) > main_cn_step_change:
-        print(f"Fit of purity={purity} and ploidy={ploidy} is NOT an acceptable solution, as main CN change step = {abs(most_common - second_most_common)}." )
-        return False
-    else:
+    try:
+        second_most_common = statistics.mode([x for x in acn_int if x != most_common])
+    except:
         return True
+    else:
+        if abs(most_common - second_most_common) > main_cn_step_change:
+            print(f"Fit of purity={purity} and ploidy={ploidy} is NOT an acceptable solution, as main CN change step = {abs(most_common - second_most_common)}." )
+            return False
+        else:
+            return True
 
 
 def viable_solutions(fits_r, relative_CN, weights, max_proportion_zero = 0.1, min_proportion_close_to_whole_number = 0.5, max_distance_from_whole_number = 0.25, main_cn_step_change = 1):
