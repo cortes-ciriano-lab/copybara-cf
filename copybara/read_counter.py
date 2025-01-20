@@ -12,8 +12,11 @@ import pybedtools
 import copy
 import statistics
 import math
+from scipy.stats import pearsonr
 import numpy as np
 from statsmodels.nonparametric.smoothers_lowess import lowess
+from scipy.interpolate import interp1d
+# from skmisc.loess import loess
 
 def count_reads_in_curr_bin(bam, chrom, start, end, readcount_mapq):
     chunk_read_count = 0
@@ -173,33 +176,97 @@ def binned_read_counting(curr_chunk, bed_chunk, alns, nmode, blacklisting, bl_th
 #             r.append(n)
 #     # return out
 #     return filtered_counts, normalised_counts
-def gc_loess(read_gc, read_outlier, gc_outlier):
-    read_counts = [int(x[0]) for x in read_gc]
+
+
+# def gc_loess(read_gc, read_outlier, gc_outlier):
+#     read_counts = [int(x[0]) for x in read_gc]
+#     gc_content = [float(x[1]) for x in read_gc]
+#     # define read and gc range to remove outliers for loess fitting 
+#     read_range = np.quantile(read_counts, [0, 1 - read_outlier])
+#     gc_range = np.quantile(gc_content, [gc_outlier, 1 - gc_outlier])
+#     # subset data based on ranges
+#     counts_subset = [x for x in read_gc if int(x[0]) > read_range[0] and int(x[0]) <= read_range[1] and
+#                      float(x[1]) >= gc_range[0] and float(x[1]) <= gc_range[1]] 
+#     read_subset = [int(x[0]) for x in counts_subset]
+#     gc_subset = [float(x[1]) for x in counts_subset]
+#     # Estimate correlation between GC content and read count to determine whether or not to perform GC correction
+#     pear_res = pearsonr(read_subset, gc_subset)
+#     pear_R, pear_pval = pear_res[0],pear_res[1]
+#     print(f"gc bias: pearsons's R={round(pear_R,3)}; p_val={round(pear_pval,6)}")
+#     if (abs(pear_R)>=0.2 and pear_pval < 0.05):
+#         print("         GC bias detected. LOESS correction being performed.")
+#         # Rough LOESS fit
+#         # rough_loess = lowess(read_subset, gc_subset, frac=0.03, return_sorted=False)
+#         # normalise gc and reads
+#         rough_loess = lowess(read_subset, gc_subset, frac=0.03)
+#         # rough_loess = loess(read_subset, gc_subset, span = 0.03)
+#         # Refine the fit
+#         gc_grid = np.linspace(0, 1, 1000)  # Interpolation points for refined LOESS
+#         # rough_pred = np.interp(gc_grid, np.sort(gc_subset), np.sort(rough_loess))
+#         rough_pred = np.interp(gc_grid, rough_loess[:,0], rough_loess[:,1],left=float('NaN'), right=float('NaN'))
+#         final_loess = lowess(rough_pred, gc_grid, frac=0.3, return_sorted=False)
+#         # final_loess = lowess(rough_pred, gc_grid, frac=0.3  )
+#         # Correct read counts
+#         smooth_gc = np.interp(gc_content, gc_grid, final_loess)  # Predicted values for all bins
+#         # smooth_gc = np.interp(gc_content, final_loess[:,0], final_loess[:,1],left=float('NaN'), right=float('NaN'))  # Predicted values for all bins
+#         cor_gc = read_counts / smooth_gc # GC correct read counts
+#         pear_res = pearsonr(read_counts, cor_gc)
+#         pear_R, pear_pval = pear_res[0],pear_res[1]
+#         print(f"gc bias after correction: pearsons's R={round(pear_R,3)}; p_val={round(pear_pval,6)}")
+#     else:
+#         cor_gc = read_counts
+#     return cor_gc
+
+def gc_loess(read_gc, read_outlier, gc_outlier, sample_size):
+    read_counts = [float(x[0]) for x in read_gc]
     gc_content = [float(x[1]) for x in read_gc]
     # define read and gc range to remove outliers for loess fitting 
     read_range = np.quantile(read_counts, [0, 1 - read_outlier])
     gc_range = np.quantile(gc_content, [gc_outlier, 1 - gc_outlier])
     # subset data based on ranges
-    counts_subset = [x for x in read_gc if int(x[0]) >= read_range[0] and int(x[0]) <= read_range[1] and
+    counts_subset = [x for x in read_gc if int(x[0]) > read_range[0] and int(x[0]) <= read_range[1] and
                      float(x[1]) >= gc_range[0] and float(x[1]) <= gc_range[1]] 
     read_subset = [int(x[0]) for x in counts_subset]
     gc_subset = [float(x[1]) for x in counts_subset]
-    # Rough LOESS fit
-    rough_loess = lowess(read_subset, gc_subset, frac=0.03, return_sorted=False)
-    # Refine the fit
-    gc_grid = np.linspace(0, 1, 1000)  # Interpolation points for refined LOESS
-    rough_pred = np.interp(gc_grid, np.sort(gc_subset), np.sort(rough_loess))
-    final_loess = lowess(rough_pred, gc_grid, frac=0.3, return_sorted=False)
-    # Correct read counts
-    smooth_gc = np.interp(gc_content, gc_grid, final_loess)  # Predicted values for all bins
-    cor_gc = read_counts / smooth_gc # GC correct read counts
+    # Estimate correlation between GC content and read count to determine whether or not to perform GC correction
+    pear_res = pearsonr(read_subset, gc_subset)
+    pear_R, pear_pval = pear_res[0],pear_res[1]
+    print(f"gc bias: pearsons's R={round(pear_R,3)}; p_val={round(pear_pval,6)}")
+    if (abs(pear_R)>=0.1 and pear_pval < 0.05):
+        print("         GC bias detected. LOESS correction being performed.")
+        # Rough LOESS fit
+        if len(read_subset) >= sample_size:
+            ind = np.where(read_subset)[0]
+            random_ind = np.random.choice(ind, min(len(ind), sample_size), replace=False)
+            rough_fit = lowess(np.asarray(read_subset)[random_ind], np.asarray(gc_subset)[random_ind], frac=0.03)
+        else:
+            rough_fit = lowess(read_subset, gc_subset, frac=0.03)
+        # Refine the fit
+        gc_grid = np.linspace(0, 1, 1000)  # Interpolation points for refined LOESS
+        rough_interp = interp1d(rough_fit[:, 0], rough_fit[:, 1], bounds_error=False, fill_value=np.nan)
+        rough_pred = rough_interp(gc_grid)
+        # Perform the final LOESS fit
+        final_fit = lowess(rough_pred, gc_grid, frac=0.3)
+        # Interpolate the final fit
+        # final_interp = interp1d(final_fit[:, 0], final_fit[:, 1], bounds_error=False, fill_value=np.nan)
+        final_interp = interp1d(final_fit[:, 0], final_fit[:, 1], bounds_error=False, fill_value="extrapolate")
+        final_pred = final_interp(gc_content)  # Predicted values for all bins
+        # Correct read counts
+        cor_gc = read_counts / final_pred # GC correct read counts
+        ind = np.where(np.isfinite(cor_gc))[0]
+        pear_res = pearsonr(cor_gc[ind], np.asarray(gc_content)[ind])
+        pear_R, pear_pval = pear_res[0],pear_res[1]
+        print(f"gc bias after correction: pearsons's R={round(pear_R,3)}; p_val={round(pear_pval,6)}")
+        cor_gc = list(cor_gc)
+    else:
+        cor_gc = read_counts
     return cor_gc
 
-def gc_correct_counts(filtered_counts, nmode, read_outlier = 0.01, gc_outlier = 0.001):
+def gc_correct_counts(filtered_counts, nmode, read_outlier = 0.01, gc_outlier = 0.001, sample_size = 50000):
     # extract read counts and gc content from filtered counts
     # tumour reads
     read_gc = [[int(x[-2]),float(x[4])] for x in filtered_counts]
-    cor_gc = gc_loess(read_gc, read_outlier, gc_outlier)
+    cor_gc = gc_loess(read_gc, read_outlier, gc_outlier, sample_size)
     # Prepare output
     gc_cor_counts = copy.deepcopy(filtered_counts)
     for id,r in enumerate(gc_cor_counts):
