@@ -107,7 +107,9 @@ def define_purity_search_space(rel_cn,bc_thres,dens_thres,min_copy_number,max_co
                 pur_centre = abs(maxval-upperval)
             elif upperval != None and lowerval != None:
                 pur_centre = max([abs(maxval-lowerval),abs(maxval-upperval)])
-    min_purity,max_purity = round(max(pur_centre-0.15,0),2) , round(min(pur_centre+0.15,1),2)
+    minp = round(max(pur_centre-0.15,0),2)
+    min_purity = 0 if minp <= 0.1 else minp
+    max_purity = round(min(pur_centre+0.15,1),2) if pur_centre >= 0.15 else round(min(pur_centre+pur_centre,1),2)
     return(pur_centre,min_purity,max_purity)
 
 
