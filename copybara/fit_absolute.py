@@ -85,7 +85,7 @@ def define_purity_search_space(rel_cn,bc_thres,dens_thres,min_copy_number,max_co
         # plt.show()
         # Compute pur_centre and estimate min and max purity search space
         if len(maxima_select) == 1:
-            print("unimodal distribution. Minimum purity = 0; maximum purity = 0.15")
+            print("unimodal distribution. Minimum purity = 0; maximum purity = 0.1")
             pur_centre = 0
         if len(maxima_select) == 2:
             pur_centre = abs(maxima_select[0][0] - maxima_select[1][0])
@@ -110,6 +110,7 @@ def define_purity_search_space(rel_cn,bc_thres,dens_thres,min_copy_number,max_co
     minp = round(max(pur_centre-0.15,0),2)
     min_purity = 0 if minp <= 0.1 else minp
     max_purity = round(min(pur_centre+0.15,1),2) if pur_centre >= 0.15 else round(min(pur_centre+pur_centre,1),2)
+    max_purity = 0.1 if len(maxima_select) == 1 and pur_centre == 0 else max_purity
     return(pur_centre,min_purity,max_purity)
 
 
@@ -217,9 +218,9 @@ def fit_absolute_cn(outdir, log2r_cn_path, sample,
         acn = round(cnfitter.relative_to_absolute_CN(x[-1], fitted_purity, fitted_ploidy),4)
         x[-1] = acn if acn > 0 else 0
     # set negative values to 0
-    for x in abs_copy_number_segments:
-        if x[-1] < 0:
-            x[-1] = 0
+    # for x in abs_copy_number_segments:
+    #     if x[-1] < 0:
+    #         x[-1] = 0
 
     #----
     # 5. Prepare and write out results

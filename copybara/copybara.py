@@ -160,8 +160,8 @@ def parse_args(args):
     global_parser.add_argument('-ps', '--p_seg', type=float,  default=0.05, help='p-value used to test segmentation statistic for a given interval during CBS using (shuffles) number of permutations (default = 0.05).', required=False)
     global_parser.add_argument('-pv', '--p_val', type=float,  default=0.01, help='p-value used to test validity of candidate segments from CBS using (shuffles) number of permutations (default = 0.01).', required=False)
     global_parser.add_argument('-qt', '--quantile', type=float,  default=0.2, help='Quantile of changepoint (absolute median differences across all segments) used to estimate threshold for segment merging (default = 0.2; set to 0 to avoid segment merging).', required=False)
-    global_parser.add_argument('--min_ploidy', type=float, default=1.6, help='Minimum ploidy to be considered for copy number fitting.', required=False)
-    global_parser.add_argument('--max_ploidy', type=float, default=3, help='Maximum ploidy to be considered for copy number fitting.', required=False)
+    global_parser.add_argument('--min_ploidy', type=float, default=1.5, help='Minimum ploidy to be considered for copy number fitting.', required=False)
+    global_parser.add_argument('--max_ploidy', type=float, default=4.5, help='Maximum ploidy to be considered for copy number fitting.', required=False)
     global_parser.add_argument('--ploidy_step', type=float, default=0.1, help='Ploidy step size for grid search space used during for copy number fitting.', required=False)
     
     global_parser.add_argument('--set_ploidy', type=float, default=None, help='Set to sample`s ploidy if known.', required=False)   
@@ -179,8 +179,6 @@ def parse_args(args):
     global_parser.add_argument('--min_proportion_close_to_whole_number', type=float, default=0.5, help='Minimum proportion of fitted copy numbers sufficiently close to whole number to be tolerated for a given fit.', required=False)
     global_parser.add_argument('--max_distance_from_whole_number', type=float, default=0.25, help='Distance from whole number for fitted value to be considered sufficiently close to nearest copy number integer.', required=False)
     global_parser.add_argument('--main_cn_step_change', type=int, default=1, help='Max main copy number step change across genome to be considered for a given solution.', required=False)
-    global_parser.add_argument('--min_ps_size', type=int, default=10, help='Minimum size (number of SNPs) for phaseset to be considered for purity estimation.', required=False)
-    global_parser.add_argument('--min_ps_length', type=int, default=500000, help='Minimum length (bps) for phaseset to be considered for purity estimation.', required=False)
     global_parser.set_defaults(func=copybara_main)
     parsed_args = global_parser.parse_args() if not args else global_parser.parse_args(args)
 
