@@ -30,6 +30,7 @@ def process_input_for_purity_estimation(log2r_cn_path):
 def define_purity_search_space(rel_cn,bc_thres,dens_thres,min_copy_number,max_copy_number,lower_threshold):
     chr_names = list(dict.fromkeys([x[0] for x in rel_cn]))
     bc_out = []
+    chr_count = 0
     for CHROM in chr_names:
         if CHROM == 'chrX' or CHROM == 'chrY':
             continue
@@ -42,25 +43,91 @@ def define_purity_search_space(rel_cn,bc_thres,dens_thres,min_copy_number,max_co
         if max_copy_number is not None:
             assert isinstance(max_copy_number, (int, float)) and np.isscalar(max_copy_number)
             chr_rel_cn = [cn for cn in chr_rel_cn if cn <= max_copy_number]
-        try:
-            # modes_result = Modes(chr_rel_cn)
-            # print(CHROM, is_unimodal(chr_rel_cn))
-            if  cnfitter.is_unimodal(chr_rel_cn) == False:
-                print(CHROM)
-                chr_bc = cnfitter.bimodality_coefficient(chr_rel_cn)
-                # print(CHROM, chr_bc, cnfitter.is_unimodal(chr_rel_cn))
-                if chr_bc >= bc_thres:
-                    bc_out.append(chr_rel_cn)
-        except:
+        number_chr_segs=len(list(dict.fromkeys([x[-2] for x in rel_cn if x[0] == CHROM])))
+        if number_chr_segs >= 2:
+            try:
+                # modes_result = Modes(chr_rel_cn)
+                # print(CHROM, is_unimodal(chr_rel_cn))
+                if  cnfitter.is_unimodal(chr_rel_cn) == False:
+                    print(CHROM)
+                    chr_bc = cnfitter.bimodality_coefficient(chr_rel_cn)
+                    # print(CHROM, chr_bc, cnfitter.is_unimodal(chr_rel_cn))
+                    if chr_bc >= bc_thres:
+                        bc_out.append(chr_rel_cn)
+                        chr_count += 1
+            except:
+                continue
+        else:
             continue
+    ####### Building site #######
+    if len(bc_out) == 0 or chr_count == 1:
+        # seg_names = list(dict.fromkeys([x[-2] for x in rel_cn]))
+        # bc_segs = []
+        # for i in range(len(seg_names)):
+        #     s1,s2 = seg_names[i], seg_names[min(i+1,len(seg_names)-1)]
+        #     # print(f"testing {s1}_{s2}")
+        #     segs_rel_cn = [x[-3] for x in rel_cn if x[-2] == s1 or x[-2] == s2]
+        #     if min_copy_number is not None:
+        #         assert isinstance(min_copy_number, (int, float)) and np.isscalar(min_copy_number)
+        #         segs_rel_cn = [cn for cn in segs_rel_cn if cn >= min_copy_number]
+        #     if max_copy_number is not None:
+        #         assert isinstance(max_copy_number, (int, float)) and np.isscalar(max_copy_number)
+        #         segs_rel_cn = [cn for cn in segs_rel_cn if cn <= max_copy_number]
+        #     try:
+        #         # modes_result = Modes(chr_rel_cn)
+        #         # print(CHROM, is_unimodal(chr_rel_cn))
+        #         if cnfitter.is_unimodal(segs_rel_cn) == False:
+        #             print(f'{s1}-{s2}')
+        #             seg_bc = cnfitter.bimodality_coefficient(segs_rel_cn)
+        #             # print(CHROM, chr_bc, cnfitter.is_unimodal(chr_rel_cn))
+        #             if seg_bc >= bc_thres:
+        #                 # bc_out.append(segs_rel_cn)
+        #                 for s in s1,s2:
+        #                     if s not in bc_segs:
+        #                         bc_segs.append(s) 
+        #     except:
+        #         continue
+        # bc_out = []
+        # for S in bc_segs:
+        #     out = [x[-3] for x in rel_cn if x[-2] == S]
+        #     bc_out.append(out)
+        ##########
+        # go by half chromosomes
+        bc_out = [] # empty bc_out from previous
+        splits = []
+        for CHROM in chr_names:
+            c_min,c_max = min([x[1] for x in rel_cn if x[0] == CHROM]),max([x[2] for x in rel_cn if x[0] == CHROM])
+            med=int((c_min+c_max-1)/2)
+            splits.append([CHROM, med])
+        for i in range(len(splits)):
+            if i+1 < len(splits):
+                # print(f'{splits[i][0]}-{splits[i+1][0]}')
+                split_rel_cn = [x[-3] for x in rel_cn if (x[0] == splits[i][0] and x[1] > splits[i][1]) or (x[0] == splits[i+1][0] and x[1] <= splits[i+1][1])]
+                if min_copy_number is not None:
+                    assert isinstance(min_copy_number, (int, float)) and np.isscalar(min_copy_number)
+                    split_rel_cn = [cn for cn in split_rel_cn if cn >= min_copy_number]
+                if max_copy_number is not None:
+                    assert isinstance(max_copy_number, (int, float)) and np.isscalar(max_copy_number)
+                    split_rel_cn = [cn for cn in split_rel_cn if cn <= max_copy_number]
+                try:
+                    if cnfitter.is_unimodal(split_rel_cn) == False:
+                        print(f'{splits[i][0]}-{splits[i+1][0]}')
+                        split_bc = cnfitter.bimodality_coefficient(split_rel_cn)
+                        # print(CHROM, chr_bc, cnfitter.is_unimodal(chr_rel_cn))
+                        if split_bc >= bc_thres:
+                            bc_out.append(split_rel_cn)
+                except:
+                    continue
+        ##########
+    # based on bc_out estimate purity centre... 
     bc_out = [x for xs in bc_out for x in xs]
     # test if all chromosomes unimodal and define out:
     if len(bc_out) == 0:
-        print("All chromosomes show unimodal distribution. Minimum purity = 0; maximum purity = 0.15")
+        print("All chromosomes show unimodal distribution. Minimum purity = 0; maximum purity = 0.1")
         pur_centre = 0
     elif len(bc_out) != 0:
         # if multimodal chromosomes identified:
-        # look at distribution and find maxima... using density default function from R
+        # look at distribution and find maxima... using python implementation of density default function from R
         dens_x,dens_y = cnfitter.r_density_default(bc_out, n=512)
         # Filter density by min/max copy number thresholds
         filtered_density = [(x, y) for x, y in zip(dens_x,dens_y) if (min_copy_number is None or x >= min_copy_number) and (max_copy_number is None or x <= max_copy_number)]
@@ -107,10 +174,11 @@ def define_purity_search_space(rel_cn,bc_thres,dens_thres,min_copy_number,max_co
                 pur_centre = abs(maxval-upperval)
             elif upperval != None and lowerval != None:
                 pur_centre = max([abs(maxval-lowerval),abs(maxval-upperval)])
+    pur_centre = 1 if pur_centre >= 1 else pur_centre
     minp = round(max(pur_centre-0.15,0),2)
     min_purity = 0 if minp <= 0.1 else minp
     max_purity = round(min(pur_centre+0.15,1),2) if pur_centre >= 0.15 else round(min(pur_centre+pur_centre,1),2)
-    max_purity = 0.1 if len(maxima_select) == 1 and pur_centre == 0 else max_purity
+    max_purity = 0.1 if pur_centre == 0 else max_purity
     return(pur_centre,min_purity,max_purity)
 
 
