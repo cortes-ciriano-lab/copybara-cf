@@ -37,14 +37,14 @@ def binned_read_counting(curr_chunk, bed_chunk, alns, nmode, blacklisting, bl_th
     # Open the BAM file using pysam
     bam_T = pysam.AlignmentFile(alns['tumour'], "rb")
     bam_N = pysam.AlignmentFile(alns['normal'], "rb") if nmode == "mnorm" and len(alns) == 2 else None
-    # PoN = pysam.AlignmentFile(alns['pon'], "r") if nmode == "pon" and len(alns) == 2 else None
+    # process PoN data into dictionary
     if nmode == "pon" and len(alns) == 2:
-        PoN = []
+        pon_dict = {}
         with open(alns['pon'], "r") as file:
             next(file)
             for line in file:
                 fields = line.strip().split("\t")
-                PoN.append(fields)
+                pon_dict[fields[0]] = fields[1]
    
     # initiate read counter
     chr_read_counts = []
@@ -73,23 +73,30 @@ def binned_read_counting(curr_chunk, bed_chunk, alns, nmode, blacklisting, bl_th
                     use = True
                 else:
                     use = False
-        # counting reads in tumour (and if provided) normal bam files in each bin
+        # counting reads in tumour (and if provided) matched normal bams in each bin or adding PoN read counts 
         chunk_read_count_T = count_reads_in_curr_bin(bam_T, chrom, start, end, readcount_mapq)
-        chunk_read_count_N = count_reads_in_curr_bin(bam_N, chrom, start, end, readcount_mapq) if bam_N else None
+        if bam_N:
+            chunk_read_count_N = count_reads_in_curr_bin(bam_N, chrom, start, end, readcount_mapq)
+        elif nmode == "pon":
+            chunk_read_count_N = pon_dict[bin_name]
+        else:
+            chunk_read_count_N = None
+
+        # chunk_read_count_N = count_reads_in_curr_bin(bam_N, chrom, start, end, readcount_mapq) if bam_N else None
 
         if blacklisting == True:
             chr_read_counts.append([bin_name, chrom, str(start), str(end), str(gc), str(bases), str(blacklist), str(use), str(chunk_read_count_T), str(chunk_read_count_N)])
         else:
             chr_read_counts.append([bin_name, chrom, str(start), str(end), str(gc), str(bases), str(use), str(chunk_read_count_T), str(chunk_read_count_N)])
 
-        # replace None values (lack of matched normal) with PoN count values if provided. PoN will need to be generated seperately, using the same bin size.
-        if nmode == "pon": 
-            print('         PoN read counts being added for normalisation')
-            if len(PoN) != len(chr_read_counts):
-                print('ERROR: PoN will have to be generated using the same bin size as used for read counting. See documentation on how to generate PoN.')
-            if len(PoN) == len(chr_read_counts):
-                for id,r in enumerate(chr_read_counts):
-                    r[-1] = PoN[id][-1]
+        # # replace None values (lack of matched normal) with PoN count values if provided. PoN will need to be generated seperately, using the same bin size.
+        # if nmode == "pon": 
+        #     print('         PoN read counts being added for normalisation')
+        #     if len(PoN) != len(chr_read_counts):
+        #         print('ERROR: PoN will have to be generated using the same bin size as used for read counting. See documentation on how to generate PoN.')
+        #     if len(PoN) == len(chr_read_counts):
+        #         for id,r in enumerate(chr_read_counts):
+        #             r[-1] = PoN[id][-1]
 
     # Close BAM file and return out
     bam_T.close()
@@ -104,9 +111,9 @@ def gc_loess(read_gc, read_outlier, gc_outlier, sample_size):
     read_range = np.quantile(read_counts, [0, 1 - read_outlier])
     gc_range = np.quantile(gc_content, [gc_outlier, 1 - gc_outlier])
     # subset data based on ranges
-    counts_subset = [x for x in read_gc if int(x[0]) > read_range[0] and int(x[0]) <= read_range[1] and
+    counts_subset = [x for x in read_gc if float(x[0]) > read_range[0] and float(x[0]) <= read_range[1] and
                      float(x[1]) >= gc_range[0] and float(x[1]) <= gc_range[1]] 
-    read_subset = [int(x[0]) for x in counts_subset]
+    read_subset = [float(x[0]) for x in counts_subset]
     gc_subset = [float(x[1]) for x in counts_subset]
     # Estimate correlation between GC content and read count to determine whether or not to perform GC correction
     pear_res = pearsonr(read_subset, gc_subset)
@@ -145,7 +152,7 @@ def gc_loess(read_gc, read_outlier, gc_outlier, sample_size):
 def gc_correct_counts(filtered_counts, nmode, read_outlier = 0.01, gc_outlier = 0.001, sample_size = 50000):
     # extract read counts and gc content from filtered counts
     # tumour reads
-    read_gc = [[int(x[-2]),float(x[4])] for x in filtered_counts]
+    read_gc = [[float(x[-2]),float(x[4])] for x in filtered_counts]
     cor_gc = gc_loess(read_gc, read_outlier, gc_outlier, sample_size)
     # Prepare output
     gc_cor_counts = copy.deepcopy(filtered_counts)
@@ -153,8 +160,9 @@ def gc_correct_counts(filtered_counts, nmode, read_outlier = 0.01, gc_outlier = 
         r[-2] = float(cor_gc[id])
     # repeat same for normal read counts if nmode = "mnorm" or "pon"
     if nmode == "mnorm" or nmode == "pon":
-        read_gc = [[int(x[-1]),float(x[4])] for x in filtered_counts]
-        cor_gc = gc_loess(read_gc, read_outlier, gc_outlier)
+        print(f'gc correction {nmode}...')
+        read_gc = [[float(x[-1]),float(x[4])] for x in filtered_counts]
+        cor_gc = gc_loess(read_gc, read_outlier, gc_outlier, sample_size)
         for id,r in enumerate(gc_cor_counts):
             r[-1] = float(cor_gc[id])
     return gc_cor_counts
@@ -172,12 +180,13 @@ def filter_correct_normalise(nmode, countData):
             r[-2] = str(math.log2(float(r[-2])/med_self)) # median normalise readcounts
             del r[-1]
     elif nmode == "mnorm" or nmode == "pon":
-        filtered_counts = [x for x in countData if x[-3] == 'True' and int(x[-2]) != 0 and int(x[-1]) != 0]
+        filtered_counts = [x for x in countData if x[-3] == 'True' and float(x[-2]) != 0 and float(x[-1]) != 0]
+        gc_cor_counts = gc_correct_counts(filtered_counts, nmode) # gc correct raw read counts
         # cov_scaler = statistics.median([math.log2(int(x[-2])/int(x[-1])) for x in filtered_counts])
-        cov_scaler = math.log2(statistics.median([(int(x[-2])/int(x[-1])) for x in filtered_counts]))
-        normalised_counts = copy.deepcopy(filtered_counts)
+        cov_scaler = math.log2(statistics.median([(float(x[-2])/float(x[-1])) for x in gc_cor_counts]))
+        normalised_counts = copy.deepcopy(gc_cor_counts)
         for r in normalised_counts:
-            n = str(math.log2(int(r[-2])/int(r[-1])) - cov_scaler)
+            n = str(math.log2(float(r[-2])/float(r[-1])) - cov_scaler)
             del r[-2:]
             r.append(n)
     # return out
