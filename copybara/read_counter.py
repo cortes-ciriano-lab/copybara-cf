@@ -16,7 +16,6 @@ from scipy.stats import pearsonr
 import numpy as np
 from statsmodels.nonparametric.smoothers_lowess import lowess
 from scipy.interpolate import interp1d
-# from skmisc.loess import loess
 
 def count_reads_in_curr_bin(bam, chrom, start, end, readcount_mapq):
     chunk_read_count = 0
@@ -97,125 +96,6 @@ def binned_read_counting(curr_chunk, bed_chunk, alns, nmode, blacklisting, bl_th
     if bam_N is not None:
         bam_N.close()
     return(chr_read_counts)
-
-# def correct_counts(gc_content,counts,smoothness=0.1):
-#     # Smoothing spline
-#     spline = UnivariateSpline(gc_content, counts, s=smoothness)
-#     # Calculate expected counts based on the spline
-#     # expected_counts_interim = spline(gc_content)
-#     expected_counts = spline(gc_content)
-#     print(expected_counts)
-#     # # Avoid division by zero
-#     # expected_counts = []
-#     # for value in expected_counts_interim:
-#     #     if value == 0:
-#     #         value = float('NaN')
-#     #     expected_counts.append(value)
-#     # expected_counts[expected_counts == 0] = float('NaN')
-#     # Correct read counts
-#     corrected_counts = []
-#     for id,val in enumerate(counts):
-#         corrected = val / expected_counts[id]
-#         corrected_counts.append(corrected)
-#     return corrected_counts
-
-
-# def correct_gc_bias(nmode,countData,smoothness=0.1):
-#     '''
-#     Model GC bias to estimate GC correction for each bin and correct raw read counts
-#     '''
-#     # add 'row number' to start of count data for later sorting
-#     for id,r in enumerate(countData):
-#         r.insert(0,id)
-#     # sort by gc content
-#     countData.sort(key = lambda x: float(x[5]))
-#     # countData.sort(key = lambda x: (float(x[5]),float(x[-2])))
-#     #
-#     # Prepare input for smoothing spline to model GC bias
-#     gc_content = [float(x[5]) for x in countData]
-#     t_counts = [int(x[-2]) for x in countData]
-#     #
-#     corrected_counts_t = correct_counts(gc_content,t_counts,smoothness)
-#     #
-#     # replace count values with corrected values
-#     for id,r in enumerate(countData):
-#         r[-2] = str(corrected_counts_t[id])
-#     # 
-#     # repeat same for normal counts (if available)
-#     if nmode == "mnorm" or nmode == "pon":
-#         n_counts = [int(x[-1]) for x in countData]
-#         corrected_counts_n = correct_counts(gc_content,n_counts,smoothness)
-#         # replace count values with corrected values
-#         for id,r in enumerate(countData):
-#             r[-1] = str(corrected_counts_n[id])
-#     #
-#     # undo sorting by gc content
-#     countData.sort(key = lambda x: x[0])
-#     countData = [x[1:] for x in countData]
-#     return countData
-
-# def filter_and_normalise(nmode, countData):
-#     """ perform filtering, normalisation and transformation """
-#     ## filtering: Remove bins with 0 reads (no sequencing data in this region). - need to be excluded for segmentation and log2 transformation
-#     if nmode == "self":
-#         filtered_counts = [x for x in countData if x[-3] == 'True' and float(x[-2]) != 0 and x[-2] != 'nan']
-#         med_self = statistics.median([int(x[-2]) for x in filtered_counts]) #estimate genome wide median for selfnormalisation
-#         # Normalise and log2 transform
-#         normalised_counts = copy.deepcopy(filtered_counts)
-#         for r in normalised_counts:
-#             r[-2] = str(math.log2(int(r[-2])/med_self)) # median normalise readcounts
-#             del r[-1]
-#     elif nmode == "mnorm" or nmode == "pon":
-#         filtered_counts = [x for x in countData if x[-3] == 'True' and int(x[-2]) != 0 and int(x[-1]) != 0]
-#         # cov_scaler = statistics.median([math.log2(int(x[-2])/int(x[-1])) for x in filtered_counts])
-#         cov_scaler = math.log2(statistics.median([(int(x[-2])/int(x[-1])) for x in filtered_counts]))
-#         normalised_counts = copy.deepcopy(filtered_counts)
-#         for r in normalised_counts:
-#             n = str(math.log2(int(r[-2])/int(r[-1])) - cov_scaler)
-#             del r[-2:]
-#             r.append(n)
-#     # return out
-#     return filtered_counts, normalised_counts
-
-
-# def gc_loess(read_gc, read_outlier, gc_outlier):
-#     read_counts = [int(x[0]) for x in read_gc]
-#     gc_content = [float(x[1]) for x in read_gc]
-#     # define read and gc range to remove outliers for loess fitting 
-#     read_range = np.quantile(read_counts, [0, 1 - read_outlier])
-#     gc_range = np.quantile(gc_content, [gc_outlier, 1 - gc_outlier])
-#     # subset data based on ranges
-#     counts_subset = [x for x in read_gc if int(x[0]) > read_range[0] and int(x[0]) <= read_range[1] and
-#                      float(x[1]) >= gc_range[0] and float(x[1]) <= gc_range[1]] 
-#     read_subset = [int(x[0]) for x in counts_subset]
-#     gc_subset = [float(x[1]) for x in counts_subset]
-#     # Estimate correlation between GC content and read count to determine whether or not to perform GC correction
-#     pear_res = pearsonr(read_subset, gc_subset)
-#     pear_R, pear_pval = pear_res[0],pear_res[1]
-#     print(f"gc bias: pearsons's R={round(pear_R,3)}; p_val={round(pear_pval,6)}")
-#     if (abs(pear_R)>=0.2 and pear_pval < 0.05):
-#         print("         GC bias detected. LOESS correction being performed.")
-#         # Rough LOESS fit
-#         # rough_loess = lowess(read_subset, gc_subset, frac=0.03, return_sorted=False)
-#         # normalise gc and reads
-#         rough_loess = lowess(read_subset, gc_subset, frac=0.03)
-#         # rough_loess = loess(read_subset, gc_subset, span = 0.03)
-#         # Refine the fit
-#         gc_grid = np.linspace(0, 1, 1000)  # Interpolation points for refined LOESS
-#         # rough_pred = np.interp(gc_grid, np.sort(gc_subset), np.sort(rough_loess))
-#         rough_pred = np.interp(gc_grid, rough_loess[:,0], rough_loess[:,1],left=float('NaN'), right=float('NaN'))
-#         final_loess = lowess(rough_pred, gc_grid, frac=0.3, return_sorted=False)
-#         # final_loess = lowess(rough_pred, gc_grid, frac=0.3  )
-#         # Correct read counts
-#         smooth_gc = np.interp(gc_content, gc_grid, final_loess)  # Predicted values for all bins
-#         # smooth_gc = np.interp(gc_content, final_loess[:,0], final_loess[:,1],left=float('NaN'), right=float('NaN'))  # Predicted values for all bins
-#         cor_gc = read_counts / smooth_gc # GC correct read counts
-#         pear_res = pearsonr(read_counts, cor_gc)
-#         pear_R, pear_pval = pear_res[0],pear_res[1]
-#         print(f"gc bias after correction: pearsons's R={round(pear_R,3)}; p_val={round(pear_pval,6)}")
-#     else:
-#         cor_gc = read_counts
-#     return cor_gc
 
 def gc_loess(read_gc, read_outlier, gc_outlier, sample_size):
     read_counts = [float(x[0]) for x in read_gc]
@@ -371,23 +251,6 @@ def count_reads(outdir, tumour, normal, panel_of_normals, sample, bin_annotation
         # print(args_in)
         with Pool(processes=threads) as pool:
             countData = [x for xs in list(pool.starmap(binned_read_counting, args_in)) for x in xs]
-
-    # countData_corrected = correct_gc_bias(nmode,countData,smoothness=0.1)
-
-    # ##################################
-    # # test write out for DEV ###
-    # outfile = open(f"{outdir}/{sample}_CORRECTED_read_counts.tsv", "w")
-    # if blacklisting == True:
-    #     header=['bin', 'chromosome','start','end', 'gc_content', 'known_bases', 'overlap_blacklist', 'use_bin', 'tumour_read_count_cor', 'normal_read_count_cor']
-    # else: 
-    #     header=['bin', 'chromosome','start','end', 'gc_content', 'known_bases', 'use_bin', 'tumour_read_count_cor', 'normal_read_count_cor']
-    # outfile.write('\t'.join(header)+'\n')
-    # for r in countData_corrected:
-    #     Line = '\t'.join(r) + '\n'
-    #     outfile.write(Line)
-    # outfile.close()
-    # ##################################
-
 
     normalised_counts = filter_correct_normalise(nmode=nmode, countData=countData)
 
