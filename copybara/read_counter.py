@@ -297,7 +297,7 @@ def count_reads(outdir, tumour, normal, panel_of_normals, sample, bin_annotation
         outfile3.write(Line)
     outfile3.close()
 
-    return log2_ratio_readcounts_path
+    return log2_ratio_readcounts_path,nmode
 
 if __name__ == "__main__":
     print("Read bin counter")

@@ -155,7 +155,7 @@ def copybara_main(args):
     bin_annotations_path = bin_generator.generate_bins(outdir, args.sample, args.ref, args.chromosomes, args.cn_binsize, args.blacklist, args.blacklist_buffer, args.threads)
     helper.time_function("Binned reference genome", checkpoints, time_str)
     # 2. perform read counting across bins
-    read_counts_path = read_counter.count_reads(outdir, args.bam, args.normal_bam, args.panel_of_normal ,args.sample, bin_annotations_path, args.mapq, args.blacklisting, args.bl_threshold, args.bases_filter, args.bases_threshold, args.threads)
+    read_counts_path,nmode = read_counter.count_reads(outdir, args.bam, args.normal_bam, args.panel_of_normal ,args.sample, bin_annotations_path, args.mapq, args.blacklisting, args.bl_threshold, args.bases_filter, args.bases_threshold, args.threads)
     helper.time_function("Performed read counting", checkpoints, time_str)
     # smooth the copy number data
     smoothened_cn_path = smooth.smooth_copy_number(outdir, read_counts_path, args.smoothing_level, args.trim)
@@ -169,7 +169,7 @@ def copybara_main(args):
     min_copy_number=-2
     max_copy_number=2
     lower_threshold=0
-    fit_absolute.fit_absolute_cn(outdir, log2r_cn_path, args.sample,
+    fit_absolute.fit_absolute_cn(outdir, nmode, log2r_cn_path, args.sample,
         bc_thres,dens_thres,min_copy_number,max_copy_number,lower_threshold,
         args.min_ploidy, args.max_ploidy, args.ploidy_step, args.min_cellularity, args.max_cellularity, args.cellularity_step, 
         args.distance_function, args.distance_filter_scale_factor, args.distance_precision,
