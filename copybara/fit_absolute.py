@@ -362,11 +362,19 @@ def fit_absolute_cn(outdir, nmode, log2r_cn_path, sample, coverage,
     abs_copy_number_segments = copy.deepcopy(rel_copy_number_segments)
     for x in abs_copy_number_segments:
         acn = round(cnfitter.relative_to_absolute_CN(x[-1], fitted_purity, fitted_ploidy),4)
-        x[-1] = acn if acn > 0 else 0
+        acn = acn if acn > 0 else 0
+        x[-1] = acn
+        cn_cat = cnfitter.categorise_cn_event(acn, fitted_ploidy)
+        x.append(cn_cat)
     # set negative values to 0
     # for x in abs_copy_number_segments:
     #     if x[-1] < 0:
     #         x[-1] = 0
+
+    # estimate percentage of abnormal genome (PAG)
+    total_length = sum([float(x[5]) for x in abs_copy_number_segments])
+    abnorm_length = sum([float(x[5]) for x in abs_copy_number_segments if x[-1] != 'neut' ])
+    PAG = abnorm_length/total_length
 
     #----
     # 5. Prepare and write out results
@@ -381,17 +389,17 @@ def fit_absolute_cn(outdir, nmode, log2r_cn_path, sample, coverage,
     outfile1.close()
 
     outfile2 = open(f"{outdir}/{sample}_fitted_purity_ploidy.tsv", "w")
-    header=['purity','ploidy','distance','rank', 'purity_centre', 'min_purity', 'max_purity', 'coverage']
+    header=['purity','ploidy','distance','rank', 'purity_centre', 'min_purity', 'max_purity', 'coverage', 'pag']
     # header=['purity','ploidy','distance','rank', 'purity_centre', 'min_purity', 'max_purity', 'bc']
     outfile2.write('\t'.join(header)+'\n')
-    Line = '\t'.join(str(e) for e in final_fit) + f'\t{cellularity}' + f'\t{min_cellularity}' + f'\t{max_cellularity}' + f'\t{round(coverage,4)}' + '\n'
+    Line = '\t'.join(str(e) for e in final_fit) + f'\t{round(cellularity,4)}' + f'\t{min_cellularity}' + f'\t{max_cellularity}' + f'\t{round(coverage,4)}' + f'\t{round(PAG,4)}' + '\n'
     # Line = '\t'.join(str(e) for e in final_fit) + f'\t{cellularity}' + f'\t{min_cellularity}' + f'\t{max_cellularity}' + f'\t{bcout}' + '\n'
     outfile2.write(Line)
     outfile2.close()
 
     outfile3 = open(f"{outdir}/{sample}_segmented_absolute_copy_number.tsv", "w")
     # if allele_counts_bed_path == None:
-    header=['chromosome','start','end','segment_id', 'bin_count', 'sum_of_bin_lengths', 'weight', 'copyNumber']
+    header=['chromosome','start','end','segment_id', 'bin_count', 'sum_of_bin_lengths', 'weight', 'copyNumber', 'category']
     # elif allele_counts_bed_path != None:
     #     header=['chromosome','start','end','segment_id', 'bin_count', 'sum_of_bin_lengths', 'weight', 'copyNumber', 'minorAlleleCopyNumber', 'meanBAF', 'no_hetSNPs']
     outfile3.write('\t'.join(header)+'\n')
