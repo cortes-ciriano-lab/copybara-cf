@@ -207,8 +207,26 @@ def chunkify_bed(bed_file, chunk_size):
         chunks.append(pybedtools.BedTool(current_chunk))
     return chunks
 
-def count_reads(outdir, tumour, normal, panel_of_normals, sample, bin_annotations_path, readcount_mapq, blacklisting, bl_threshold, bases_filter, bases_threshold, threads):
+def estimate_coverage(tumour, ref, readcount_mapq):
+    bam_T = pysam.AlignmentFile(tumour, "rb")
+    fasta = pysam.FastaFile(ref)
+    # Calculate Total Mapped Bases
+    total_mapped_bases = 0
+    for read in bam_T.fetch():
+        if not read.is_unmapped and not read.is_secondary and not read.is_supplementary and read.mapping_quality >= readcount_mapq:
+            total_mapped_bases += read.query_length 
+    # Calculate Genome Size
+    genome_size = sum(fasta.get_reference_length(contig) for contig in fasta.references)
+    # Compute Whole Genome Coverage
+    coverage = total_mapped_bases / genome_size
+    return coverage
+
+def count_reads(outdir, tumour, normal, panel_of_normals, sample, bin_annotations_path, ref, readcount_mapq, blacklisting, bl_threshold, bases_filter, bases_threshold, threads):
     """ Perform binned read counting on bam file/files per chromosome """
+
+    # estimate tumour bam coverage as needed later
+    coverage = estimate_coverage(tumour, ref, readcount_mapq)
+    print(f"Genome wide coverage of tumour bam: {coverage}")
 
     # check and define threads
     new_threads = min(threads, cpu_count())
@@ -297,7 +315,7 @@ def count_reads(outdir, tumour, normal, panel_of_normals, sample, bin_annotation
         outfile3.write(Line)
     outfile3.close()
 
-    return log2_ratio_readcounts_path,nmode
+    return log2_ratio_readcounts_path,nmode,coverage
 
 if __name__ == "__main__":
     print("Read bin counter")

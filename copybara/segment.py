@@ -267,7 +267,7 @@ def draw_segmented_data(data, seg_postions, chr_positions, title=None):
 
     return j
 
-def segment_copy_number(outdir, smoothened_cn_path, min_segment_size, shuffles, p_seg, p_val, quantile, threads):
+def segment_copy_number(outdir, smoothened_cn_path, min_segment_size, shuffles, p_seg, p_val, quantile, coverage, threads):
     ''' segment the copy number '''
     # check and define threads
     new_threads = min(threads, cpu_count())
@@ -287,6 +287,9 @@ def segment_copy_number(outdir, smoothened_cn_path, min_segment_size, shuffles, 
     # Define contig names from input log2r read count file
     chr_names = list(dict.fromkeys([x[1] for x in in_data]))
 
+    if round(coverage,2) <= 0.01:
+        quantile = 0.2
+        print("    Low coverage. Segments merged with qunatile 0.2")
     if quantile == 0:
         print("    Segment merging will be skipped")
 

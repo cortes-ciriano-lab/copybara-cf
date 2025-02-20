@@ -22,46 +22,41 @@ def process_input_for_purity_estimation(log2r_cn_path):
         next(file)
         for line in file:
             fields = line.strip().split("\t")
-            bin,chrom,start,end,cn,seg_id,seg_cn=fields[0],fields[1],int(fields[2]),int(fields[3]),float(fields[-3]),fields[-2],float(fields[-1])
-            rel_cn.append([bin,chrom,start,end,cn,seg_id,seg_cn])
+            chrom,start,end,cn,seg_id,seg_cn=fields[1],int(fields[2]),int(fields[3]),float(fields[-3]),fields[-2],float(fields[-1])
+            rel_cn.append([chrom,start,end,cn,seg_id,seg_cn])
     return rel_cn
 
 
 def define_purity_search_space(rel_cn,nmode,bc_thres,dens_thres,min_copy_number,max_copy_number,lower_threshold):
-    chr_names = list(dict.fromkeys([x[1] for x in rel_cn]))
+    chr_names = list(dict.fromkeys([x[0] for x in rel_cn]))
     # if normalisation mode == 'self', skip chromosomes 19-22 as more noise observed and results in incorrect purity estimation
     chr_skip = ['chrX','chrY','Y','X']
     if nmode == 'self':
         chr_skip += ['chr19','chr20','chr21','chr22','19','20','21','22']
-    chr_skip_splits = ['chr19','chr20','chr21','chr22','19','20','21','22']
     # test whole genome
-    # bc_out = []
-    # chr_rel_cn = [x[-3] for x in rel_cn if x[1] not in chr_skip]
-    # chr_rel_cn_seg = [x[-1] for x in rel_cn if x[1] not in chr_skip]
-    # if min_copy_number is not None:
-    #     assert isinstance(min_copy_number, (int, float)) and np.isscalar(min_copy_number)
-    #     chr_rel_cn = [cn for cn in chr_rel_cn if cn >= min_copy_number]
-    # if max_copy_number is not None:
-    #     assert isinstance(max_copy_number, (int, float)) and np.isscalar(max_copy_number)
-    #     chr_rel_cn = [cn for cn in chr_rel_cn if cn <= max_copy_number]
+    bc_out = []
+    chr_rel_cn = [x[-3] for x in rel_cn if x[0] not in chr_skip]
+    chr_rel_cn_seg = [x[-1] for x in rel_cn if x[0] not in chr_skip]
+    if min_copy_number is not None:
+        assert isinstance(min_copy_number, (int, float)) and np.isscalar(min_copy_number)
+        chr_rel_cn = [cn for cn in chr_rel_cn if cn >= min_copy_number]
+    if max_copy_number is not None:
+        assert isinstance(max_copy_number, (int, float)) and np.isscalar(max_copy_number)
+        chr_rel_cn = [cn for cn in chr_rel_cn if cn <= max_copy_number]
     # number_chr_segs=len(list(dict.fromkeys([x[-2] for x in rel_cn if x[0] not in CHROM])))
     # number_chr=len(list(dict.fromkeys([x[0] for x in rel_cn if x[0] not in CHROM])))
     # if number_chr_segs > number_chr
 
-    # TEST - skip whole genome
-    if 1 == 2:
-    # if  cnfitter.is_unimodal(chr_rel_cn) == False and cnfitter.bimodality_coefficient(chr_rel_cn) >= bc_thres:
+    if  cnfitter.is_unimodal(chr_rel_cn) == False and cnfitter.bimodality_coefficient(chr_rel_cn) >= bc_thres:
         # print(CHROM)
         # chr_bc = cnfitter.bimodality_coefficient(chr_rel_cn)
         # if chr_bc >= bc_thres:
-        # print('purity search space estimated from whole genome profile')
+        print('purity search space estimated from whole genome profile')
             # bc_out.append(chr_rel_cn)
-        # bc_out.append(chr_rel_cn_seg)
-        print('skipping whole genome')
+        bc_out.append(chr_rel_cn_seg)
     else: 
-        # print('whole genome profile shows unimodal distribution. testing chromosomes...')
+        print('whole genome profile shows unimodal distribution. testing chromosomes...')
     #### Test each chromosome instead 
-        bin_out = []
         bc_out = []
         chr_count = 0
         for CHROM in chr_names:
@@ -73,9 +68,8 @@ def define_purity_search_space(rel_cn,nmode,bc_thres,dens_thres,min_copy_number,
             #     if CHROM == 'chr19' or CHROM == 'chr20' or CHROM == 'chr21' or CHROM == 'chr22':
             #         continue
             # print(CHROM)
-            chr_rel_cn = [x[-3] for x in rel_cn if x[1] == CHROM]
-            chr_rel_cn_seg = [x[-1] for x in rel_cn if x[1] == CHROM]
-            chr_bins = [x[0] for x in rel_cn if x[1] == CHROM]
+            chr_rel_cn = [x[-3] for x in rel_cn if x[0] == CHROM]
+            chr_rel_cn_seg = [x[-1] for x in rel_cn if x[0] == CHROM]
             # apply min and max copy number thresholds for purity estimation
             if min_copy_number is not None:
                 assert isinstance(min_copy_number, (int, float)) and np.isscalar(min_copy_number)
@@ -83,7 +77,7 @@ def define_purity_search_space(rel_cn,nmode,bc_thres,dens_thres,min_copy_number,
             if max_copy_number is not None:
                 assert isinstance(max_copy_number, (int, float)) and np.isscalar(max_copy_number)
                 chr_rel_cn = [cn for cn in chr_rel_cn if cn <= max_copy_number]
-            number_chr_segs=len(list(dict.fromkeys([x[-2] for x in rel_cn if x[1] == CHROM])))
+            number_chr_segs=len(list(dict.fromkeys([x[-2] for x in rel_cn if x[0] == CHROM])))
             if number_chr_segs >= 2:
                 try:
                     if  cnfitter.is_unimodal(chr_rel_cn) == False:
@@ -93,15 +87,13 @@ def define_purity_search_space(rel_cn,nmode,bc_thres,dens_thres,min_copy_number,
                         if chr_bc >= bc_thres:
                             # bc_out.append(chr_rel_cn)
                             bc_out.append(chr_rel_cn_seg)
-                            bin_out.append(chr_bins)
                             chr_count += 1
                 except:
                     continue
             else:
                 continue
     ####### Building site #######
-        # if len(bc_out) == 0 or chr_count == 1:
-        if 1 == 1:
+        if len(bc_out) == 0 or chr_count == 1:
             # seg_names = list(dict.fromkeys([x[-2] for x in rel_cn]))
             # bc_segs = []
             # for i in range(len(seg_names)):
@@ -134,22 +126,19 @@ def define_purity_search_space(rel_cn,nmode,bc_thres,dens_thres,min_copy_number,
             #     bc_out.append(out)
             ##########
             # go by half chromosomes
-            # bc_out = [] # empty bc_out from previous
-            bin_out = [x for xs in bin_out for x in xs]
+            bc_out = [] # empty bc_out from previous
             splits = []
             for CHROM in chr_names:
-                # if CHROM in chr_skip:
-                if CHROM in chr_skip_splits:
+                if CHROM in chr_skip:
                     continue
-                c_min,c_max = min([x[2] for x in rel_cn if x[1] == CHROM]),max([x[3] for x in rel_cn if x[1] == CHROM])
+                c_min,c_max = min([x[1] for x in rel_cn if x[0] == CHROM]),max([x[2] for x in rel_cn if x[0] == CHROM])
                 med=int((c_min+c_max-1)/2)
                 splits.append([CHROM, med])
             for i in range(len(splits)):
                 if i+1 < len(splits):
                     # print(f'{splits[i][0]}-{splits[i+1][0]}')
-                    split_rel_cn = [x[-3] for x in rel_cn if (x[1] == splits[i][0] and x[2] > splits[i][1]) or (x[1] == splits[i+1][0] and x[2] <= splits[i+1][1])]
-                    split_rel_cn_seg = [x[-1] for x in rel_cn if (x[1] == splits[i][0] and x[2] > splits[i][1]) or (x[1] == splits[i+1][0] and x[2] <= splits[i+1][1])]
-                    split_bins = [x[0] for x in rel_cn if (x[1] == splits[i][0] and x[2] > splits[i][1]) or (x[1] == splits[i+1][0] and x[2] <= splits[i+1][1])]
+                    split_rel_cn = [x[-3] for x in rel_cn if (x[0] == splits[i][0] and x[1] > splits[i][1]) or (x[0] == splits[i+1][0] and x[1] <= splits[i+1][1])]
+                    split_rel_cn_seg = [x[-1] for x in rel_cn if (x[0] == splits[i][0] and x[1] > splits[i][1]) or (x[0] == splits[i+1][0] and x[1] <= splits[i+1][1])]
                     if min_copy_number is not None:
                         assert isinstance(min_copy_number, (int, float)) and np.isscalar(min_copy_number)
                         split_rel_cn = [cn for cn in split_rel_cn if cn >= min_copy_number]
@@ -163,11 +152,7 @@ def define_purity_search_space(rel_cn,nmode,bc_thres,dens_thres,min_copy_number,
                             # print(CHROM, chr_bc, cnfitter.is_unimodal(chr_rel_cn))
                             if split_bc >= bc_thres:
                                 # bc_out.append(split_rel_cn)
-                                out_segs = []
-                                for id,bin in enumerate(split_bins):
-                                    if bin not in bin_out:
-                                        out_segs.append(split_rel_cn_seg[id])
-                                bc_out.append(out_segs)
+                                bc_out.append(split_rel_cn_seg)
                     except:
                         continue
         ##########
@@ -223,14 +208,12 @@ def define_purity_search_space(rel_cn,nmode,bc_thres,dens_thres,min_copy_number,
             maxval = maxima_select[0][0]
             try:
                 # lowerval = max([m[0] for m in maxima_select[1:] if m[0] < maxval])
-                # lowerval = statistics.mean([m[0] for m in maxima_select[1:] if m[0] < maxval])
-                lowerval = min([m[0] for m in maxima_select[1:] if m[0] < maxval])
+                lowerval = statistics.mean([m[0] for m in maxima_select[1:] if m[0] < maxval])
             except:
                 lowerval = None
             try:
                 # upperval = min([m[0] for m in maxima_select[1:] if m[0] > maxval])
-                # upperval = statistics.mean([m[0] for m in maxima_select[1:] if m[0] > maxval])
-                upperval = max([m[0] for m in maxima_select[1:] if m[0] > maxval])
+                upperval = statistics.mean([m[0] for m in maxima_select[1:] if m[0] > maxval])
             except:
                 upperval = None
             if upperval == None and lowerval != None:
@@ -238,8 +221,7 @@ def define_purity_search_space(rel_cn,nmode,bc_thres,dens_thres,min_copy_number,
             elif upperval != None and lowerval == None:
                 pur_centre = abs(maxval-upperval)
             elif upperval != None and lowerval != None:
-                # pur_centre = max([abs(maxval-lowerval),abs(maxval-upperval)])
-                pur_centre = statistics.mean([abs(maxval-lowerval),abs(maxval-upperval)])
+                pur_centre = max([abs(maxval-lowerval),abs(maxval-upperval)])
     pur_centre = 1 if pur_centre >= 1 else pur_centre
     # minp = round(max(pur_centre-0.15,0),2)
     # min_purity = 0 if minp <= 0.1 else minp
@@ -249,10 +231,8 @@ def define_purity_search_space(rel_cn,nmode,bc_thres,dens_thres,min_copy_number,
     
     ### TEST smaller purity search space ##
     minp = round(max(pur_centre-0.1,0),2)
-    # minp = round(max(pur_centre-0.15,0),2)
-    min_purity = 0 if minp <= 0.08 else minp
+    min_purity = 0 if minp <= 0.05 else minp
     max_purity = round(min(pur_centre+0.1,1),2) if pur_centre >= 0.1 else round(min(pur_centre+pur_centre,1),2)
-    # max_purity = round(min(pur_centre+0.15,1),2) if pur_centre >= 0.15 else round(min(pur_centre+pur_centre,1),2)
     max_purity = 0.1 if pur_centre == 0 or max_purity == 0 else max_purity
     return(pur_centre,min_purity,max_purity)
     # return(pur_centre,min_purity,max_purity,BC_out)
@@ -288,7 +268,7 @@ def process_log2r_input(log2r_cn_path):
             break
     return rel_copy_number_segments
 
-def fit_absolute_cn(outdir, nmode, log2r_cn_path, sample, coverage,
+def fit_absolute_cn(outdir, nmode, log2r_cn_path, sample,
     bc_thres,dens_thres,min_copy_number,max_copy_number,lower_threshold,
     min_ploidy, max_ploidy, ploidy_step, 
     min_cellularity, max_cellularity, cellularity_step,
@@ -381,10 +361,10 @@ def fit_absolute_cn(outdir, nmode, log2r_cn_path, sample, coverage,
     outfile1.close()
 
     outfile2 = open(f"{outdir}/{sample}_fitted_purity_ploidy.tsv", "w")
-    header=['purity','ploidy','distance','rank', 'purity_centre', 'min_purity', 'max_purity', 'coverage']
+    header=['purity','ploidy','distance','rank', 'purity_centre', 'min_purity', 'max_purity']
     # header=['purity','ploidy','distance','rank', 'purity_centre', 'min_purity', 'max_purity', 'bc']
     outfile2.write('\t'.join(header)+'\n')
-    Line = '\t'.join(str(e) for e in final_fit) + f'\t{cellularity}' + f'\t{min_cellularity}' + f'\t{max_cellularity}' + f'\t{round(coverage,4)}' + '\n'
+    Line = '\t'.join(str(e) for e in final_fit) + f'\t{cellularity}' + f'\t{min_cellularity}' + f'\t{max_cellularity}' + '\n'
     # Line = '\t'.join(str(e) for e in final_fit) + f'\t{cellularity}' + f'\t{min_cellularity}' + f'\t{max_cellularity}' + f'\t{bcout}' + '\n'
     outfile2.write(Line)
     outfile2.close()
