@@ -6,7 +6,7 @@ def plotting(bin_data, seg_data, offsets, cat_colours, meta):
     # Prepare figure
     title = f"{meta['sample']}"
     subtitle = f"PAG={meta['pag']}; purity={meta['purity']}; fitted purity={meta['fitted_purity']}; fitted ploidy={meta['ploidy']}; goodness of fit={meta['gof']}; coverage={meta['coverage']}x"
-    fig_name = f"{title}_copy_number_plot.png"
+    fig_name = f"{title}_copy_number_plot.pdf"
     plt.figure(figsize=(7, 2))
     # prepare chromosome input fpr plotting
     chromosomes = list(dict.fromkeys(offsets))
