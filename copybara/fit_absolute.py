@@ -388,7 +388,8 @@ def fit_absolute_cn(outdir, nmode, log2r_cn_path, sample, coverage,
         outfile1.write(Line)
     outfile1.close()
 
-    outfile2 = open(f"{outdir}/{sample}_fitted_purity_ploidy.tsv", "w")
+    fit_path = f"{outdir}/{sample}_fitted_purity_ploidy.tsv"
+    outfile2 = open(fit_path, "w")
     header=['purity','ploidy','distance','rank', 'purity_centre', 'min_purity', 'max_purity', 'coverage', 'pag']
     # header=['purity','ploidy','distance','rank', 'purity_centre', 'min_purity', 'max_purity', 'bc']
     outfile2.write('\t'.join(header)+'\n')
@@ -397,7 +398,8 @@ def fit_absolute_cn(outdir, nmode, log2r_cn_path, sample, coverage,
     outfile2.write(Line)
     outfile2.close()
 
-    outfile3 = open(f"{outdir}/{sample}_segmented_absolute_copy_number.tsv", "w")
+    abs_cn_path = f"{outdir}/{sample}_segmented_absolute_copy_number.tsv"
+    outfile3 = open(abs_cn_path, "w")
     # if allele_counts_bed_path == None:
     header=['chromosome','start','end','segment_id', 'bin_count', 'sum_of_bin_lengths', 'weight', 'copyNumber', 'category']
     # elif allele_counts_bed_path != None:
@@ -407,6 +409,8 @@ def fit_absolute_cn(outdir, nmode, log2r_cn_path, sample, coverage,
         Line = '\t'.join(str(e) for e in r) + '\n'
         outfile3.write(Line)
     outfile3.close()
+    
+    return abs_cn_path, fit_path
 
     # TODO: add this back in - either manually or one step up
     """

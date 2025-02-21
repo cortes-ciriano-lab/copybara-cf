@@ -21,6 +21,7 @@ import copybara.pon_generator as pon_generator
 import copybara.smooth as smooth
 import copybara.segment as segment
 import copybara.fit_absolute as fit_absolute
+import copybara.plotting as plotting
 # import copybara.tmad as tmad
 import copybara.helper as helper
 
@@ -169,12 +170,13 @@ def copybara_main(args):
     min_copy_number=-2
     max_copy_number=2
     lower_threshold=0
-    fit_absolute.fit_absolute_cn(outdir, nmode, log2r_cn_path, args.sample, coverage,
+    absolute_cn_path,cn_fit_path = fit_absolute.fit_absolute_cn(outdir, nmode, log2r_cn_path, args.sample, coverage,
         bc_thres,dens_thres,min_copy_number,max_copy_number,lower_threshold,
         args.min_ploidy, args.max_ploidy, args.ploidy_step, args.min_cellularity, args.max_cellularity, args.cellularity_step, 
         args.distance_function, args.distance_filter_scale_factor, args.distance_precision,
         args.max_proportion_zero, args.min_proportion_close_to_whole_number, args.max_distance_from_whole_number, args.main_cn_step_change,
         args.threads)
+    plotting.plot_copy_number(absolute_cn_path, log2r_cn_path, cn_fit_path, args.sample, outdir)
     helper.time_function("Fit absolute copy number", checkpoints, time_str)
     helper.time_function("Total time to perform copy number calling", checkpoints, time_str, final=True)
 

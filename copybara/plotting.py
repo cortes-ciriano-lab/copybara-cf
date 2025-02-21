@@ -1,12 +1,18 @@
+"""
+Script to plot final copy number output
+Created: 20/02/2025
+Python 3.9.7
+Carolin Sauer
+"""
+
 import matplotlib.pyplot as plt
 
-
 # plotting
-def plotting(bin_data, seg_data, offsets, cat_colours, meta):
+def plotting(bin_data, seg_data, offsets, cat_colours, meta, outdir):
     # Prepare figure
     title = f"{meta['sample']}"
-    subtitle = f"PAG={meta['pag']}; purity={meta['purity']}; fitted purity={meta['fitted_purity']}; fitted ploidy={meta['ploidy']}; goodness of fit={meta['gof']}; coverage={meta['coverage']}x"
-    fig_name = f"{title}_copy_number_plot.pdf"
+    subtitle = f"PAG={meta['pag']}; purity={meta['purity']}; fitted purity={meta['fitted_purity']}; fitted ploidy={meta['ploidy']}\ngoodness of fit={meta['gof']}; coverage={meta['coverage']}x"
+    fig_name = f"{outdir}/{title}_copy_number_plot.pdf"
     plt.figure(figsize=(7, 2))
     # prepare chromosome input fpr plotting
     chromosomes = list(dict.fromkeys(offsets))
@@ -63,6 +69,7 @@ def plotting(bin_data, seg_data, offsets, cat_colours, meta):
     plt.xlabel('Chromosome',fontsize=6)
     plt.ylabel('Copy number (log2R)',fontsize=6)
     plt.xticks(midpoints, chr_label,fontsize=5)
+    plt.yticks(fontsize=5)
     # plt.legend(loc='upper right', markerscale=4)
     plt.grid(False)
     plt.tight_layout()  
@@ -102,7 +109,7 @@ def calc_chrom_offset(seg_data):
     return chromosome_data
 
 
-def plot_copy_number(absolute_cn_path, log2r_cn_path, cn_fit_path, sample):
+def plot_copy_number(absolute_cn_path, log2r_cn_path, cn_fit_path, sample, outdir):
     # Color mapping for copy number categories
     cat_colours = {
         'del': '#0072B2',
@@ -158,4 +165,4 @@ def plot_copy_number(absolute_cn_path, log2r_cn_path, cn_fit_path, sample):
     # estimate chromosome offsets
     offsets = calc_chrom_offset(seg_data)
     # plot data 
-    plotting(bin_data, seg_data, offsets, cat_colours, meta)
+    plotting(bin_data, seg_data, offsets, cat_colours, meta, outdir)
