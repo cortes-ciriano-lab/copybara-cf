@@ -447,21 +447,24 @@ def relative_to_absolute_minor_total_CN(chrom, rel_copy_number_segments, allele_
     return acn_minor_major
 
 def categorise_cn_event(acn, ploidy):
-    val = round( 2**(math.log2( float(acn)/float(ploidy) )) *2 )
-    if val is None:
-        cn_cat = None
-    elif val == 0:
-        cn_cat = 'del'
-    elif val == 1:
-        cn_cat = 'loss'
-    elif val == 2:
-        cn_cat = 'neut'
-    elif val == 3:
-        cn_cat = 'gain'
-    elif val >= 4:
-        cn_cat = 'amp'
-    else:
-        cn_cat = 'other'
+    if acn != 0:
+        val = round( 2**(math.log2( float(acn)/float(ploidy) )) *2 )
+        if val is None:
+            cn_cat = None
+        elif val == 0:
+            cn_cat = 'del'
+        elif val == 1:
+            cn_cat = 'loss'
+        elif val == 2:
+            cn_cat = 'neut'
+        elif val == 3:
+            cn_cat = 'gain'
+        elif val >= 4:
+            cn_cat = 'amp'
+        else:
+            cn_cat = 'other'
+    elif acn == 0:
+        cn_cat = 'del'    
     return cn_cat
         
 
