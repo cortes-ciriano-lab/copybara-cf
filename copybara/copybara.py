@@ -170,7 +170,7 @@ def copybara_main(args):
     min_copy_number=-2
     max_copy_number=2
     lower_threshold=0
-    absolute_cn_path,cn_fit_path = fit_absolute.fit_absolute_cn(outdir, nmode, log2r_cn_path, args.sample, coverage,
+    absolute_cn_path,cn_fit_path = fit_absolute.fit_absolute_cn(outdir, nmode, log2r_cn_path, args.sample, coverage, args.goi,
         bc_thres,dens_thres,min_copy_number,max_copy_number,lower_threshold,
         args.min_ploidy, args.max_ploidy, args.ploidy_step, args.min_cellularity, args.max_cellularity, args.cellularity_step, 
         args.distance_function, args.distance_filter_scale_factor, args.distance_precision,
@@ -234,6 +234,7 @@ def parse_args(args):
         control_group.add_argument('-pon','--panel_of_normal', nargs='?', type=str, default=None, required=False, help='Path to panel of normal read count file')
         global_parser.add_argument('--ref', nargs='?', type=str, required=True, help='Full path to reference genome')
         global_parser.add_argument('--ref_index', nargs='?', type=str, required=False, help='Full path to reference genome fasta index (ref path + ".fai" by default)')
+        global_parser.add_argument('--goi', nargs='?', type=str, required=False, help='Full path to gene list of interest (must be tsv or bed file in bed file format)')
         global_parser.add_argument('--mapq', nargs='?', type=int, default=5, help='Minimum MAPQ to consider a read counting (default=5)')
         global_parser.add_argument('--threads', nargs='?', type=int, const=0, help='Number of threads to use (default=max)')
         global_parser.add_argument('--outdir', nargs='?', required=True, help='Output directory (can exist but must be empty)')

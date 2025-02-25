@@ -26,6 +26,13 @@ def process_input_for_purity_estimation(log2r_cn_path):
             rel_cn.append([bin,chrom,start,end,cn,seg_id,seg_cn])
     return rel_cn
 
+def process_gois(goi_path):
+    goi_list = []
+    with open(goi_path, "r") as file:
+        for line in file:
+            fields = line.strip().split("\t")
+            goi_list.append([fields[0],int(fields[1]),int(fields[2]),fields[3]])
+    return goi_list
 
 def define_purity_search_space(rel_cn,nmode,bc_thres,dens_thres,min_copy_number,max_copy_number,lower_threshold):
     chr_names = list(dict.fromkeys([x[1] for x in rel_cn]))
@@ -288,7 +295,7 @@ def process_log2r_input(log2r_cn_path):
             break
     return rel_copy_number_segments
 
-def fit_absolute_cn(outdir, nmode, log2r_cn_path, sample, coverage,
+def fit_absolute_cn(outdir, nmode, log2r_cn_path, sample, coverage, goi_path,
     bc_thres,dens_thres,min_copy_number,max_copy_number,lower_threshold,
     min_ploidy, max_ploidy, ploidy_step, 
     min_cellularity, max_cellularity, cellularity_step,
@@ -376,6 +383,11 @@ def fit_absolute_cn(outdir, nmode, log2r_cn_path, sample, coverage,
     abnorm_length = sum([float(x[5]) for x in abs_copy_number_segments if x[-1] != 'neut' ])
     PAG = abnorm_length/total_length
 
+    # if gene list provided annotate genes and estimate number of genes with CNA events
+    if goi_path is not None:
+        goi_list = process_gois(goi_path)
+        annotated_gois, cnas = cnfitter.annotate_gois_with_copynumber(abs_copy_number_segments, goi_list)
+
     #----
     # 5. Prepare and write out results
     ### ranked solutions, final fit, and converted segmented absolute copy number
@@ -390,33 +402,41 @@ def fit_absolute_cn(outdir, nmode, log2r_cn_path, sample, coverage,
 
     fit_path = f"{outdir}/{sample}_fitted_purity_ploidy.tsv"
     outfile2 = open(fit_path, "w")
-    header=['purity','ploidy','distance','rank', 'purity_centre', 'min_purity', 'max_purity', 'coverage', 'pag']
+    if goi_path is not None:
+        header=['purity','ploidy','distance','rank', 'purity_centre', 'min_purity', 'max_purity', 'coverage', 'pag', 'goi_events']
+    else:
+        header=['purity','ploidy','distance','rank', 'purity_centre', 'min_purity', 'max_purity', 'coverage', 'pag']
     # header=['purity','ploidy','distance','rank', 'purity_centre', 'min_purity', 'max_purity', 'bc']
     outfile2.write('\t'.join(header)+'\n')
-    Line = '\t'.join(str(e) for e in final_fit) + f'\t{round(cellularity,4)}' + f'\t{min_cellularity}' + f'\t{max_cellularity}' + f'\t{round(coverage,4)}' + f'\t{round(PAG,4)}' + '\n'
+    if goi_path is not None:
+        Line = '\t'.join(str(e) for e in final_fit) + f'\t{round(cellularity,3)}' + f'\t{min_cellularity}' + f'\t{max_cellularity}' + f'\t{round(coverage,3)}' + f'\t{round(PAG,3)}' + f'\t{cnas}' + '\n'
+    else:
+        Line = '\t'.join(str(e) for e in final_fit) + f'\t{round(cellularity,3)}' + f'\t{min_cellularity}' + f'\t{max_cellularity}' + f'\t{round(coverage,3)}' + f'\t{round(PAG,3)}' + '\n'
     # Line = '\t'.join(str(e) for e in final_fit) + f'\t{cellularity}' + f'\t{min_cellularity}' + f'\t{max_cellularity}' + f'\t{bcout}' + '\n'
     outfile2.write(Line)
     outfile2.close()
 
     abs_cn_path = f"{outdir}/{sample}_segmented_absolute_copy_number.tsv"
     outfile3 = open(abs_cn_path, "w")
-    # if allele_counts_bed_path == None:
     header=['chromosome','start','end','segment_id', 'bin_count', 'sum_of_bin_lengths', 'weight', 'copyNumber', 'category']
-    # elif allele_counts_bed_path != None:
-    #     header=['chromosome','start','end','segment_id', 'bin_count', 'sum_of_bin_lengths', 'weight', 'copyNumber', 'minorAlleleCopyNumber', 'meanBAF', 'no_hetSNPs']
     outfile3.write('\t'.join(header)+'\n')
     for r in abs_copy_number_segments:
         Line = '\t'.join(str(e) for e in r) + '\n'
         outfile3.write(Line)
     outfile3.close()
-    
+
+    if goi_path is not None:
+        goi_annots = f"{outdir}/{sample}_gois_cna_annotations.tsv"
+        outfile4 = open(goi_annots, "w")
+        header=['chromosome','start','end','gene_name', 'segment_overlap', 'copyNumber', 'category']
+        outfile4.write('\t'.join(header)+'\n')
+        for r in annotated_gois:
+            Line = '\t'.join(str(e) for e in r) + '\n'
+            outfile4.write(Line)
+        outfile4.close()
+    else:
+        goi_annots = None
+    # return abs_cn_path, fit_path, goi_annots
     return abs_cn_path, fit_path
 
-    # TODO: add this back in - either manually or one step up
-    """
-    with open(f"{outdir}/PARAMS_out.tsv", 'w') as params_out:
-            params_out.write('PARAMETERS:\n')
-            for key, value in vars(args).items():
-                    params_out.write(f'{key}: {value}\n')
-    """
 

@@ -9,9 +9,10 @@ import matplotlib.pyplot as plt
 
 # plotting
 def plotting(bin_data, seg_data, offsets, cat_colours, meta, outdir):
+# def plotting(bin_data, seg_data, offsets, goi_list, cat_colours, gene_colour, meta, outdir):
     # Prepare figure
     title = f"{meta['sample']}"
-    subtitle = f"PAG={meta['pag']}; purity={meta['purity']}; fitted purity={meta['fitted_purity']}; fitted ploidy={meta['ploidy']}\ngoodness of fit={meta['gof']}; coverage={meta['coverage']}x"
+    subtitle = f"PAG={meta['pag']}; purity={meta['purity']}; fitted purity={meta['fitted_purity']}; fitted ploidy={meta['ploidy']}\nfitting error function={meta['gof']}; coverage={meta['coverage']}x"
     fig_name = f"{outdir}/{title}_copy_number_plot.pdf"
     plt.figure(figsize=(7, 2))
     # prepare chromosome input fpr plotting
@@ -20,12 +21,18 @@ def plotting(bin_data, seg_data, offsets, cat_colours, meta, outdir):
     midpoints = []
     # chr_limits = [offsets['chr1']['start']]
     chr_limits = []
+    # # gois
+    # gois_plotting = []
+    # for r in goi_list:
+    #     gchr,gene = r[0],r[3]
+    #     gpos = int(r[2])-int(r[1])+1 + offsets[gchr]['offset']
+    #     gois_plotting.append([gpos, gene])
     # Plot each chromosome
     for chrom in chromosomes:
         # offsets
         x_offset = offsets[chrom]['offset']
         midpoints.append(offsets[chrom]['mid'])
-        chr_limits.append(offsets[chrom]['end'])
+        chr_limits.append(offsets[chrom]['end'])            
         # Filter data for the current chromosome
         bins = [d for d in bin_data if d['chrom'] == chrom]
         segments = [d for d in seg_data if d['chrom'] == chrom]
@@ -59,6 +66,10 @@ def plotting(bin_data, seg_data, offsets, cat_colours, meta, outdir):
     # plt.axhline(0, color='black', linestyle='--', linewidth=1)
     for lim in chr_limits:
         plt.axvline(x=lim, color='black', linewidth=0.5)
+    # # add gois
+    # for gene in gois_plotting:
+    #     plt.axvline(x=gene[0], color=gene_colour, linewidth=0.5)
+    #     plt.text(gene[0]+500000,3,gene[1],rotation=90, color=gene_colour, fontsize=5)
     plt.margins(x=0) 
     # plt.suptitle(title, fontsize=7) 
     # plt.title(subtitle,fontsize=6)
@@ -110,6 +121,7 @@ def calc_chrom_offset(seg_data):
 
 
 def plot_copy_number(absolute_cn_path, log2r_cn_path, cn_fit_path, sample, outdir):
+# def plot_copy_number(absolute_cn_path, log2r_cn_path, cn_fit_path, goi_annots_path, sample, outdir):
     # Color mapping for copy number categories
     cat_colours = {
         'del': '#0072B2',
@@ -119,6 +131,7 @@ def plot_copy_number(absolute_cn_path, log2r_cn_path, cn_fit_path, sample, outdi
         'amp': '#D55E00',
         'other': '#D3D3D3'
     }
+    # gene_colour = "#009E73"
     # segments
     seg_info = {}
     with open(absolute_cn_path, "r") as file:
@@ -162,7 +175,17 @@ def plot_copy_number(absolute_cn_path, log2r_cn_path, cn_fit_path, sample, outdi
                     'gof': fields[2],
                     'coverage': fields[7],
                     'pag': fields[8]}
+    # # prep genes of interest
+    # if goi_annots_path is not None:
+    #     goi_list = []
+    #     with open(goi_annots_path, "r") as file:
+    #         header=next(file)
+    #         for line in file:
+    #             fields = line.strip().split("\t")
+    #             if fields[-1] != 'neut':
+    #                 goi_list.append([fields[0],fields[1],fields[2],fields[3]])
     # estimate chromosome offsets
     offsets = calc_chrom_offset(seg_data)
     # plot data 
+    # plotting(bin_data, seg_data, offsets, goi_list, cat_colours, gene_colour, meta, outdir)
     plotting(bin_data, seg_data, offsets, cat_colours, meta, outdir)

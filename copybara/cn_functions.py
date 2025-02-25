@@ -446,6 +446,7 @@ def relative_to_absolute_minor_total_CN(chrom, rel_copy_number_segments, allele_
         acn_minor_major.append(x)
     return acn_minor_major
 
+
 def categorise_cn_event(acn, ploidy):
     if acn != 0:
         val = round( 2**(math.log2( float(acn)/float(ploidy) )) *2 )
@@ -468,6 +469,30 @@ def categorise_cn_event(acn, ploidy):
     return cn_cat
         
 
+def overlaps(a, b):
+    return min(a[1], b[1]) - max(a[0], b[0]) + 1
+
+
+def annotate_gois_with_copynumber(acn, goi_list):
+    annotated_gois = []
+    cna_counter = 0
+    for seg in acn:
+        schr,sstart,send,scn,scat = seg[0],int(seg[1]),int(seg[2]),seg[-2],seg[-1]
+        if scat == 'neut':
+            continue
+        for row in goi_list:
+            gchr,gstart,gend,gene = row[0],int(row[1]),int(row[2]),row[3]
+            gene_length = gend - gstart + 1
+            if gchr == schr:
+                # if (gstart > sstart and gstart < send ) or (gend > sstart & gend < send):
+                overlap = overlaps([gstart,gend],[sstart,send])
+                overlap_pct = overlap / gene_length * 100
+                if overlap > 0:
+                    if scat != 'neut':
+                        annotated_gois.append([gchr,str(gstart),str(gend),gene,str(overlap_pct),scn,scat])
+                        cna_counter += 1
+    cnas = f'{cna_counter}/{len(goi_list)}'
+    return annotated_gois, cnas
 
 if __name__ == "__main__":
 	print("Helper functions for Copy Number fitting")
