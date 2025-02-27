@@ -356,7 +356,7 @@ def reduce_grid(fits,distance_filter_scale_factor = 1.25):
     return reduced_grid
 
 
-def is_acceptable_fit(purity, ploidy, relative_CN, weights, max_proportion_zero = 0.1, min_proportion_close_to_whole_number = 0.5, max_distance_from_whole_number = 0.25, main_cn_step_change = 1):
+def is_acceptable_fit(purity, ploidy, relative_CN, weights, max_proportion_zero, min_proportion_close_to_whole_number, max_distance_from_whole_number, main_cn_step_change):
     '''
     Test if given fit is acceptable using parameters looking at the proportion of zero or negative segments, proportion of genome fitted close to an integer, and distance between most common CN state peaks.
     '''
@@ -378,6 +378,8 @@ def is_acceptable_fit(purity, ploidy, relative_CN, weights, max_proportion_zero 
         print(f"Fit of purity={purity} and ploidy={ploidy} is NOT an acceptable solution, as proportion of segments close to whole number  = {prop_state}." )
         return False
     # Remove fits which result in overstretchin/overfitting of copy number states (i.e. copy number state skipping) normally caused by oversegmentation
+    if not main_cn_step_change:
+        main_cn_step_change = np.nan
     most_common = statistics.mode(acn_int)
     try:
         second_most_common = statistics.mode([x for x in acn_int if x != most_common])
