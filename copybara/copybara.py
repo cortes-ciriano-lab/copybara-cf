@@ -258,7 +258,7 @@ def parse_args(args):
         global_parser.add_argument('--p_val', type=float,  default=0.01, help='p-value used to test validity of candidate segments from CBS using (shuffles) number of permutations (default = 0.01).', required=False)
         global_parser.add_argument('--quantile', type=float,  default=0, help='Quantile of changepoints (absolute median differences across all segments) used to estimate threshold for segment merging (default = 0, i.e. no segment merging).', required=False)
         global_parser.add_argument('--quantile_low_cov', type=float,  default=0.2, help='Quantile of changepoints used to estimate threshold for segment merging if sample < min coverage (default = 0.2).', required=False)
-        global_parser.add_argument('--min_coverage', type=float,  default=0.1, help='Quantile of changepoint (absolute median differences across all segments) used to estimate threshold for segment merging (default = 0, i.e. no segment merging).', required=False)
+        global_parser.add_argument('--min_coverage', type=float,  default=0.01, help='Quantile of changepoint (absolute median differences across all segments) used to estimate threshold for segment merging (default = 0, i.e. no segment merging).', required=False)
         global_parser.add_argument('--min_ploidy', type=float, default=1.7, help='Minimum ploidy to be considered for copy number fitting.', required=False)
         global_parser.add_argument('--max_ploidy', type=float, default=3.7, help='Maximum ploidy to be considered for copy number fitting.', required=False)
         global_parser.add_argument('--ploidy_step', type=float, default=0.1, help='Ploidy step size for grid search space used during for copy number fitting.', required=False)
