@@ -162,7 +162,7 @@ def copybara_main(args):
     smoothened_cn_path = smooth.smooth_copy_number(outdir, read_counts_path, args.smoothing_level, args.trim)
     helper.time_function("Performed smoothing", checkpoints, time_str)
     # segment the copy number data
-    log2r_cn_path = segment.segment_copy_number(outdir, smoothened_cn_path, args.min_segment_size, args.shuffles, args.p_seg, args.p_val, args.quantile, coverage, args.threads)
+    log2r_cn_path = segment.segment_copy_number(outdir, smoothened_cn_path, args.min_segment_size, args.shuffles, args.p_seg, args.p_val, args.quantile, args.quantile_low_cov, args.min_coverage, coverage, args.threads)
     helper.time_function("Performed CBS", checkpoints, time_str)
     # fit absolute copy number
     bc_thres=0.25
@@ -243,7 +243,7 @@ def parse_args(args):
         global_parser.add_argument('-w', '--cn_binsize', type=int, default=500, help='Bin window size in kbp', required=False)
         global_parser.add_argument('-c', '--chromosomes', nargs='+', default='all', help='Contigs/chromosomes to consider. (optional, default=all). To run only a subset of chromosomes, specify the chromosome numbers separated by spaces. For x and y chromosomes, use 23 and 24, respectively.  E.g. use "-c 1 4 23 24" to run chromosomes 1, 4, X and Y', required=False)
         global_parser.add_argument('-bl', '--blacklist', type=str, help='Path to the blacklist file', required=False)
-        global_parser.add_argument('--blacklist_buffer', type=int, default=10000, help='Length of region (in bp) flanking the centromere to be excluded. (default = 10000)', required=False)
+        global_parser.add_argument('--blacklist_buffer', type=int, default=0, help='Length of region (in bp) flanking the blacklisted region to be excluded. (default = 0)', required=False)
         global_parser.add_argument('--no_blacklist', dest='blacklisting', action='store_false')
         global_parser.set_defaults(blacklisting=True)
         global_parser.add_argument('-blt', '--bl_threshold', type=int,  default='1', help='Percentage overlap between bin and blacklist threshold to tolerate for read counting (default = 0, i.e. no overlap tolerated). Please specify percentage threshold as integer, e.g. "-t 5" ', required=False)
@@ -256,9 +256,11 @@ def parse_args(args):
         global_parser.add_argument('-sf', '--shuffles', type=int,  default=1000, help='Number of permutations (shuffles) to be performed during CBS (default = 1000).', required=False)
         global_parser.add_argument('-ps', '--p_seg', type=float,  default=0.05, help='p-value used to test segmentation statistic for a given interval during CBS using (shuffles) number of permutations (default = 0.05).', required=False)
         global_parser.add_argument('-pv', '--p_val', type=float,  default=0.01, help='p-value used to test validity of candidate segments from CBS using (shuffles) number of permutations (default = 0.01).', required=False)
-        global_parser.add_argument('-qt', '--quantile', type=float,  default=0.2, help='Quantile of changepoint (absolute median differences across all segments) used to estimate threshold for segment merging (default = 0.2; set to 0 to avoid segment merging).', required=False)
-        global_parser.add_argument('--min_ploidy', type=float, default=1.5, help='Minimum ploidy to be considered for copy number fitting.', required=False)
-        global_parser.add_argument('--max_ploidy', type=float, default=4.5, help='Maximum ploidy to be considered for copy number fitting.', required=False)
+        global_parser.add_argument('-qt', '--quantile', type=float,  default=0, help='Quantile of changepoints (absolute median differences across all segments) used to estimate threshold for segment merging (default = 0, i.e. no segment merging).', required=False)
+        global_parser.add_argument('--quantile_low_cov', type=float,  default=0.2, help='Quantile of changepoints used to estimate threshold for segment merging if sample < min coverage (default = 0.2).', required=False)
+        global_parser.add_argument('--min_coverage', type=float,  default=0.1, help='Quantile of changepoint (absolute median differences across all segments) used to estimate threshold for segment merging (default = 0, i.e. no segment merging).', required=False)
+        global_parser.add_argument('--min_ploidy', type=float, default=1.7, help='Minimum ploidy to be considered for copy number fitting.', required=False)
+        global_parser.add_argument('--max_ploidy', type=float, default=3.7, help='Maximum ploidy to be considered for copy number fitting.', required=False)
         global_parser.add_argument('--ploidy_step', type=float, default=0.1, help='Ploidy step size for grid search space used during for copy number fitting.', required=False)
         global_parser.add_argument('--set_ploidy', type=float, default=None, help='Set to sample`s ploidy if known.', required=False)   
         # global_parser.add_argument('--ploidy_buffer', type=float, default=0.3, help='Ploidy buffer to define ploidy grid search space during copy number fitting when --set_ploidy is provided (default = 0.3).', required=False)
