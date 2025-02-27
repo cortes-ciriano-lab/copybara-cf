@@ -476,21 +476,24 @@ def overlaps(a, b):
 def annotate_gois_with_copynumber(acn, goi_list):
     annotated_gois = []
     cna_counter = 0
-    for seg in acn:
-        schr,sstart,send,scn,scat = seg[0],int(seg[1]),int(seg[2]),seg[-2],seg[-1]
-        if scat == 'neut':
-            continue
-        for row in goi_list:
-            gchr,gstart,gend,gene = row[0],int(row[1]),int(row[2]),row[3]
-            gene_length = gend - gstart + 1
-            if gchr == schr:
-                # if (gstart > sstart and gstart < send ) or (gend > sstart & gend < send):
+    for row in goi_list:
+        gchr,gstart,gend,gene = row[0],int(row[1]),int(row[2]),row[3]
+        gene_length = gend - gstart + 1
+        gene_match_counter = 0
+        for seg in acn:
+            schr,sstart,send,scn,scat = seg[0],int(seg[1]),int(seg[2]),seg[-2],seg[-1]
+            # if scat == 'neut':
+            #     continue
+            if schr == gchr:
                 overlap = overlaps([gstart,gend],[sstart,send])
                 overlap_pct = overlap / gene_length * 100
                 if overlap > 0:
+                    annotated_gois.append([gchr,str(gstart),str(gend),gene,str(overlap_pct),scn,scat])
+                    gene_match_counter += 1
                     if scat != 'neut':
-                        annotated_gois.append([gchr,str(gstart),str(gend),gene,str(overlap_pct),scn,scat])
                         cna_counter += 1
+        if gene_match_counter == 0:
+            annotated_gois.append([gchr,str(gstart),str(gend),gene,'0','NA','NA'])
     cnas = f'{cna_counter}/{len(goi_list)}'
     return annotated_gois, cnas
 
