@@ -34,7 +34,7 @@ def process_gois(goi_path):
             goi_list.append([fields[0],int(fields[1]),int(fields[2]),fields[3]])
     return goi_list
 
-def define_purity_search_space(rel_cn,nmode,bc_thres,dens_thres,min_copy_number,max_copy_number,lower_threshold):
+def define_purity_search_space(rel_cn,nmode,bc_thres,dens_thres,min_copy_number,max_copy_number,lower_threshold,cellularity_buffer):
     chr_names = list(dict.fromkeys([x[1] for x in rel_cn]))
     # if normalisation mode == 'self', skip chromosomes 19-22 as more noise observed and results in incorrect purity estimation
     chr_skip = ['chrX','chrY','Y','X']
@@ -254,16 +254,24 @@ def define_purity_search_space(rel_cn,nmode,bc_thres,dens_thres,min_copy_number,
     # max_purity = 0.1 if pur_centre == 0 or max_purity == 0 else max_purity
     # return(pur_centre,min_purity,max_purity)
     
-    ### TEST smaller purity search space ##
-    minp = round(max(pur_centre-0.1,0),2)
-    # minp = round(max(pur_centre-0.15,0),2)
-    min_purity = 0 if minp <= 0.08 else minp
-    max_purity = round(min(pur_centre+0.1,1),2) if pur_centre >= 0.1 else round(min(pur_centre+pur_centre,1),2)
+    # ### TEST smaller purity search space ## v1.0.0
+    # minp = round(max(pur_centre-0.1,0),2)
+    # # minp = round(max(pur_centre-0.15,0),2)
+    # min_purity = 0 if minp <= 0.08 else minp
+    # max_purity = round(min(pur_centre+0.1,1),2) if pur_centre >= 0.1 else round(min(pur_centre+pur_centre,1),2)
+    # # max_purity = round(min(pur_centre+0.15,1),2) if pur_centre >= 0.15 else round(min(pur_centre+pur_centre,1),2)
+    # max_purity = 0.1 if pur_centre == 0 or max_purity == 0 else max_purity
+    # return(pur_centre,min_purity,max_purity)
+    # # return(pur_centre,min_purity,max_purity,BC_out)
+
+    ### TEST smaller purity search space ## v1.0.1
+    # minp = round(max(pur_centre-cellularity_buffer,0),2)
+    # min_purity = 0 if pur_centre <= 0.08 else minp
+    min_purity = round(max(pur_centre-cellularity_buffer,0),2)
+    max_purity = round(min(pur_centre+cellularity_buffer,1),2) if pur_centre >= cellularity_buffer else round(min(pur_centre+pur_centre,1),2)
     # max_purity = round(min(pur_centre+0.15,1),2) if pur_centre >= 0.15 else round(min(pur_centre+pur_centre,1),2)
     max_purity = 0.1 if pur_centre == 0 or max_purity == 0 else max_purity
     return(pur_centre,min_purity,max_purity)
-    # return(pur_centre,min_purity,max_purity,BC_out)
-
 
 def process_log2r_input(log2r_cn_path):
     rel_copy_number = []
@@ -298,7 +306,7 @@ def process_log2r_input(log2r_cn_path):
 def fit_absolute_cn(outdir, nmode, log2r_cn_path, sample, coverage, goi_path,
     bc_thres,dens_thres,min_copy_number,max_copy_number,lower_threshold,
     min_ploidy, max_ploidy, ploidy_step, 
-    min_cellularity, max_cellularity, cellularity_step,
+    min_cellularity, max_cellularity, cellularity_step, cellularity_buffer,
     distance_function, distance_filter_scale_factor, distance_precision,
     max_proportion_zero, min_proportion_close_to_whole_number, max_distance_from_whole_number, main_cn_step_change,
     threads):
@@ -314,7 +322,7 @@ def fit_absolute_cn(outdir, nmode, log2r_cn_path, sample, coverage, goi_path,
     # 3. Determine purity centre and search space based on chromosomes with multimodal CN data
     #----
     rel_cn = process_input_for_purity_estimation(log2r_cn_path)
-    cellularity,min_cellularity,max_cellularity=define_purity_search_space(rel_cn,nmode,bc_thres,dens_thres,min_copy_number,max_copy_number,lower_threshold)
+    cellularity,min_cellularity,max_cellularity=define_purity_search_space(rel_cn,nmode,bc_thres,dens_thres,min_copy_number,max_copy_number,lower_threshold,cellularity_buffer)
     # cellularity,min_cellularity,max_cellularity,bcout=define_purity_search_space(rel_cn,bc_thres,dens_thres,min_copy_number,max_copy_number,lower_threshold)
     print(cellularity,min_cellularity,max_cellularity)
     # print(cellularity,min_cellularity,max_cellularity,bcout)

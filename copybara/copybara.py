@@ -172,7 +172,7 @@ def copybara_main(args):
     lower_threshold=0
     absolute_cn_path,cn_fit_path = fit_absolute.fit_absolute_cn(outdir, nmode, log2r_cn_path, args.sample, coverage, args.goi,
         bc_thres,dens_thres,min_copy_number,max_copy_number,lower_threshold,
-        args.min_ploidy, args.max_ploidy, args.ploidy_step, args.min_cellularity, args.max_cellularity, args.cellularity_step, 
+        args.min_ploidy, args.max_ploidy, args.ploidy_step, args.min_cellularity, args.max_cellularity, args.cellularity_step, args.cellularity_buffer, 
         args.distance_function, args.distance_filter_scale_factor, args.distance_precision,
         args.max_proportion_zero, args.min_proportion_close_to_whole_number, args.max_distance_from_whole_number, args.main_cn_step_change,
         args.threads)
@@ -262,12 +262,12 @@ def parse_args(args):
         global_parser.add_argument('--min_ploidy', type=float, default=1.7, help='Minimum ploidy to be considered for copy number fitting.', required=False)
         global_parser.add_argument('--max_ploidy', type=float, default=3.7, help='Maximum ploidy to be considered for copy number fitting.', required=False)
         global_parser.add_argument('--ploidy_step', type=float, default=0.1, help='Ploidy step size for grid search space used during for copy number fitting.', required=False)
-        global_parser.add_argument('--set_ploidy', type=float, default=None, help='Set to sample`s ploidy if known.', required=False)   
+        # global_parser.add_argument('--set_ploidy', type=float, default=None, help='Set to sample`s ploidy if known.', required=False)   
         # global_parser.add_argument('--ploidy_buffer', type=float, default=0.3, help='Ploidy buffer to define ploidy grid search space during copy number fitting when --set_ploidy is provided (default = 0.3).', required=False)
         global_parser.add_argument('--min_cellularity', type=float, default=0, help='Minimum cellularity to be considered for copy number fitting. If hetSNPs allele counts are provided, this is estimated during copy number fitting. Alternatively, a purity value can be provided if the purity of the sample is already known.', required=False)
         global_parser.add_argument('--max_cellularity', type=float, default=1, help='Maximum cellularity to be considered for copy number fitting. If hetSNPs allele counts are provided, this is estimated during copy number fitting. Alternatively, a purity value can be provided if the purity of the sample is already known.', required=False)
         global_parser.add_argument('--cellularity_step', type=float, default=0.01, help='Cellularity step size for grid search space used during for copy number fitting.', required=False)
-        # global_parser.add_argument('--cellularity_buffer', type=float, default=0.1, help='Cellularity buffer to define purity grid search space during copy number fitting (default = 0.1).', required=False)
+        global_parser.add_argument('--cellularity_buffer', type=float, default=0.05, help='Cellularity buffer to define purity grid search space during copy number fitting (default = 0.05).', required=False)
         # global_parser.add_argument('--overrule_cellularity', type=float, default=None, help='Set to sample`s purity if known. This value will overrule the cellularity estimated using hetSNP allele counts (not used by default).', required=False)   
         global_parser.add_argument('--distance_function', type=str, default='RMSD', help='Distance function to be used for copy number fitting.', choices=['RMSD', 'MAD'], required=False)
         global_parser.add_argument('--distance_filter_scale_factor', type=float, default=1.25, help='Distance filter scale factor to only include solutions with distances < scale factor * min(distance).', required=False)
