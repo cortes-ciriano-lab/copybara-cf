@@ -17,7 +17,7 @@ import numpy as np
 from statsmodels.nonparametric.smoothers_lowess import lowess
 from scipy.interpolate import interp1d
 
-def count_reads_in_curr_bin(bam, chrom, start, end, readcount_mapq):
+def count_reads_in_curr_bin(bam, chrom, start, end, readcount_mapq, size_select, min_read_size, max_read_size):
     chunk_read_count = 0
     for read in bam.fetch(chrom, start, end, multiple_iterators = True):
         if read.is_secondary or read.is_supplementary or read.mapping_quality < readcount_mapq:
@@ -25,13 +25,27 @@ def count_reads_in_curr_bin(bam, chrom, start, end, readcount_mapq):
         else: 
             read_start = read.reference_start
             read_end = read.reference_end
-            if read_start >= start and read_start <= end:
-                    chunk_read_count += 1
-            elif read_end >= start and read_end <= end:
-                    chunk_read_count += 1
+            # read_len = read_end - read_start + 1
+            read_len=len(read.query_sequence)
+            if size_select == True:
+                c=0
+                for id,x in enumerate(min_read_size):
+                    if read_len >= x and read_len <= max_read_size[id]:
+                        c+=1
+                if c > 0:
+                    print(read_len)
+                    if read_start >= start and read_start <= end:
+                        chunk_read_count += 1
+                    elif read_end >= start and read_end <= end:
+                        chunk_read_count += 1
+            else:
+                if read_start >= start and read_start <= end:
+                        chunk_read_count += 1
+                elif read_end >= start and read_end <= end:
+                        chunk_read_count += 1
     return chunk_read_count
 
-def binned_read_counting(curr_chunk, bed_chunk, alns, nmode, blacklisting, bl_threshold, bases_filter, bases_threshold, readcount_mapq):
+def binned_read_counting(curr_chunk, bed_chunk, alns, nmode, blacklisting, bl_threshold, bases_filter, bases_threshold, readcount_mapq, size_select, min_read_size, max_read_size):
     print(f"    Read counting {curr_chunk} ...")
 
     # Open the BAM file using pysam
@@ -74,9 +88,9 @@ def binned_read_counting(curr_chunk, bed_chunk, alns, nmode, blacklisting, bl_th
                 else:
                     use = False
         # counting reads in tumour (and if provided) matched normal bams in each bin or adding PoN read counts 
-        chunk_read_count_T = count_reads_in_curr_bin(bam_T, chrom, start, end, readcount_mapq)
+        chunk_read_count_T = count_reads_in_curr_bin(bam_T, chrom, start, end, readcount_mapq, size_select, min_read_size, max_read_size)
         if bam_N:
-            chunk_read_count_N = count_reads_in_curr_bin(bam_N, chrom, start, end, readcount_mapq)
+            chunk_read_count_N = count_reads_in_curr_bin(bam_N, chrom, start, end, readcount_mapq, False, min_read_size, max_read_size)
         elif nmode == "pon":
             chunk_read_count_N = pon_dict[bin_name]
         else:
@@ -207,25 +221,35 @@ def chunkify_bed(bed_file, chunk_size):
         chunks.append(pybedtools.BedTool(current_chunk))
     return chunks
 
-def estimate_coverage(tumour, ref, readcount_mapq):
+def estimate_coverage(tumour, ref, readcount_mapq, size_select, min_read_size, max_read_size):
     bam_T = pysam.AlignmentFile(tumour, "rb")
     fasta = pysam.FastaFile(ref)
     # Calculate Total Mapped Bases
     total_mapped_bases = 0
     for read in bam_T.fetch():
         if not read.is_unmapped and not read.is_secondary and not read.is_supplementary and read.mapping_quality >= readcount_mapq:
-            total_mapped_bases += read.query_length 
+            if size_select == True:
+                read_len=len(read.query_sequence)
+                c=0
+                for id,x in enumerate(min_read_size):
+                    if read_len >= x and read_len <= max_read_size[id]:
+                        c+=1
+                if c > 0:
+                    print(read_len)
+                    total_mapped_bases += read.query_length 
+            else:
+                total_mapped_bases += read.query_length 
     # Calculate Genome Size
     genome_size = sum(fasta.get_reference_length(contig) for contig in fasta.references)
     # Compute Whole Genome Coverage
     coverage = total_mapped_bases / genome_size
     return coverage
 
-def count_reads(outdir, tumour, normal, panel_of_normals, sample, bin_annotations_path, ref, readcount_mapq, blacklisting, bl_threshold, bases_filter, bases_threshold, threads):
+def count_reads(outdir, tumour, normal, panel_of_normals, sample, bin_annotations_path, ref, readcount_mapq, blacklisting, bl_threshold, bases_filter, bases_threshold, size_select, min_read_size, max_read_size, threads):
     """ Perform binned read counting on bam file/files per chromosome """
 
     # estimate tumour bam coverage as needed later
-    coverage = estimate_coverage(tumour, ref, readcount_mapq)
+    coverage = estimate_coverage(tumour, ref, readcount_mapq, size_select, min_read_size, max_read_size)
     print(f"Genome wide coverage of tumour bam: {coverage}")
 
     # check and define threads
@@ -268,13 +292,13 @@ def count_reads(outdir, tumour, normal, panel_of_normals, sample, bin_annotation
         countData = []
         for idx,bed_chunk in enumerate(chunks):
             curr_chunk = f"chunk {idx+1}"
-            counts_binned_chr = binned_read_counting(curr_chunk, bed_chunk, aln_files, nmode, blacklisting, bl_threshold, bases_filter, bases_threshold, readcount_mapq)
+            counts_binned_chr = binned_read_counting(curr_chunk, bed_chunk, aln_files, nmode, blacklisting, bl_threshold, bases_filter, bases_threshold, readcount_mapq, size_select, min_read_size, max_read_size)
             countData.append(counts_binned_chr)
         countData = [x for xs in countData for x in xs]
 
     else:
         print(f"multithreading using {threads} threads.")
-        args_in = [[str(f"chunk {idx+1}"),bed_chunk,aln_files, nmode, blacklisting, bl_threshold, bases_filter, bases_threshold, readcount_mapq] for idx,bed_chunk in enumerate(chunks)]
+        args_in = [[str(f"chunk {idx+1}"),bed_chunk,aln_files, nmode, blacklisting, bl_threshold, bases_filter, bases_threshold, readcount_mapq, size_select, min_read_size, max_read_size] for idx,bed_chunk in enumerate(chunks)]
         # print(args_in)
         with Pool(processes=threads) as pool:
             countData = [x for xs in list(pool.starmap(binned_read_counting, args_in)) for x in xs]

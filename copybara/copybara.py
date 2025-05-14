@@ -147,16 +147,28 @@ def copybara_main(args):
     else:
         args.ref_index = f'{args.ref}.fai' if not args.ref_index else args.ref_index
         print(f'Found {args.ref_index} to use as reference fasta index')
-    
+
+    # if not args.size_select:
+    #     args.size_select = False
+    if args.size_select == True and (args.min_read_size is None or args.max_read_size is None):
+        sys.exit(f'-size_select requires --min_read_size and --max_read_size.')
+        if len(args.min_read_size) != len(args.max_read_size):
+            sys.exit(f'the length of --min_read_size and --max_read_size must be identical.')
+    if args.size_select == True:
+        print(f'Performing size selection prior to copy number analysis. (min_read_size: {args.min_read_size} and max_read_size: {args.max_read_size}')
+
+
     # initialize timing
     checkpoints = [time()]
     time_str = []
-   
+
+    # print(f'size select: {args.size_select} | min read size: {args.min_read_size} | {type(args.min_read_size)}')
+
     # 1. generate bins
     bin_annotations_path = bin_generator.generate_bins(outdir, args.sample, args.ref, args.chromosomes, args.cn_binsize, args.blacklist, args.blacklist_buffer, args.threads)
     helper.time_function("Binned reference genome", checkpoints, time_str)
     # 2. perform read counting across bins
-    read_counts_path,nmode,coverage = read_counter.count_reads(outdir, args.bam, args.normal_bam, args.panel_of_normal ,args.sample, bin_annotations_path, args.ref, args.mapq, args.blacklisting, args.bl_threshold, args.bases_filter, args.bases_threshold, args.threads)
+    read_counts_path,nmode,coverage = read_counter.count_reads(outdir, args.bam, args.normal_bam, args.panel_of_normal ,args.sample, bin_annotations_path, args.ref, args.mapq, args.blacklisting, args.bl_threshold, args.bases_filter, args.bases_threshold, args.size_select, args.min_read_size, args.max_read_size, args.threads)
     helper.time_function("Performed read counting", checkpoints, time_str)
     # smooth the copy number data
     smoothened_cn_path = smooth.smooth_copy_number(outdir, read_counts_path, args.smoothing_level, args.trim)
@@ -276,12 +288,16 @@ def parse_args(args):
         global_parser.add_argument('--min_proportion_close_to_whole_number', type=float, default=0.5, help='Minimum proportion of fitted copy numbers sufficiently close to whole number to be tolerated for a given fit.', required=False)
         global_parser.add_argument('--max_distance_from_whole_number', type=float, default=0.25, help='Distance from whole number for fitted value to be considered sufficiently close to nearest copy number integer.', required=False)
         global_parser.add_argument('--main_cn_step_change', type=int, help='Max main copy number step change across genome to be considered for a given solution.', required=False)
+        global_parser.add_argument('--size_select', dest='size_select', action='store_true', help='add --size_select to turn on size_selection.')
+        global_parser.set_defaults(size_select=False)
+        global_parser.add_argument('--min_read_size', type=int, nargs='+', required=False, help='minimum read size for size selection prior to copy number analysis. Provide multiple values if looking to combine multiple sizes.')
+        global_parser.add_argument('--max_read_size', type=int, nargs='+', required=False, help='maximum read size for size selection prior to copy number analysis. Provide multiple values if looking to combine multiple sizes.')
         global_parser.set_defaults(func=copybara_main)
         parsed_args = global_parser.parse_args() if not args else global_parser.parse_args(args)
     else:
         global_parser.exit_on_error = True
         parsed_args = global_parser.parse_args() if not args else global_parser.parse_args(args)
-
+        
     return parsed_args
 
 def main(args=None):
