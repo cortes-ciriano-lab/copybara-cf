@@ -222,13 +222,16 @@ def count_reads(outdir, pon_list, pon_name, bin_annotations_path, readcount_mapq
     #----
     # 4. Get results and write out
     #----
-    outfile = open(f"{outdir}/{pon_name}_read_counts.tsv", "w")
+    pon_read_counts = f"{outdir}/{pon_name}_read_counts.tsv"
+    outfile = open(pon_read_counts, "w")
     header=['bin', 'PoN_read_count']
     outfile.write('\t'.join(header)+'\n')
     for r in countData:
         Line = '\t'.join(r) + '\n'
         outfile.write(Line)
     outfile.close()
+
+    return pon_read_counts
 
 if __name__ == "__main__":
     print("PoN generator")
