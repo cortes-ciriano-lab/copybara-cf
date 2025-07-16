@@ -9,6 +9,7 @@ Carolin Sauer
 import sys
 import os
 import argparse
+import math
 
 from time import time
 from multiprocessing import cpu_count
@@ -157,6 +158,10 @@ def copybara_main(args):
     if args.size_select == True:
         print(f'Performing size selection prior to copy number analysis. (min_read_size: {args.min_read_size} and max_read_size: {args.max_read_size}')
 
+    # set minimum number of bins for segment size based on min_segment_size argument
+    bin_size=args.cn_binsize * int(1000)
+    args.min_segment_size = math.ceil(args.min_segment_size / bin_size)
+    print(f'Min segment size = {args.min_segment_size} bins.')
 
     # initialize timing
     checkpoints = [time()]
@@ -188,7 +193,7 @@ def copybara_main(args):
         args.distance_function, args.distance_filter_scale_factor, args.distance_precision,
         args.max_proportion_zero, args.min_proportion_close_to_whole_number, args.max_distance_from_whole_number, args.main_cn_step_change,
         args.threads)
-    plotting.plot_copy_number(absolute_cn_path, log2r_cn_path, cn_fit_path, args.sample, outdir)
+    plotting.plot_copy_number(absolute_cn_path, log2r_cn_path, cn_fit_path, args.sample, args.no_plot_points, outdir)
     helper.time_function("Fit absolute copy number", checkpoints, time_str)
     helper.time_function("Total time to perform copy number calling", checkpoints, time_str, final=True)
 
@@ -264,7 +269,7 @@ def parse_args(args):
         global_parser.add_argument('--bases_threshold', type=int,  default='75', help='Percentage of known bases per bin required for read counting (default = 0, i.e. no filtering). Please specify percentage threshold as integer, e.g. "-bt 95" ', required=False)
         global_parser.add_argument('--smoothing_level', type=int, default='10', help='Size of neighbourhood for smoothing.', required=False)
         global_parser.add_argument('--trim', type=float, default='0.025', help='Trimming percentage to be used.', required=False)
-        global_parser.add_argument('--min_segment_size', type=int,  default=5, help='Minimum size for a segement to be considered a segment (default = 5).', required=False)
+        global_parser.add_argument('--min_segment_size', type=int,  default=2500000, help='Minimum size for a segement to be considered a segment (default = 2500000 (2.5Mb)).', required=False)
         global_parser.add_argument('--shuffles', type=int,  default=1000, help='Number of permutations (shuffles) to be performed during CBS (default = 1000).', required=False)
         global_parser.add_argument('--p_seg', type=float,  default=0.05, help='p-value used to test segmentation statistic for a given interval during CBS using (shuffles) number of permutations (default = 0.05).', required=False)
         global_parser.add_argument('--p_val', type=float,  default=0.01, help='p-value used to test validity of candidate segments from CBS using (shuffles) number of permutations (default = 0.01).', required=False)
@@ -293,6 +298,7 @@ def parse_args(args):
         global_parser.add_argument('--min_read_size', type=int, nargs='+', required=False, help='minimum read size for size selection prior to copy number analysis. Provide multiple values if looking to combine multiple sizes.')
         global_parser.add_argument('--max_read_size', type=int, nargs='+', required=False, help='maximum read size for size selection prior to copy number analysis. Provide multiple values if looking to combine multiple sizes.')
         global_parser.set_defaults(func=copybara_main)
+        global_parser.add_argument('--no_plot_points', type=int, default=7500 ,required=False, help='Number of points to plot, e.g. downsampling when small binsize is used for cleaner visuals. (default = 10000).')
         parsed_args = global_parser.parse_args() if not args else global_parser.parse_args(args)
     else:
         global_parser.exit_on_error = True
