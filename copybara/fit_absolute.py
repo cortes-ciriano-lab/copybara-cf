@@ -332,6 +332,8 @@ def define_purity_search_space(rel_cn,nmode,bc_thres,dens_thres,min_copy_number,
     pur_centre = 1 if pur_centre >= 1 else pur_centre 
     # min and max purities based on actual peaks... 
     min_purity = round(max(min([x-cellularity_buffer for x in dist]),0),2) 
+    if min_purity < 0.025:
+        min_purity = 0
     max_purity = round(min(max([x+cellularity_buffer for x in dist]),1),2) 
     print(pur_centre,min_purity,max_purity)
     # ### TEST smaller purity search space ## v1.0.0
