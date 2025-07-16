@@ -6,6 +6,7 @@ Carolin Sauer
 """
 
 import matplotlib.pyplot as plt
+import random
 
 # plotting
 def plotting(bin_data, seg_data, offsets, cat_colours, meta, outdir):
@@ -120,7 +121,7 @@ def calc_chrom_offset(seg_data):
     return chromosome_data
 
 
-def plot_copy_number(absolute_cn_path, log2r_cn_path, cn_fit_path, sample, outdir):
+def plot_copy_number(absolute_cn_path, log2r_cn_path, cn_fit_path, sample, no_plot_points, outdir):
 # def plot_copy_number(absolute_cn_path, log2r_cn_path, cn_fit_path, goi_annots_path, sample, outdir):
     # Color mapping for copy number categories
     cat_colours = {
@@ -158,6 +159,9 @@ def plot_copy_number(absolute_cn_path, log2r_cn_path, cn_fit_path, sample, outdi
                              'pos':float(position),
                              'binned': bin_cn,
                              'category': cn_cat})
+    # downsample bin data for plotting
+    if len(bin_data) > no_plot_points:
+        bin_data = random.sample(bin_data, no_plot_points)
     # add relative segment copy number to segment data
     seg_data = []
     for seg_id in list(dict.fromkeys(segs)):
