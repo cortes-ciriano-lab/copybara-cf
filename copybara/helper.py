@@ -14,7 +14,7 @@ from time import time
 from datetime import datetime
 import argparse
 
-__version__ = "1.0.0"
+__version__ = "1.0.2"
 
 # def get_contigs(contig_file, ref_index):
 # 	""" use the contigs file to return contigs and lengths - otherwise use index """

@@ -34,9 +34,167 @@ def process_gois(goi_path):
             goi_list.append([fields[0],int(fields[1]),int(fields[2]),fields[3]])
     return goi_list
 
+# VERSION 1
+# def define_purity_search_space(rel_cn,nmode,bc_thres,dens_thres,min_copy_number,max_copy_number,lower_threshold,cellularity_buffer):
+#     chr_names = list(dict.fromkeys([x[1] for x in rel_cn]))
+#     # if normalisation mode == 'self', skip chromosomes 19-22 as more noise observed and results in incorrect purity estimation
+#     chr_skip = ['chrX','chrY','Y','X']
+#     if nmode == 'self':
+#         chr_skip += ['chr19','chr20','chr21','chr22','19','20','21','22']
+#     chr_skip_splits = ['chr19','chr20','chr21','chr22','19','20','21','22']
+#     # Test each chromosome and chromosome breaks for multimodal peaks
+#     bin_out = []
+#     bc_out = []
+#     chr_count = 0
+#     for CHROM in chr_names:
+#         if CHROM in chr_skip:
+#             continue
+#         chr_rel_cn = [x[-3] for x in rel_cn if x[1] == CHROM]
+#         chr_rel_cn_seg = [x[-1] for x in rel_cn if x[1] == CHROM]
+#         chr_bins = [x[0] for x in rel_cn if x[1] == CHROM]
+#         # apply min and max copy number thresholds for purity estimation
+#         if min_copy_number is not None:
+#             assert isinstance(min_copy_number, (int, float)) and np.isscalar(min_copy_number)
+#             chr_rel_cn = [cn for cn in chr_rel_cn if cn >= min_copy_number]
+#         if max_copy_number is not None:
+#             assert isinstance(max_copy_number, (int, float)) and np.isscalar(max_copy_number)
+#             chr_rel_cn = [cn for cn in chr_rel_cn if cn <= max_copy_number]
+#         number_chr_segs=len(list(dict.fromkeys([x[-2] for x in rel_cn if x[1] == CHROM])))
+#         if number_chr_segs >= 2:
+#             try:
+#                 if  cnfitter.is_unimodal(chr_rel_cn) == False:
+#                     print(CHROM)
+#                     chr_bc = cnfitter.bimodality_coefficient(chr_rel_cn)
+#                     # print(CHROM, chr_bc, cnfitter.is_unimodal(chr_rel_cn))
+#                     if chr_bc >= bc_thres:
+#                         # bc_out.append(chr_rel_cn)
+#                         bc_out.append(chr_rel_cn_seg)
+#                         bin_out.append(chr_bins)
+#                         chr_count += 1
+#             except:
+#                 continue
+#         else:
+#             continue
+#     ####### Building site #######
+#     bin_out = [x for xs in bin_out for x in xs]
+#     splits = []
+#     for CHROM in chr_names:
+#         # if CHROM in chr_skip:
+#         if CHROM in chr_skip_splits:
+#             continue
+#         c_min,c_max = min([x[2] for x in rel_cn if x[1] == CHROM]),max([x[3] for x in rel_cn if x[1] == CHROM])
+#         med=int((c_min+c_max-1)/2)
+#         splits.append([CHROM, med])
+#     for i in range(len(splits)):
+#         if i+1 < len(splits):
+#             # print(f'{splits[i][0]}-{splits[i+1][0]}')
+#             split_rel_cn = [x[-3] for x in rel_cn if (x[1] == splits[i][0] and x[2] > splits[i][1]) or (x[1] == splits[i+1][0] and x[2] <= splits[i+1][1])]
+#             split_rel_cn_seg = [x[-1] for x in rel_cn if (x[1] == splits[i][0] and x[2] > splits[i][1]) or (x[1] == splits[i+1][0] and x[2] <= splits[i+1][1])]
+#             split_bins = [x[0] for x in rel_cn if (x[1] == splits[i][0] and x[2] > splits[i][1]) or (x[1] == splits[i+1][0] and x[2] <= splits[i+1][1])]
+#             if min_copy_number is not None:
+#                 assert isinstance(min_copy_number, (int, float)) and np.isscalar(min_copy_number)
+#                 split_rel_cn = [cn for cn in split_rel_cn if cn >= min_copy_number]
+#             if max_copy_number is not None:
+#                 assert isinstance(max_copy_number, (int, float)) and np.isscalar(max_copy_number)
+#                 split_rel_cn = [cn for cn in split_rel_cn if cn <= max_copy_number]
+#             try:
+#                 if cnfitter.is_unimodal(split_rel_cn) == False:
+#                     print(f'{splits[i][0]}-{splits[i+1][0]}')
+#                     split_bc = cnfitter.bimodality_coefficient(split_rel_cn)
+#                     # print(CHROM, chr_bc, cnfitter.is_unimodal(chr_rel_cn))
+#                     if split_bc >= bc_thres:
+#                         # bc_out.append(split_rel_cn)
+#                         out_segs = []
+#                         for id,bin in enumerate(split_bins):
+#                             if bin not in bin_out:
+#                                 out_segs.append(split_rel_cn_seg[id])
+#                         bc_out.append(out_segs)
+#             except:
+#                 continue
+#     # based on bc_out estimate purity centre... 
+#     bc_out = [x for xs in bc_out for x in xs]
+#     # test if all chromosomes unimodal and define out:
+#     if len(bc_out) == 0:
+#         print("All chromosomes show unimodal distribution. Minimum purity = 0; maximum purity = 0.1")
+#         pur_centre = 0
+#     elif len(bc_out) != 0:
+#         try:
+#             dens_x,dens_y = cnfitter.r_density_default(bc_out, n=512)
+#             # Filter density by min/max copy number thresholds
+#             filtered_density = [(x, y) for x, y in zip(dens_x,dens_y) if (min_copy_number is None or x >= min_copy_number) and (max_copy_number is None or x <= max_copy_number)]
+#             # Finding maxima
+#             maxima = []
+#             for i in range(1, len(filtered_density) - 1):
+#                 if filtered_density[i][1] > filtered_density[i - 1][1] and filtered_density[i][1] > filtered_density[i + 1][1]:
+#                     maxima.append(filtered_density[i])
+#             # Filter maxima by lower_threshold
+#             maxima = [(x, d) for x, d in maxima if d >= lower_threshold * max(dens_y)]
+#         except:
+#             maxima = [(0,1)]
+#         # Select maxima with density > 0.2 and sort by density
+#         maxima_select = sorted([m for m in maxima if m[1] > dens_thres], key=lambda m: -m[1])
+#         # # PLOTTING
+#         # copy_number_array = np.array(bc_out)
+#         # plt.figure(figsize=(8, 5))
+#         # plt.hist(copy_number_array, bins=30, density=True, alpha=0.5, label="Histogram")
+#         # plt.plot(dens_x, dens_y, label="Density", color='blue')
+#         # for x, _ in maxima_select:
+#         #     plt.axvline(x=x, color='red', linestyle='--', label=f"Maxima at {x:.2f}")
+#         # plt.xlim(min_copy_number, max_copy_number)
+#         # plt.legend()
+#         # plt.show()
+#         # Compute pur_centre and estimate min and max purity search space
+#         if len(maxima_select) <= 1:
+#             print("unimodal distribution. Minimum purity = 0; maximum purity = 0.1")
+#             pur_centre = 0
+#         if len(maxima_select) == 2:
+#             pur_centre = abs(maxima_select[0][0] - maxima_select[1][0])
+#         if len(maxima_select) > 2:
+#             maxval = maxima_select[0][0]
+#             try:
+#                 # lowerval = max([m[0] for m in maxima_select[1:] if m[0] < maxval])
+#                 # lowerval = statistics.mean([m[0] for m in maxima_select[1:] if m[0] < maxval])
+#                 lowerval = min([m[0] for m in maxima_select[1:] if m[0] < maxval])
+#             except:
+#                 lowerval = None
+#             try:
+#                 # upperval = min([m[0] for m in maxima_select[1:] if m[0] > maxval])
+#                 # upperval = statistics.mean([m[0] for m in maxima_select[1:] if m[0] > maxval])
+#                 upperval = max([m[0] for m in maxima_select[1:] if m[0] > maxval])
+#             except:
+#                 upperval = None
+#             if upperval == None and lowerval != None:
+#                 pur_centre = abs(maxval-lowerval)
+#             elif upperval != None and lowerval == None:
+#                 pur_centre = abs(maxval-upperval)
+#             elif upperval != None and lowerval != None:
+#                 # pur_centre = max([abs(maxval-lowerval),abs(maxval-upperval)])
+#                 pur_centre = statistics.mean([abs(maxval-lowerval),abs(maxval-upperval)])
+#     pur_centre = 1 if pur_centre >= 1 else pur_centre   
+    
+#     # ### TEST smaller purity search space ## v1.0.0
+#     # minp = round(max(pur_centre-0.1,0),2)
+#     # # minp = round(max(pur_centre-0.15,0),2)
+#     # min_purity = 0 if minp <= 0.08 else minp
+#     # max_purity = round(min(pur_centre+0.1,1),2) if pur_centre >= 0.1 else round(min(pur_centre+pur_centre,1),2)
+#     # # max_purity = round(min(pur_centre+0.15,1),2) if pur_centre >= 0.15 else round(min(pur_centre+pur_centre,1),2)
+#     # max_purity = 0.1 if pur_centre == 0 or max_purity == 0 else max_purity
+#     # return(pur_centre,min_purity,max_purity)
+#     # # return(pur_centre,min_purity,max_purity,BC_out)
+
+#     ### TEST smaller purity search space ## v1.0.1
+#     # minp = round(max(pur_centre-cellularity_buffer,0),2)
+#     # min_purity = 0 if pur_centre <= 0.08 else minp
+#     min_purity = round(max(pur_centre-cellularity_buffer,0),2)
+#     max_purity = round(min(pur_centre+cellularity_buffer,1),2) if pur_centre >= cellularity_buffer else round(min(pur_centre+pur_centre,1),2)
+#     # max_purity = round(min(pur_centre+0.15,1),2) if pur_centre >= 0.15 else round(min(pur_centre+pur_centre,1),2)
+#     max_purity = 0.1 if pur_centre == 0 or max_purity == 0 else max_purity
+#     return(pur_centre,min_purity,max_purity)
+############################################
+
+# VERSION 2
 def define_purity_search_space(rel_cn,nmode,bc_thres,dens_thres,min_copy_number,max_copy_number,lower_threshold,cellularity_buffer):
     chr_names = list(dict.fromkeys([x[1] for x in rel_cn]))
-    # if normalisation mode == 'self', skip chromosomes 19-22 as more noise observed and results in incorrect purity estimation
     chr_skip = ['chrX','chrY','Y','X']
     if nmode == 'self':
         chr_skip += ['chr19','chr20','chr21','chr22','19','20','21','22']
@@ -66,7 +224,6 @@ def define_purity_search_space(rel_cn,nmode,bc_thres,dens_thres,min_copy_number,
                     chr_bc = cnfitter.bimodality_coefficient(chr_rel_cn)
                     # print(CHROM, chr_bc, cnfitter.is_unimodal(chr_rel_cn))
                     if chr_bc >= bc_thres:
-                        # bc_out.append(chr_rel_cn)
                         bc_out.append(chr_rel_cn_seg)
                         bin_out.append(chr_bins)
                         chr_count += 1
@@ -74,11 +231,9 @@ def define_purity_search_space(rel_cn,nmode,bc_thres,dens_thres,min_copy_number,
                 continue
         else:
             continue
-    ####### Building site #######
     bin_out = [x for xs in bin_out for x in xs]
     splits = []
     for CHROM in chr_names:
-        # if CHROM in chr_skip:
         if CHROM in chr_skip_splits:
             continue
         c_min,c_max = min([x[2] for x in rel_cn if x[1] == CHROM]),max([x[3] for x in rel_cn if x[1] == CHROM])
@@ -86,7 +241,6 @@ def define_purity_search_space(rel_cn,nmode,bc_thres,dens_thres,min_copy_number,
         splits.append([CHROM, med])
     for i in range(len(splits)):
         if i+1 < len(splits):
-            # print(f'{splits[i][0]}-{splits[i+1][0]}')
             split_rel_cn = [x[-3] for x in rel_cn if (x[1] == splits[i][0] and x[2] > splits[i][1]) or (x[1] == splits[i+1][0] and x[2] <= splits[i+1][1])]
             split_rel_cn_seg = [x[-1] for x in rel_cn if (x[1] == splits[i][0] and x[2] > splits[i][1]) or (x[1] == splits[i+1][0] and x[2] <= splits[i+1][1])]
             split_bins = [x[0] for x in rel_cn if (x[1] == splits[i][0] and x[2] > splits[i][1]) or (x[1] == splits[i+1][0] and x[2] <= splits[i+1][1])]
@@ -102,7 +256,6 @@ def define_purity_search_space(rel_cn,nmode,bc_thres,dens_thres,min_copy_number,
                     split_bc = cnfitter.bimodality_coefficient(split_rel_cn)
                     # print(CHROM, chr_bc, cnfitter.is_unimodal(chr_rel_cn))
                     if split_bc >= bc_thres:
-                        # bc_out.append(split_rel_cn)
                         out_segs = []
                         for id,bin in enumerate(split_bins):
                             if bin not in bin_out:
@@ -114,8 +267,8 @@ def define_purity_search_space(rel_cn,nmode,bc_thres,dens_thres,min_copy_number,
     bc_out = [x for xs in bc_out for x in xs]
     # test if all chromosomes unimodal and define out:
     if len(bc_out) == 0:
-        print("All chromosomes show unimodal distribution. Minimum purity = 0; maximum purity = 0.1")
-        pur_centre = 0
+        print(f"All chromosomes show unimodal distribution. Minimum purity = 0; maximum purity = {cellularity_buffer}")
+        dist = [0]
     elif len(bc_out) != 0:
         try:
             dens_x,dens_y = cnfitter.r_density_default(bc_out, n=512)
@@ -144,33 +297,43 @@ def define_purity_search_space(rel_cn,nmode,bc_thres,dens_thres,min_copy_number,
         # plt.show()
         # Compute pur_centre and estimate min and max purity search space
         if len(maxima_select) <= 1:
-            print("unimodal distribution. Minimum purity = 0; maximum purity = 0.1")
-            pur_centre = 0
+            print(f"unimodal distribution. Minimum purity = 0; maximum purity = {cellularity_buffer}")
+            dist = [0]
         if len(maxima_select) == 2:
-            pur_centre = abs(maxima_select[0][0] - maxima_select[1][0])
+            dist = [abs(maxima_select[0][0] - maxima_select[1][0])]
         if len(maxima_select) > 2:
             maxval = maxima_select[0][0]
             try:
                 # lowerval = max([m[0] for m in maxima_select[1:] if m[0] < maxval])
                 # lowerval = statistics.mean([m[0] for m in maxima_select[1:] if m[0] < maxval])
-                lowerval = min([m[0] for m in maxima_select[1:] if m[0] < maxval])
+                # lowerval = min([m[0] for m in maxima_select[1:] if m[0] < maxval])
+                lowerval = [m[0] for m in maxima_select[1:] if m[0] < maxval]
             except:
                 lowerval = None
             try:
                 # upperval = min([m[0] for m in maxima_select[1:] if m[0] > maxval])
                 # upperval = statistics.mean([m[0] for m in maxima_select[1:] if m[0] > maxval])
-                upperval = max([m[0] for m in maxima_select[1:] if m[0] > maxval])
+                # upperval = max([m[0] for m in maxima_select[1:] if m[0] > maxval])
+                upperval = [m[0] for m in maxima_select[1:] if m[0] > maxval]
             except:
                 upperval = None
             if upperval == None and lowerval != None:
-                pur_centre = abs(maxval-lowerval)
+                dist = [abs(maxval-x) for x in lowerval]
             elif upperval != None and lowerval == None:
-                pur_centre = abs(maxval-upperval)
+                dist = [abs(maxval-x) for x in upperval]
             elif upperval != None and lowerval != None:
+                lowerupper = lowerval + upperval
                 # pur_centre = max([abs(maxval-lowerval),abs(maxval-upperval)])
-                pur_centre = statistics.mean([abs(maxval-lowerval),abs(maxval-upperval)])
-    pur_centre = 1 if pur_centre >= 1 else pur_centre   
-    
+                # pur_centre = statistics.mean([abs(maxval-lowerval),abs(maxval-upperval)])
+                dist = [abs(maxval-x) for x in lowerupper]
+    pur_centre = statistics.mean(dist)
+    dist = [x for x in dist if x >= 0.5*pur_centre] 
+    pur_centre = statistics.mean(dist)
+    pur_centre = 1 if pur_centre >= 1 else pur_centre 
+    # min and max purities based on actual peaks... 
+    min_purity = round(max(min([x-cellularity_buffer for x in dist]),0),2) 
+    max_purity = round(min(max([x+cellularity_buffer for x in dist]),1),2) 
+    print(pur_centre,min_purity,max_purity)
     # ### TEST smaller purity search space ## v1.0.0
     # minp = round(max(pur_centre-0.1,0),2)
     # # minp = round(max(pur_centre-0.15,0),2)
@@ -184,12 +347,15 @@ def define_purity_search_space(rel_cn,nmode,bc_thres,dens_thres,min_copy_number,
     ### TEST smaller purity search space ## v1.0.1
     # minp = round(max(pur_centre-cellularity_buffer,0),2)
     # min_purity = 0 if pur_centre <= 0.08 else minp
-    min_purity = round(max(pur_centre-cellularity_buffer,0),2)
-    max_purity = round(min(pur_centre+cellularity_buffer,1),2) if pur_centre >= cellularity_buffer else round(min(pur_centre+pur_centre,1),2)
+    # min_purity = round(max(pur_centre-cellularity_buffer,0),2)
+    # max_purity = round(min(pur_centre+cellularity_buffer,1),2) if pur_centre >= cellularity_buffer else round(min(pur_centre+pur_centre,1),2)
     # max_purity = round(min(pur_centre+0.15,1),2) if pur_centre >= 0.15 else round(min(pur_centre+pur_centre,1),2)
-    max_purity = 0.1 if pur_centre == 0 or max_purity == 0 else max_purity
+    # max_purity = 0.1 if pur_centre == 0 or max_purity == 0 else max_purity
     return(pur_centre,min_purity,max_purity)
 
+
+
+############################################
 def process_log2r_input(log2r_cn_path):
     rel_copy_number = []
     with open(log2r_cn_path, "r") as file:
