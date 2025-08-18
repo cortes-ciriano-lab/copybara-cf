@@ -212,7 +212,9 @@ def parse_args(args):
     subparsers = global_parser.add_subparsers(title="subcommands", help='COPYBARA sub-commands', dest='command')
     subparsers.required = False
     
-    # copybara pon
+    ####
+    # arguments for copybara pon
+    ####
     pon_parser = subparsers.add_parser("pon", help="generate panel of normals from bam files for COPYBARA copy number analysis")
     pon_parser.add_argument('-i','--pon_list', nargs='?', type=str, default=None, required=True, help='Path to text file containing a list of bam files from which to build the panel of normals')
     pon_parser.add_argument('--pon_name', nargs='?', type=str, default='PoN', required=False, help='Name to prepend to PoN output file (default="PoN")')
