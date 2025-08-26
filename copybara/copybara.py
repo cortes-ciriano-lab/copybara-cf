@@ -17,6 +17,7 @@ from multiprocessing import cpu_count
 import pysam
 
 import copybara.bin_generator as bin_generator
+import copybara.focal_bin_generator as focal_bin_generator
 import copybara.read_counter as read_counter
 import copybara.pon_generator as pon_generator
 import copybara.smooth as smooth
@@ -40,6 +41,7 @@ Write code to estimate tMAD score!
 Gene mapping for genes of interest and categorise if gain amp loss del present 
 Correct tumour purity if purity 1 and ploidy 0 (or if completely flat profile, i.e. no changes present...)
 """
+#####
 def copybara_pon(args):
     """ main function for PoN generation """
     # print(f'blacklisting = {args.blacklisting}\nblacklist: {args.blacklist}')
@@ -103,7 +105,84 @@ def copybara_pon(args):
     helper.time_function("Performed read counting", checkpoints, time_str)
     helper.time_function("Total time to generate panel of normals", checkpoints, time_str, final=True)
 
+#####
+def copybara_focal(args):
+    """ main function for focal analysis and ecDNA detection in regions of interest (ROIs) """
+    # define function to process roi input
+    def process_rois(roi_path):
+    # function to read in regions of interest for focal amplification/ecDNA analysis
+        roi_list = []
+        with open(roi_path, "r") as file:
+            for line in file:
+                fields = line.strip().split("\t")
+                roi_length = int(fields[2])-int(fields[1])+1
+                roi_list.append([fields[0],int(fields[1]),int(fields[2]),fields[3], roi_length])
+        return roi_list
+    
+    # check arguments/parameters and define all required input
+    print(f'blacklisting = {args.blacklisting}\nblacklist: {args.blacklist}')
+    if not args.sample:
+        # set sample name to default
+        args.sample = os.path.splitext(os.path.basename(args.bam))[0]
+    print(f'Running as sample {args.sample}')
+    outdir = helper.check_outdir(args.outdir, args.overwrite, illegal=None)
 
+    # set number of threads to cpu count if none set
+    if not args.threads:
+        args.threads = cpu_count()
+
+    # set blacklisting parameter if not provided
+    if not args.blacklist:
+        args.blacklisting = False
+
+    # check if files are bam or cram (must have indices)
+    if args.bam.endswith('bam'): #and args.normal_bam.endswith('bam'):
+        args.is_cram = False
+        aln_files = {
+            'tbam': pysam.AlignmentFile(args.bam, "rb"),
+        }
+    elif args.bam.endswith('cram'): #and args.normal_bam.endswith('cram'):
+        args.is_cram = True
+        aln_files = {
+            'tbam': pysam.AlignmentFile(args.bam, "rc"),
+        }
+    else:
+        sys.exit('Unrecognized file extension. Input files must be BAM/CRAM.')
+
+    # confirm ref and ref fasta index exist
+    if not os.path.exists(args.ref):
+        sys.exit(f'Provided reference: "{args.ref}" does not exist. Please provide full path')
+    elif args.ref_index and not os.path.exists(args.ref_index):
+        sys.exit(f'Provided reference fasta index: "{args.ref_index}" does not exist. Please provide full path')
+    elif not os.path.exists(f'{args.ref}.fai'):
+        sys.exit(f'Default reference fasta index: "{args.ref}.fai" does not exist. Please provide full path')
+    else:
+        args.ref_index = f'{args.ref}.fai' if not args.ref_index else args.ref_index
+        print(f'Found {args.ref_index} to use as reference fasta index')
+
+    # initialize timing
+    checkpoints = [time()]
+    time_str = []
+    ###
+
+    # go through rois 
+    roi_list = process_rois(args.roi)
+    for roi in roi_list:
+        roi_name=roi[3]
+        print(f'*** Focal analysis for region: {roi_name} ***')
+        # outdir_reg=f"{outdir}/{roi_name}"
+        outdir_reg=helper.check_outdir(f"{outdir}/{roi_name}", args.overwrite, illegal=None)
+        # 1. generate annotated bin bed file 
+        bin_annotations_path = focal_bin_generator.generate_bins(outdir_reg, args.sample, args.ref, roi, args.roi_buffer, args.n_regions, args.chromosomes, args.blacklist)
+        helper.time_function("Binned reference genome", checkpoints, time_str)
+        # 2. count reads and normalise
+        read_counts_path,nmode,coverage = read_counter.count_reads(outdir_reg, args.bam, None, None ,args.sample, bin_annotations_path, args.ref, args.mapq, args.blacklisting, args.bl_threshold, args.bases_filter, args.bases_threshold, False, None, None, args.threads)
+        helper.time_function("Performed read counting", checkpoints, time_str)
+
+
+
+
+#####
 def copybara_main(args):
     """ main function for copy number analysis """
     print(f'blacklisting = {args.blacklisting}\nblacklist: {args.blacklist}')
@@ -226,15 +305,32 @@ def parse_args(args):
     pon_parser.add_argument('--overwrite', action='store_true', help='Use this flag to write to output directory even if files are present')
     pon_parser.add_argument('-w', '--cn_binsize', type=int, default=500, help='Bin window size in kbp (default=500)', required=False)
     pon_parser.add_argument('-c', '--chromosomes', nargs='+', default='all', help='Contigs/chromosomes to consider. (optional, default=all). To run only a subset of chromosomes, specify the chromosome numbers separated by spaces. For x and y chromosomes, use 23 and 24, respectively.  E.g. use "-c 1 4 23 24" to run chromosomes 1, 4, X and Y', required=False)
-    # pon_parser.add_argument('-bl', '--blacklist', type=str, help='Path to the blacklist file', required=False)
-    # pon_parser.add_argument('--blacklist_buffer', type=int, default=10000, help='Length of region (in bp) flanking the centromere to be excluded. (default = 10000)', required=False)
-    # pon_parser.add_argument('--no_blacklist', dest='blacklisting', action='store_false')
-    # pon_parser.set_defaults(blacklisting=True)
-    # pon_parser.add_argument('-blt', '--bl_threshold', type=int,  default='1', help='Percentage overlap between bin and blacklist threshold to tolerate for read counting (default = 0, i.e. no overlap tolerated). Please specify percentage threshold as integer, e.g. "-t 5" ', required=False)
-    # pon_parser.add_argument('--no_basesfilter', dest='bases_filter', action='store_false')
-    # pon_parser.set_defaults(bases_filter=True)
-    # pon_parser.add_argument('-bt', '--bases_threshold', type=int,  default='75', help='Percentage of known bases per bin required for read counting (default = 0, i.e. no filtering). Please specify percentage threshold as integer, e.g. "-bt 95" ', required=False)
     pon_parser.set_defaults(func=copybara_pon)
+
+    ####
+    # arguments for copybara focal
+    ####
+    focal_parser = subparsers.add_parser("focal", help="detect putative ecDNA/focal amplifications across regions of interest")
+    focal_parser.add_argument('-b', '--bam', nargs='?', type=str, required=True, help='BAM file (must have index)')
+    focal_parser.add_argument('--sample', nargs='?', type=str, help='Name to prepend to output files (default=tumour BAM filename without extension)')
+    focal_parser.add_argument('--roi', nargs='?', type=str, required=True, help='Full path to region list of interest for focal analysis (must be tsv or bed file in bed file format)')
+    focal_parser.add_argument('--roi_buffer', nargs='?', type=int, default=500000, required=False, help='Length of region (in bp) flanking the a given region of interest to be excluded from random background region sampling')
+    focal_parser.add_argument('--n_regions', nargs='?', type=int, default = 100, required=False, help='Number of random background regions to be sampled for computing of ROIs')    
+    focal_parser.add_argument('--ref', nargs='?', type=str, required=True, help='Full path to reference genome')
+    focal_parser.add_argument('--ref_index', nargs='?', type=str, required=False, help='Full path to reference genome fasta index (ref path + ".fai" by default)')
+    focal_parser.add_argument('--mapq', nargs='?', type=int, default=5, help='Minimum MAPQ to consider a read counting (default=5)')
+    focal_parser.add_argument('--threads', nargs='?', type=int, const=0, help='Number of threads to use (default=max)')
+    focal_parser.add_argument('--outdir', nargs='?', required=True, help='Output directory (can exist but must be empty)')
+    focal_parser.add_argument('--overwrite', action='store_true', help='Use this flag to write to output directory even if files are present')
+    focal_parser.add_argument('-c', '--chromosomes', nargs='+', default='all', help='Contigs/chromosomes to consider. (optional, default=all). To run only a subset of chromosomes, specify the chromosome numbers separated by spaces. For x and y chromosomes, use 23 and 24, respectively.  E.g. use "-c 1 4 23 24" to run chromosomes 1, 4, X and Y', required=False)
+    focal_parser.add_argument('-bl', '--blacklist', type=str, help='Path to the blacklist file', required=False)
+    focal_parser.add_argument('--no_blacklist', dest='blacklisting', action='store_false')
+    focal_parser.set_defaults(blacklisting=True)
+    focal_parser.add_argument('-blt', '--bl_threshold', type=int,  default='1', help='Percentage overlap between bin and blacklist threshold to tolerate for read counting (default = 0, i.e. no overlap tolerated). Please specify percentage threshold as integer, e.g. "-t 5" ', required=False)
+    focal_parser.add_argument('--no_basesfilter', dest='bases_filter', action='store_false')
+    focal_parser.set_defaults(bases_filter=True)
+    focal_parser.add_argument('-bt', '--bases_threshold', type=int,  default='75', help='Percentage of known bases per bin required for read counting (default = 0, i.e. no filtering). Please specify percentage threshold as integer, e.g. "-bt 95" ', required=False)
+    focal_parser.set_defaults(func=copybara_focal)
 
     try:
         global_parser.exit_on_error = False
@@ -244,7 +340,7 @@ def parse_args(args):
         subparser = None
 
     ####
-    # arguments for default copybara run
+    # arguments for default/main copybara run
     ####
     if not subparser:
         global_parser.add_argument('-b', '--bam', nargs='?', type=str, required=True, help='BAM file (must have index)')
@@ -299,8 +395,8 @@ def parse_args(args):
         global_parser.set_defaults(size_select=False)
         global_parser.add_argument('--min_read_size', type=int, nargs='+', required=False, help='minimum read size for size selection prior to copy number analysis. Provide multiple values if looking to combine multiple sizes.')
         global_parser.add_argument('--max_read_size', type=int, nargs='+', required=False, help='maximum read size for size selection prior to copy number analysis. Provide multiple values if looking to combine multiple sizes.')
-        global_parser.set_defaults(func=copybara_main)
         global_parser.add_argument('--no_plot_points', type=int, default=7500 ,required=False, help='Number of points to plot, e.g. downsampling when small binsize is used for cleaner visuals. (default = 10000).')
+        global_parser.set_defaults(func=copybara_main)
         parsed_args = global_parser.parse_args() if not args else global_parser.parse_args(args)
     else:
         global_parser.exit_on_error = True

@@ -15,25 +15,21 @@ from intervaltree import IntervalTree
 #----
 # Define functions
 #----
-# def overlaps(a, b):
-#     '''
-#     Function to estimate overlaps between two regions
-#     '''
-#     return min(a[1], b[1]) - max(a[0], b[0]) + 1
 
-def process_rois(roi_path):
-    '''
-    Function to read in regions of interest for focal amplification/ecDNA analysis
-    '''
-    roi_list = []
-    with open(roi_path, "r") as file:
-        for line in file:
-            fields = line.strip().split("\t")
-            roi_length = int(fields[2])-int(fields[1])+1
-            roi_list.append([fields[0],int(fields[1]),int(fields[2]),fields[3], roi_length])
-    return roi_list
+# def process_rois(roi_path):
+#     '''
+#     Function to read in regions of interest for focal amplification/ecDNA analysis
+#     '''
+#     roi_list = []
+#     with open(roi_path, "r") as file:
+#         for line in file:
+#             fields = line.strip().split("\t")
+#             roi_length = int(fields[2])-int(fields[1])+1
+#             roi_list.append([fields[0],int(fields[1]),int(fields[2]),fields[3], roi_length])
+#     return roi_list
 
 def sample_region(size, chrom_sizes, blacklists):
+    '''Function to randomly select random regions of equal size across the genome.'''
     chosen = {chrom: IntervalTree() for chrom in chrom_sizes}
     while True:
         chrom = random.choices(list(chrom_sizes.keys()), weights=chrom_sizes.values())[0]
@@ -46,15 +42,14 @@ def sample_region(size, chrom_sizes, blacklists):
             # calculate gc content 
             return chrom, start, end
 
-def generate_bins(outdir, sample, ref, roi, roi_buffer, n_regions, chromosomes, blacklist, blacklist_buffer, threads):
+def generate_bins(outdir, sample, ref, roi, roi_buffer, n_regions, chromosomes, blacklist): #, threads):
     '''
     Main function to process fasta file and generate bins for focal analysis based on regions of interest
     '''
-    # check and define threads
-    new_threads = min(threads, cpu_count())
-    print(f"... Bin generator will use threads = {new_threads}. (threads = {threads} defined; threads = {cpu_count()} available) ...")
-    threads = new_threads
-
+    # # check and define threads
+    # new_threads = min(threads, cpu_count())
+    # print(f"... Bin generator will use threads = {new_threads}. (threads = {threads} defined; threads = {cpu_count()} available) ...")
+    # threads = new_threads
     # Extract chormosome info and pass fasta file into chr_in list
     fasta = pysam.FastaFile(ref)
     # contigs = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','X','Y']
@@ -72,10 +67,9 @@ def generate_bins(outdir, sample, ref, roi, roi_buffer, n_regions, chromosomes, 
         chrom_sizes[chrom] = fasta.get_reference_length(chrom)
     # chr_in = [[chrom,fasta.get_reference_length(chrom),ref,bin_size,blacklist,blacklist_buffer] for chrom in chr_names]
     # fasta.close()
-    
     roi_name = roi[3]
     bin_size = roi[4]
-
+    # prep blacklist
     blacklisted_regions = {chrom: IntervalTree() for chrom in chrom_sizes}
     # add in blacklist to only include regions without blacklist overlap if provided
     if (blacklist is not None):
@@ -84,22 +78,18 @@ def generate_bins(outdir, sample, ref, roi, roi_buffer, n_regions, chromosomes, 
                 chrom, start, end = line.strip().split()[:3]
                 if chrom in blacklisted_regions.keys():
                     blacklisted_regions[chrom].addi(int(start), int(end))
-        # blist = pybedtools.BedTool(blacklist)
-        # blist = [[row[0], int(row[1])-int(blacklist_buffer), int(row[2])+int(blacklist_buffer)] for row in blist]
-        # blacklisted_regions.append(blist)
     else:
         pass
     blacklisted_regions[roi[0]].addi(int(roi[1])-roi_buffer, int(roi[2])+roi_buffer)
-
     # randomly choose regions
     regions = [sample_region(bin_size, chrom_sizes, blacklisted_regions) for _ in range(n_regions)]
     # add in region of interest
     regions.append((roi[0], roi[1], roi[2]))
-
+    # prepare output
     List_of_bins = []
     for r in regions:
         chrom,start,end=r
-        overlap_pct = 0
+        overlap_pct = float(0)
         chr_bin_seq = fasta.fetch(chrom, start, end)
         acgt_len = 0
         gc_len = 0
@@ -110,19 +100,21 @@ def generate_bins(outdir, sample, ref, roi, roi_buffer, n_regions, chromosomes, 
                 gc_len += 1
         chr_bases = acgt_len / bin_size * 100
         gc_content = gc_len / bin_size
-
+        #out
         if blacklist is not None:
             List_of_bins.append([chrom, str(start), str(end), str(gc_content), str(chr_bases), str(overlap_pct)])
         else:
             List_of_bins.append([chrom, str(start), str(end), str(gc_content), str(chr_bases)])
+    # Concat results into a single bed file
+    outfile_name = f"{outdir}/focal_regions_{sample}.bed"
+    outfile = open(outfile_name, "w")
+    for r in List_of_bins:
+        Line = '\t'.join(r) + '\n'
+        outfile.write(Line)
+    outfile.close()
+    #
+    return outfile_name
 
-
-    # also add in minimum region size??
-    # plotting and estimation/plus stats test...
-    
-
-#### building site ###
-#then write function to pick random regions!!! 
 
     
 
