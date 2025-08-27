@@ -5,32 +5,19 @@ Python 3.9.7
 Carolin Sauer
 """
 
-from multiprocessing import Pool
-from multiprocessing import cpu_count
-import pybedtools
 import pysam
 import random
 from intervaltree import IntervalTree
+import re
 
 #----
 # Define functions
 #----
 
-# def process_rois(roi_path):
-#     '''
-#     Function to read in regions of interest for focal amplification/ecDNA analysis
-#     '''
-#     roi_list = []
-#     with open(roi_path, "r") as file:
-#         for line in file:
-#             fields = line.strip().split("\t")
-#             roi_length = int(fields[2])-int(fields[1])+1
-#             roi_list.append([fields[0],int(fields[1]),int(fields[2]),fields[3], roi_length])
-#     return roi_list
-
-def sample_region(size, chrom_sizes, blacklists):
+def sample_region(size, chrom_sizes, blacklists, seed_val):
     '''Function to randomly select random regions of equal size across the genome.'''
     chosen = {chrom: IntervalTree() for chrom in chrom_sizes}
+    random.seed(seed_val)
     while True:
         chrom = random.choices(list(chrom_sizes.keys()), weights=chrom_sizes.values())[0]
         max_start = chrom_sizes[chrom] - size
@@ -41,6 +28,26 @@ def sample_region(size, chrom_sizes, blacklists):
             chosen[chrom].addi(start, end)
             # calculate gc content 
             return chrom, start, end
+        
+def chr_key(chr_name):
+    '''function to allow sorting of chromosomes'''
+    # If it's already an integer, return it directly
+    if isinstance(chr_name, int):
+        return chr_name
+    # If it's a string, normalize
+    m = re.match(r'chr(\d+|X|Y|M)', chr_name)
+    if m:
+        val = m.group(1)
+        if val == 'X':
+            return 23
+        elif val == 'Y':
+            return 24
+        elif val == 'M':
+            return 25
+        else:
+            return int(val)
+    return 999  # in case of unusual names
+
 
 def generate_bins(outdir, sample, ref, roi, roi_buffer, n_regions, chromosomes, blacklist): #, threads):
     '''
@@ -82,9 +89,11 @@ def generate_bins(outdir, sample, ref, roi, roi_buffer, n_regions, chromosomes, 
         pass
     blacklisted_regions[roi[0]].addi(int(roi[1])-roi_buffer, int(roi[2])+roi_buffer)
     # randomly choose regions
-    regions = [sample_region(bin_size, chrom_sizes, blacklisted_regions) for _ in range(n_regions)]
+    regions = [sample_region(bin_size, chrom_sizes, blacklisted_regions, _) for _ in range(n_regions)]
     # add in region of interest
     regions.append((roi[0], roi[1], roi[2]))
+    # sort regions
+    regions = sorted(regions, key=lambda r: (chr_key(r[0]), r[1], r[2]))
     # prepare output
     List_of_bins = []
     for r in regions:
@@ -114,22 +123,3 @@ def generate_bins(outdir, sample, ref, roi, roi_buffer, n_regions, chromosomes, 
     outfile.close()
     #
     return outfile_name
-
-
-    
-
-
-
-
-# add in blacklist as dictionary by chromosome
-
-# function to randomly choose chromosome and start position from reference fasta + roi_length that do not overlap with blacklist or ROI+buffer
-
-
-# once all regions and background regions are defined: 
-    ## count reads
-    ## filter (no 0s)
-    ## GC correct
-    ## self normalise
-    ## estimate CN change separation and test for significance
-    ## plot and generate output

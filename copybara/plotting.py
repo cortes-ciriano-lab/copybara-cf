@@ -8,6 +8,8 @@ Carolin Sauer
 import matplotlib.pyplot as plt
 import random
 
+import copybara.cn_functions as cnfitter
+
 # plotting
 def plotting(bin_data, seg_data, offsets, cat_colours, meta, outdir):
 # def plotting(bin_data, seg_data, offsets, goi_list, cat_colours, gene_colour, meta, outdir):
@@ -193,3 +195,132 @@ def plot_copy_number(absolute_cn_path, log2r_cn_path, cn_fit_path, sample, no_pl
     # plot data 
     # plotting(bin_data, seg_data, offsets, goi_list, cat_colours, gene_colour, meta, outdir)
     plotting(bin_data, seg_data, offsets, cat_colours, meta, outdir)
+
+
+### focal region plotting ###
+def focal_plotting(outdir, meta, offsets, cat_colours, region_data, roi_coords, density_points):
+    # Prepare figure
+    sample,roi_name = meta['sample'],meta['roi_name']
+    title = f"{sample} | region: {roi_name}"
+    subtitle = f"CN change separation={meta['cnsep']}; T-statistic={meta['T']}; p={meta['pval']}"
+    fig_name = f"{outdir}/{sample}_focal_analysis_{roi_name}.pdf"
+    fig = plt.figure(figsize=(7, 2))
+    gs = fig.add_gridspec(1, 2, width_ratios=[6, 1], wspace=0)
+    p_main = fig.add_subplot(gs[0])
+    p_side = fig.add_subplot(gs[1], sharey=p_main)
+    # plot roi cross
+    p_main.axvline(x=roi_coords[0]+offsets[roi_coords[2]]['offset'], color=cat_colours['roi'], linewidth=0.75)
+    p_main.axhline(y=roi_coords[1], color=cat_colours['roi'], linewidth=0.75)
+    # prepare chromosome input fpr plotting
+    chromosomes = list(dict.fromkeys(offsets))
+    chr_label = [x.replace('chr','') for x in chromosomes]
+    midpoints = []
+    chr_limits = []
+    # Plot each chromosome
+    for chrom in chromosomes:
+        # offsets
+        x_offset = offsets[chrom]['offset']
+        midpoints.append(offsets[chrom]['mid'])
+        chr_limits.append(offsets[chrom]['end'])            
+        # Filter data for the current chromosome
+        bins = [d for d in region_data if d['chrom'] == chrom]
+        # Plot Region log2R Data
+        for cat, col in cat_colours.items():
+            subset = [d for d in bins if d['category'] == cat]
+            POS = [x_offset + d['pos'] for d in subset]
+            CN = [d['binned'] for d in subset]
+            # scatter bins
+            p_main.scatter(
+                POS,
+                CN,
+                color=col,
+                s=1 if cat == 'background' else 4,
+                alpha=0.75
+            )
+    chr_limits=chr_limits[:-1]
+    # Customizing the plot
+    # plt.ylim(-3, 3)
+    for lim in chr_limits:
+        p_main.axvline(x=lim, color='black', linewidth=0.5)
+    p_main.set_xlabel('Chromosome',fontsize=6)
+    p_main.set_ylabel('Copy number (log2R)',fontsize=6)
+    p_main.set_xticks(midpoints, chr_label,fontsize=5)
+    p_main.text(0.0, 1.05, title, fontsize=7, ha='left', va='bottom', transform=p_main.transAxes)
+    p_main.text(1.0, 1.05, subtitle, fontsize=7, ha='right', va='bottom', transform=p_main.transAxes)
+    p_main.tick_params(axis='y', labelsize=5)
+    p_main.grid(False)
+    p_main.margins(y=0)
+    p_main.margins(x=0.01)
+    p_main.set_xlim(p_main.get_xlim()[0], p_main.get_xlim()[1])
+    ## add in side density plot ##
+    y_vals, density = zip(*density_points)
+    p_side.fill_betweenx(y_vals, 0, density, color=cat_colours['background'], alpha=0.6)
+    p_side.plot(density, y_vals, color=cat_colours['background'], linewidth=0.5)
+    p_side.axhline(y=roi_coords[1], color=cat_colours['roi'], linewidth=0.75)
+    p_side.set_xlabel('Density', fontsize=6)
+    p_side.tick_params(axis='y', left=False, labelleft=False)
+    p_side.tick_params(axis='x', bottom=False, labelbottom=False)
+    p_side.spines['right'].set_visible(False)
+    p_side.spines['top'].set_visible(False)
+    p_side.spines['bottom'].set_visible(False)
+    # plot asthetics
+    plt.yticks(fontsize=5)
+    plt.xticks(fontsize=5)
+    plt.margins(x=0) 
+    plt.tight_layout()  
+    # plt.title(title,fontsize=7, loc='center')
+    # plt.title(subtitle,fontsize=7)
+    # Save plot
+    plt.savefig(fig_name, dpi=300)
+    plt.close()
+
+def label_pvalue(pval):
+    pval = float(pval)
+    if pval <= 0.0001:
+        plab = '≤0.0001****'
+    elif pval <= 0.001:
+        plab = '≤0.001***'
+    elif pval <= 0.01:
+        plab = '≤0.01**'
+    elif pval <= 0.05:
+        plab = '≤0.05*'
+    elif pval > 0.05:
+        plab = 'NS'
+    return plab
+    
+def plot_focal_results(focal_cn, focal_out, sample, outdir):
+    # prepare input data
+    ## meta data
+    meta = {'sample': sample,
+            'roi_name': focal_out[3],
+            'T': round(float(focal_out[8]),3),
+            'pval': label_pvalue(float(focal_out[9])),
+            'cnsep': round(float(focal_out[10]),3) if focal_out[10] != 'None' else focal_out[10]}
+    ## cn data
+    roi_coords = ( (int(focal_out[1])+int(focal_out[2])-1)/2 , float(focal_out[4]), focal_out[0])
+    region_data = []
+    for line in focal_cn:
+        chr, start, end, position, bin_cn = line[1], int(line[2]), int(line[3]), (int(line[2])+int(line[3])-1)/2, float(line[-1])
+        label = line[-2] if line[-2] != "background" else None
+        bin_cat = line[-2] if line[-2] == "background" else "roi"
+        region_data.append({'chrom':chr,
+                            'pos':float(position),
+                            'start':start,
+                            'end':end,
+                            'binned': bin_cn,
+                            'label': label,
+                            'category': bin_cat})
+    # chromosome offsets
+    offsets = calc_chrom_offset(region_data)
+    # colours
+    cat_colours = {
+        'background': '#A9A9A9',
+        'roi': '#CC79A7'
+    }
+    # get density data for side plot
+    bg_cn = [float(x[-1]) for x in focal_cn if x[-2] == "background"]
+    dens_x,dens_y = cnfitter.r_density_default(bg_cn, n=512)
+    density_points = [(x, y) for x, y in zip(dens_x,dens_y)]
+    # plot
+    focal_plotting(outdir, meta, offsets, cat_colours, region_data, roi_coords, density_points)
+    

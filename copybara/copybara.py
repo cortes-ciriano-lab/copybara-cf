@@ -19,6 +19,7 @@ import pysam
 import copybara.bin_generator as bin_generator
 import copybara.focal_bin_generator as focal_bin_generator
 import copybara.read_counter as read_counter
+import copybara.focal_analyse as focal_analyse
 import copybara.pon_generator as pon_generator
 import copybara.smooth as smooth
 import copybara.segment as segment
@@ -119,6 +120,15 @@ def copybara_focal(args):
                 roi_list.append([fields[0],int(fields[1]),int(fields[2]),fields[3], roi_length])
         return roi_list
     
+    def output_roi_summary(roi_summary, outdir, sample):
+        header=['chromosome','start','end', 'region', 'log2r_copynumber', 'background_mean', 'background_sd', 'df', 'T', 'p-val', 'cn_change_sep']
+        outfile = open(f"{outdir}/{sample}_focal_analysis_summary_stats.tsv", "w")
+        outfile.write('\t'.join(header)+'\n')
+        for r in roi_summary:
+            Line = '\t'.join(r) + '\n'
+            outfile.write(Line)
+        outfile.close()
+    
     # check arguments/parameters and define all required input
     print(f'blacklisting = {args.blacklisting}\nblacklist: {args.blacklist}')
     if not args.sample:
@@ -167,6 +177,7 @@ def copybara_focal(args):
 
     # go through rois 
     roi_list = process_rois(args.roi)
+    roi_summary = []
     for roi in roi_list:
         roi_name=roi[3]
         print(f'*** Focal analysis for region: {roi_name} ***')
@@ -178,8 +189,17 @@ def copybara_focal(args):
         # 2. count reads and normalise
         read_counts_path,nmode,coverage = read_counter.count_reads(outdir_reg, args.bam, None, None ,args.sample, bin_annotations_path, args.ref, args.mapq, args.blacklisting, args.bl_threshold, args.bases_filter, args.bases_threshold, False, None, None, args.threads)
         helper.time_function("Performed read counting", checkpoints, time_str)
-
-
+        # 3. analyse focal readcounts
+        dens_thres=0.2
+        lower_threshold=0   
+        focal_cn,focal_out =focal_analyse.analyse_focal(outdir_reg, args.sample, read_counts_path, args.blacklisting, roi, lower_threshold, dens_thres)
+        roi_summary.append(focal_out)
+        # 4. plotting output
+        plotting.plot_focal_results(focal_cn, focal_out, args.sample, outdir_reg)
+        helper.time_function("Performed focal analysis and visualisation", checkpoints, time_str)
+    # prepare and output all roi out data
+    output_roi_summary(roi_summary, outdir, args.sample)
+    helper.time_function("Total time to perform focal analysis", checkpoints, time_str, final=True) 
 
 
 #####
@@ -315,7 +335,7 @@ def parse_args(args):
     focal_parser.add_argument('--sample', nargs='?', type=str, help='Name to prepend to output files (default=tumour BAM filename without extension)')
     focal_parser.add_argument('--roi', nargs='?', type=str, required=True, help='Full path to region list of interest for focal analysis (must be tsv or bed file in bed file format)')
     focal_parser.add_argument('--roi_buffer', nargs='?', type=int, default=500000, required=False, help='Length of region (in bp) flanking the a given region of interest to be excluded from random background region sampling')
-    focal_parser.add_argument('--n_regions', nargs='?', type=int, default = 100, required=False, help='Number of random background regions to be sampled for computing of ROIs')    
+    focal_parser.add_argument('--n_regions', nargs='?', type=int, default = 1000, required=False, help='Number of random background regions to be sampled for computing of ROIs')    
     focal_parser.add_argument('--ref', nargs='?', type=str, required=True, help='Full path to reference genome')
     focal_parser.add_argument('--ref_index', nargs='?', type=str, required=False, help='Full path to reference genome fasta index (ref path + ".fai" by default)')
     focal_parser.add_argument('--mapq', nargs='?', type=int, default=5, help='Minimum MAPQ to consider a read counting (default=5)')
