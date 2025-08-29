@@ -47,7 +47,6 @@ def count_reads_in_curr_bin(bam, chrom, start, end, readcount_mapq, size_select,
 
 def binned_read_counting(curr_chunk, bed_chunk, alns, nmode, blacklisting, bl_threshold, bases_filter, bases_threshold, readcount_mapq, size_select, min_read_size, max_read_size):
     print(f"    Read counting {curr_chunk} ...")
-
     # Open the BAM file using pysam
     bam_T = pysam.AlignmentFile(alns['tumour'], "rb")
     bam_N = pysam.AlignmentFile(alns['normal'], "rb") if nmode == "mnorm" and len(alns) == 2 else None
@@ -59,7 +58,6 @@ def binned_read_counting(curr_chunk, bed_chunk, alns, nmode, blacklisting, bl_th
             for line in file:
                 fields = line.strip().split("\t")
                 pon_dict[fields[0]] = fields[1]
-   
     # initiate read counter
     chr_read_counts = []
     for bin in bed_chunk:
@@ -74,7 +72,7 @@ def binned_read_counting(curr_chunk, bed_chunk, alns, nmode, blacklisting, bl_th
                     use = True
                 else:
                     use = False
-
+        # 
         elif blacklisting == True:
             blacklist = float(bin[5])
             if bases_filter == False:
@@ -95,14 +93,11 @@ def binned_read_counting(curr_chunk, bed_chunk, alns, nmode, blacklisting, bl_th
             chunk_read_count_N = pon_dict[bin_name]
         else:
             chunk_read_count_N = None
-
         # chunk_read_count_N = count_reads_in_curr_bin(bam_N, chrom, start, end, readcount_mapq) if bam_N else None
-
         if blacklisting == True:
             chr_read_counts.append([bin_name, chrom, str(start), str(end), str(gc), str(bases), str(blacklist), str(use), str(chunk_read_count_T), str(chunk_read_count_N)])
         else:
             chr_read_counts.append([bin_name, chrom, str(start), str(end), str(gc), str(bases), str(use), str(chunk_read_count_T), str(chunk_read_count_N)])
-
         # # replace None values (lack of matched normal) with PoN count values if provided. PoN will need to be generated seperately, using the same bin size.
         # if nmode == "pon": 
         #     print('         PoN read counts being added for normalisation')
@@ -111,7 +106,6 @@ def binned_read_counting(curr_chunk, bed_chunk, alns, nmode, blacklisting, bl_th
         #     if len(PoN) == len(chr_read_counts):
         #         for id,r in enumerate(chr_read_counts):
         #             r[-1] = PoN[id][-1]
-
     # Close BAM file and return out
     bam_T.close()
     if bam_N is not None:
@@ -187,6 +181,7 @@ def filter_correct_normalise(nmode, countData):
     if nmode == "self":
         filtered_counts = [x for x in countData if x[-3] == 'True' and float(x[-2]) != 0]
         gc_cor_counts = gc_correct_counts(filtered_counts, nmode) # gc correct raw read counts
+        gc_cor_counts = [x for x in gc_cor_counts if float(x[-2]) > 0] # remove regions > 0 after gc correction
         med_self = statistics.median([float(x[-2]) for x in gc_cor_counts]) #estimate genome wide median for selfnormalisation
         # Normalise and log2 transform
         normalised_counts = copy.deepcopy(gc_cor_counts)
@@ -196,6 +191,7 @@ def filter_correct_normalise(nmode, countData):
     elif nmode == "mnorm" or nmode == "pon":
         filtered_counts = [x for x in countData if x[-3] == 'True' and float(x[-2]) != 0 and float(x[-1]) != 0]
         gc_cor_counts = gc_correct_counts(filtered_counts, nmode) # gc correct raw read counts
+        gc_cor_counts = [x for x in gc_cor_counts if float(x[-2]) > 0] # remove regions < 0 after gc correction
         # cov_scaler = statistics.median([math.log2(int(x[-2])/int(x[-1])) for x in filtered_counts])
         cov_scaler = math.log2(statistics.median([(float(x[-2])/float(x[-1])) for x in gc_cor_counts]))
         normalised_counts = copy.deepcopy(gc_cor_counts)

@@ -209,8 +209,11 @@ def focal_plotting(outdir, meta, offsets, cat_colours, region_data, roi_coords, 
     p_main = fig.add_subplot(gs[0])
     p_side = fig.add_subplot(gs[1], sharey=p_main)
     # plot roi cross
-    p_main.axvline(x=roi_coords[0]+offsets[roi_coords[2]]['offset'], color=cat_colours['roi'], linewidth=0.75)
-    p_main.axhline(y=roi_coords[1], color=cat_colours['roi'], linewidth=0.75)
+    if roi_coords != None:
+        p_main.axvline(x=roi_coords[0]+offsets[roi_coords[2]]['offset'], color=cat_colours['roi'], linewidth=0.75)
+        p_main.axhline(y=roi_coords[1], color=cat_colours['roi'], linewidth=0.75)
+        if density_points != None:
+            p_side.axhline(y=roi_coords[1], color=cat_colours['roi'], linewidth=0.75)
     # prepare chromosome input fpr plotting
     chromosomes = list(dict.fromkeys(offsets))
     chr_label = [x.replace('chr','') for x in chromosomes]
@@ -253,11 +256,11 @@ def focal_plotting(outdir, meta, offsets, cat_colours, region_data, roi_coords, 
     p_main.margins(x=0.01)
     p_main.set_xlim(p_main.get_xlim()[0], p_main.get_xlim()[1])
     ## add in side density plot ##
-    y_vals, density = zip(*density_points)
-    p_side.fill_betweenx(y_vals, 0, density, color=cat_colours['background'], alpha=0.6)
-    p_side.plot(density, y_vals, color=cat_colours['background'], linewidth=0.5)
-    p_side.axhline(y=roi_coords[1], color=cat_colours['roi'], linewidth=0.75)
-    p_side.set_xlabel('Density', fontsize=6)
+    if density_points != None:
+        y_vals, density = zip(*density_points)
+        p_side.fill_betweenx(y_vals, 0, density, color=cat_colours['background'], alpha=0.6)
+        p_side.plot(density, y_vals, color=cat_colours['background'], linewidth=0.5)
+        p_side.set_xlabel('Density', fontsize=6)
     p_side.tick_params(axis='y', left=False, labelleft=False)
     p_side.tick_params(axis='x', bottom=False, labelbottom=False)
     p_side.spines['right'].set_visible(False)
@@ -293,11 +296,11 @@ def plot_focal_results(focal_cn, focal_out, sample, outdir):
     ## meta data
     meta = {'sample': sample,
             'roi_name': focal_out[3],
-            'T': round(float(focal_out[8]),3),
-            'pval': label_pvalue(float(focal_out[9])),
-            'cnsep': round(float(focal_out[10]),3) if focal_out[10] != 'None' else focal_out[10]}
+            'T': round(float(focal_out[8]),3) if focal_out[8] not in ['None', 'NA'] else focal_out[8],
+            'pval': label_pvalue(float(focal_out[9])) if focal_out[9] not in ['None', 'NA'] else focal_out[9],
+            'cnsep': round(float(focal_out[10]),3) if focal_out[10] not in ['None', 'NA'] else focal_out[10]}
     ## cn data
-    roi_coords = ( (int(focal_out[1])+int(focal_out[2])-1)/2 , float(focal_out[4]), focal_out[0])
+    roi_coords = ( (int(focal_out[1])+int(focal_out[2])-1)/2 , float(focal_out[4]), focal_out[0]) if focal_out[4] != 'NA' else None
     region_data = []
     for line in focal_cn:
         chr, start, end, position, bin_cn = line[1], int(line[2]), int(line[3]), (int(line[2])+int(line[3])-1)/2, float(line[-1])
@@ -319,8 +322,12 @@ def plot_focal_results(focal_cn, focal_out, sample, outdir):
     }
     # get density data for side plot
     bg_cn = [float(x[-1]) for x in focal_cn if x[-2] == "background"]
-    dens_x,dens_y = cnfitter.r_density_default(bg_cn, n=512)
-    density_points = [(x, y) for x, y in zip(dens_x,dens_y)]
+    try:
+        dens_x,dens_y = cnfitter.r_density_default(bg_cn, n=512)
+        density_points = [(x, y) for x, y in zip(dens_x,dens_y)]
+    except:
+        print(f"density could not be computed. values of n = {len(bg_cn)} sampled.")
+        density_points = None
     # plot
     focal_plotting(outdir, meta, offsets, cat_colours, region_data, roi_coords, density_points)
     

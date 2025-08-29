@@ -62,18 +62,22 @@ def roi_prediction_test(roi_cn, bg_cn, lower_threshold, dens_thres, p_thres = 0.
     return dict(mean_bg=mean_bg, sd_bg=sd, df=n_bg-1, T=T, p=p, cnsep=cnsep)
 
 def estimate_CN_change_sep(roi_cn, bg_cn, lower_threshold, dens_thres):
-    dens_x,dens_y = cnfitter.r_density_default(bg_cn, n=512)
-    density = [(x, y) for x, y in zip(dens_x,dens_y)]
-    # Finding maxima
-    maxima = []
-    for i in range(1, len(density) - 1):
-        if density[i][1] > density[i - 1][1] and density[i][1] > density[i + 1][1]:
-            maxima.append(density[i])
-    # Filter maxima by lower_threshold
-    maxima = [(x, d) for x, d in maxima if d >= lower_threshold * max(dens_y)]
-    maxima_select = sorted([m for m in maxima if m[1] > dens_thres], key=lambda m: -m[1])
-    # estimate cn change sep
-    cnsep = abs(maxima_select[0][0] - roi_cn)
+    try:
+        dens_x,dens_y = cnfitter.r_density_default(bg_cn, n=512)
+        density = [(x, y) for x, y in zip(dens_x,dens_y)]
+        # Finding maxima
+        maxima = []
+        for i in range(1, len(density) - 1):
+            if density[i][1] > density[i - 1][1] and density[i][1] > density[i + 1][1]:
+                maxima.append(density[i])
+        # Filter maxima by lower_threshold
+        maxima = [(x, d) for x, d in maxima if d >= lower_threshold * max(dens_y)]
+        maxima_select = sorted([m for m in maxima if m[1] > dens_thres], key=lambda m: -m[1])
+        # estimate cn change sep
+        cnsep = abs(maxima_select[0][0] - roi_cn)
+    except:
+        print(f"CN change separation could not be estimated due to insufficient read/read distribution. Moving on...")
+        cnsep = None
     return cnsep
 
 def analyse_focal(outdir, sample, read_counts_path, blacklisting, roi, lower_threshold, dens_thres):
@@ -83,20 +87,27 @@ def analyse_focal(outdir, sample, read_counts_path, blacklisting, roi, lower_thr
     # process input data and annotate with region name
     in_data = process_read_counts(read_counts_path, roi_annot, blacklisting)
     roi_read_count = flatten([x for x in in_data if x[-2] == roi_name])
-    # compute statistics and summary values and estimate cn change separation
-    bg_cn = [float(x[-1]) for x in in_data if x[-2] == "background"]
-    roi_cn = float(roi_read_count[-1])
-    roi_stats = roi_prediction_test(roi_cn, bg_cn, lower_threshold, dens_thres, p_thres=0.05, alternative="greater")
-    # prepare main out
-    select = [1,2,3,-2,-1]
-    out = [roi_read_count[i] for i in select] + [str(x) for x in roi_stats.values()]
+     # check if roi in in_data:
+    if len(roi_read_count) == 0:
+        print(f"no reads found in region: {roi_name}")
+        out = [str(x) for x in roi[0:4]] + ['NA','NA','NA','NA','NA','NA','NA']
+        make_plot = False
+    elif len(roi_read_count) > 0:
+        # compute statistics and summary values and estimate cn change separation
+        bg_cn = [float(x[-1]) for x in in_data if x[-2] == "background"]
+        roi_cn = float(roi_read_count[-1])
+        roi_stats = roi_prediction_test(roi_cn, bg_cn, lower_threshold, dens_thres, p_thres=0.05, alternative="greater")
+        # prepare main out
+        select = [1,2,3,-2,-1]
+        out = [roi_read_count[i] for i in select] + [str(x) for x in roi_stats.values()]
+        make_plot = True
     # write output
     outfile = open(f"{outdir}/{sample}_focal_analysis_stats_{roi_name}.tsv", "w")
     header=['chromosome','start','end', 'region', 'log2r_copynumber', 'background_mean', 'background_sd', 'df', 'T', 'p-val', 'cn_change_sep']
     outfile.write('\t'.join(header)+'\n')
     outfile.write('\t'.join(out) + '\n')
     outfile.close()
-    return in_data, out
+    return in_data, out, make_plot
   
 
 #### builing site code dump ####

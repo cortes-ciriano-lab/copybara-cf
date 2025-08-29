@@ -128,6 +128,13 @@ def copybara_focal(args):
             Line = '\t'.join(r) + '\n'
             outfile.write(Line)
         outfile.close()
+
+    def output_focal_out(outdir, sample, focal_out, roi_name):
+        outfile = open(f"{outdir}/{sample}_focal_analysis_stats_{roi_name}.tsv", "w")
+        header=['chromosome','start','end', 'region', 'log2r_copynumber', 'background_mean', 'background_sd', 'df', 'T', 'p-val', 'cn_change_sep']
+        outfile.write('\t'.join(header)+'\n')
+        outfile.write('\t'.join(focal_out) + '\n')
+        outfile.close()
     
     # check arguments/parameters and define all required input
     print(f'blacklisting = {args.blacklisting}\nblacklist: {args.blacklist}')
@@ -187,16 +194,25 @@ def copybara_focal(args):
         bin_annotations_path = focal_bin_generator.generate_bins(outdir_reg, args.sample, args.ref, roi, args.roi_buffer, args.n_regions, args.chromosomes, args.blacklist)
         helper.time_function("Binned reference genome", checkpoints, time_str)
         # 2. count reads and normalise
-        read_counts_path,nmode,coverage = read_counter.count_reads(outdir_reg, args.bam, None, None ,args.sample, bin_annotations_path, args.ref, args.mapq, args.blacklisting, args.bl_threshold, args.bases_filter, args.bases_threshold, False, None, None, args.threads)
-        helper.time_function("Performed read counting", checkpoints, time_str)
+        try:
+            read_counts_path,nmode,coverage = read_counter.count_reads(outdir_reg, args.bam, None, None ,args.sample, bin_annotations_path, args.ref, args.mapq, args.blacklisting, args.bl_threshold, args.bases_filter, args.bases_threshold, False, None, None, args.threads)
+            helper.time_function("Performed read counting", checkpoints, time_str)
+        except: 
+            print(f"read counter normalisation and gc correction failed likely due to insufficient coverage. moving on to next region...")
+            focal_out = [str(x) for x in roi[0:4]] + ['NA','NA','NA','NA','NA','NA','NA']
+            roi_summary.append(focal_out)
+            output_focal_out(outdir_reg, args.sample, focal_out, roi_name)
+            continue
         # 3. analyse focal readcounts
         dens_thres=0.2
         lower_threshold=0   
-        focal_cn,focal_out =focal_analyse.analyse_focal(outdir_reg, args.sample, read_counts_path, args.blacklisting, roi, lower_threshold, dens_thres)
+        focal_cn,focal_out,make_plot =focal_analyse.analyse_focal(outdir_reg, args.sample, read_counts_path, args.blacklisting, roi, lower_threshold, dens_thres)
+        output_focal_out(outdir_reg, args.sample, focal_out, roi_name)
         roi_summary.append(focal_out)
         # 4. plotting output
-        plotting.plot_focal_results(focal_cn, focal_out, args.sample, outdir_reg)
-        helper.time_function("Performed focal analysis and visualisation", checkpoints, time_str)
+        if make_plot == True:
+            plotting.plot_focal_results(focal_cn, focal_out, args.sample, outdir_reg)
+            helper.time_function("Performed focal analysis and visualisation", checkpoints, time_str)
     # prepare and output all roi out data
     output_roi_summary(roi_summary, outdir, args.sample)
     helper.time_function("Total time to perform focal analysis", checkpoints, time_str, final=True) 
