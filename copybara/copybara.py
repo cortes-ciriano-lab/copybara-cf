@@ -206,6 +206,8 @@ def copybara_focal(args):
         except: 
             print(f"read counter normalisation and gc correction failed likely due to insufficient coverage. moving on to next region...")
             focal_out = [str(x) for x in roi[0:4]] + ['NA','NA','NA','NA','NA','NA','NA']
+            if args.cnfit != None:
+                focal_out += ['NA','NA']
             roi_summary.append(focal_out)
             output_focal_out(outdir_reg, args.sample, focal_out, roi_name, args.cnfit)
             continue
