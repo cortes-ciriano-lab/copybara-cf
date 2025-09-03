@@ -120,18 +120,24 @@ def copybara_focal(args):
                 roi_list.append([fields[0],int(fields[1]),int(fields[2]),fields[3], roi_length])
         return roi_list
     
-    def output_roi_summary(roi_summary, outdir, sample):
-        header=['chromosome','start','end', 'region', 'log2r_copynumber', 'background_mean', 'background_sd', 'df', 'T', 'p-val', 'cn_change_sep']
+    def output_roi_summary(roi_summary, outdir, sample, cnfit):
         outfile = open(f"{outdir}/{sample}_focal_analysis_summary_stats.tsv", "w")
+        if cnfit != None:
+            header=['chromosome','start','end', 'region', 'log2r_copynumber', 'background_mean', 'background_sd', 'df', 'T', 'p-val', 'cn_change_sep', 'copyNumber', 'category']
+        else:
+            header=['chromosome','start','end', 'region', 'log2r_copynumber', 'background_mean', 'background_sd', 'df', 'T', 'p-val', 'cn_change_sep']
         outfile.write('\t'.join(header)+'\n')
         for r in roi_summary:
             Line = '\t'.join(r) + '\n'
             outfile.write(Line)
         outfile.close()
 
-    def output_focal_out(outdir, sample, focal_out, roi_name):
+    def output_focal_out(outdir, sample, focal_out, roi_name, cnfit):
         outfile = open(f"{outdir}/{sample}_focal_analysis_stats_{roi_name}.tsv", "w")
-        header=['chromosome','start','end', 'region', 'log2r_copynumber', 'background_mean', 'background_sd', 'df', 'T', 'p-val', 'cn_change_sep']
+        if cnfit != None:
+            header=['chromosome','start','end', 'region', 'log2r_copynumber', 'background_mean', 'background_sd', 'df', 'T', 'p-val', 'cn_change_sep', 'copyNumber', 'category']
+        else:
+            header=['chromosome','start','end', 'region', 'log2r_copynumber', 'background_mean', 'background_sd', 'df', 'T', 'p-val', 'cn_change_sep']
         outfile.write('\t'.join(header)+'\n')
         outfile.write('\t'.join(focal_out) + '\n')
         outfile.close()
@@ -201,20 +207,20 @@ def copybara_focal(args):
             print(f"read counter normalisation and gc correction failed likely due to insufficient coverage. moving on to next region...")
             focal_out = [str(x) for x in roi[0:4]] + ['NA','NA','NA','NA','NA','NA','NA']
             roi_summary.append(focal_out)
-            output_focal_out(outdir_reg, args.sample, focal_out, roi_name)
+            output_focal_out(outdir_reg, args.sample, focal_out, roi_name, args.cnfit)
             continue
         # 3. analyse focal readcounts
         dens_thres=0.2
         lower_threshold=0   
-        focal_cn,focal_out,make_plot =focal_analyse.analyse_focal(outdir_reg, args.sample, read_counts_path, args.blacklisting, roi, lower_threshold, dens_thres)
-        output_focal_out(outdir_reg, args.sample, focal_out, roi_name)
+        focal_cn,focal_out,make_plot =focal_analyse.analyse_focal(outdir_reg, args.sample, read_counts_path, args.blacklisting, roi, args.cnfit, args.alternative, args.p_thres, lower_threshold, dens_thres)
+        output_focal_out(outdir_reg, args.sample, focal_out, roi_name, args.cnfit)
         roi_summary.append(focal_out)
         # 4. plotting output
         if make_plot == True:
             plotting.plot_focal_results(focal_cn, focal_out, args.sample, outdir_reg)
             helper.time_function("Performed focal analysis and visualisation", checkpoints, time_str)
     # prepare and output all roi out data
-    output_roi_summary(roi_summary, outdir, args.sample)
+    output_roi_summary(roi_summary, outdir, args.sample, args.cnfit)
     helper.time_function("Total time to perform focal analysis", checkpoints, time_str, final=True) 
 
 
@@ -354,6 +360,9 @@ def parse_args(args):
     focal_parser.add_argument('--n_regions', nargs='?', type=int, default = 1000, required=False, help='Number of random background regions to be sampled for computing of ROIs')    
     focal_parser.add_argument('--ref', nargs='?', type=str, required=True, help='Full path to reference genome')
     focal_parser.add_argument('--ref_index', nargs='?', type=str, required=False, help='Full path to reference genome fasta index (ref path + ".fai" by default)')
+    focal_parser.add_argument('--cnfit', nargs='?', type=str, required=False, default = None, help='Full path to "fitted_purity_ploidy.tsv" COPYBARA output file')
+    focal_parser.add_argument('--alternative', nargs='?', type=str, required=False, default = 'greater', help='Alternative to test ["greater", "two-sided", "less"]')
+    focal_parser.add_argument('--p_thres', nargs='?', type=float, required=False, default = 0.05, help='p value threshold to consider significance')
     focal_parser.add_argument('--mapq', nargs='?', type=int, default=5, help='Minimum MAPQ to consider a read counting (default=5)')
     focal_parser.add_argument('--threads', nargs='?', type=int, const=0, help='Number of threads to use (default=max)')
     focal_parser.add_argument('--outdir', nargs='?', required=True, help='Output directory (can exist but must be empty)')

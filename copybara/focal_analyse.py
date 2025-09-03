@@ -55,7 +55,7 @@ def roi_prediction_test(roi_cn, bg_cn, lower_threshold, dens_thres, p_thres = 0.
         p = 2 * stats.t.sf(abs(T), df=n_bg-1)
     elif alternative == "greater":   # enrichment
         p = stats.t.sf(T, df=n_bg-1)
-    else:  # "less"
+    elif alternative == "less":  # "less"
         p = stats.t.cdf(T, df=n_bg-1)
     # estimate CN change separation if p_val is significant
     cnsep = estimate_CN_change_sep(roi_cn, bg_cn, lower_threshold, dens_thres) if p <= p_thres else None
@@ -80,7 +80,7 @@ def estimate_CN_change_sep(roi_cn, bg_cn, lower_threshold, dens_thres):
         cnsep = None
     return cnsep
 
-def analyse_focal(outdir, sample, read_counts_path, blacklisting, roi, lower_threshold, dens_thres):
+def analyse_focal(outdir, sample, read_counts_path, blacklisting, roi, cnfit, alternative, p_thres, lower_threshold, dens_thres):
     ''' main function to analyse focal read counts '''
     # extract roi info for annotation
     roi_annot, roi_name = process_rois(roi)
@@ -96,17 +96,36 @@ def analyse_focal(outdir, sample, read_counts_path, blacklisting, roi, lower_thr
         # compute statistics and summary values and estimate cn change separation
         bg_cn = [float(x[-1]) for x in in_data if x[-2] == "background"]
         roi_cn = float(roi_read_count[-1])
-        roi_stats = roi_prediction_test(roi_cn, bg_cn, lower_threshold, dens_thres, p_thres=0.05, alternative="greater")
+        roi_stats = roi_prediction_test(roi_cn, bg_cn, lower_threshold, dens_thres, p_thres=p_thres, alternative=alternative)
         # prepare main out
         select = [1,2,3,-2,-1]
         out = [roi_read_count[i] for i in select] + [str(x) for x in roi_stats.values()]
+        if cnfit != None:
+            # get purity and ploidy from copybara run
+            if roi_stats['p'] <= p_thres:
+                with open(cnfit, "r") as file:
+                    header_line=next(file)
+                    for line in file:
+                        fields = line.strip().split("\t")
+                        purity,ploidy = float(fields[0]),float(fields[1])
+                # estimate absolute CN and annotate
+                acn=cnfitter.relative_to_absolute_CN(2**roi_cn, purity, ploidy)
+                acn = 0 if acn < 0 else acn
+                cat='putative ecDNA' if acn >=8 else cnfitter.categorise_cn_event(acn, ploidy)
+            else: 
+                acn,cat = None,None
+            # add to out
+            out = out + [str(acn),str(cat)]
         make_plot = True
     # write output
-    outfile = open(f"{outdir}/{sample}_focal_analysis_stats_{roi_name}.tsv", "w")
-    header=['chromosome','start','end', 'region', 'log2r_copynumber', 'background_mean', 'background_sd', 'df', 'T', 'p-val', 'cn_change_sep']
-    outfile.write('\t'.join(header)+'\n')
-    outfile.write('\t'.join(out) + '\n')
-    outfile.close()
+    # outfile = open(f"{outdir}/{sample}_focal_analysis_stats_{roi_name}.tsv", "w")
+    # if cnfit != None:
+    #     header=['chromosome','start','end', 'region', 'log2r_copynumber', 'background_mean', 'background_sd', 'df', 'T', 'p-val', 'cn_change_sep', 'copyNumber', 'category']
+    # else:
+    #     header=['chromosome','start','end', 'region', 'log2r_copynumber', 'background_mean', 'background_sd', 'df', 'T', 'p-val', 'cn_change_sep']
+    # outfile.write('\t'.join(header)+'\n')
+    # outfile.write('\t'.join(out) + '\n')
+    # outfile.close()
     return in_data, out, make_plot
   
 
