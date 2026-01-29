@@ -6,6 +6,7 @@ Carolin Sauer
 """
 
 import matplotlib.pyplot as plt
+plt.rcParams.update({'font.size': 5})
 import random
 
 import copybara.cn_functions as cnfitter
@@ -14,10 +15,10 @@ import copybara.cn_functions as cnfitter
 def plotting(bin_data, seg_data, offsets, cat_colours, meta, outdir):
 # def plotting(bin_data, seg_data, offsets, goi_list, cat_colours, gene_colour, meta, outdir):
     # Prepare figure
-    title = f"{meta['sample']}"
-    subtitle = f"PAG={meta['pag']}; purity={meta['purity']}; fitted purity={meta['fitted_purity']}; fitted ploidy={meta['ploidy']}\nfitting error function={meta['gof']}; coverage={meta['coverage']}x"
-    fig_name = f"{outdir}/{title}_copy_number_plot.pdf"
-    plt.figure(figsize=(7, 2))
+    title = f"{meta['sample']} | fitted purity={meta['fitted_purity']}; fitted ploidy={meta['ploidy']}; PAG={meta['pag']}"
+    subtitle = f"CN deviation={meta['purity']}; error function={meta['gof']}; coverage={meta['coverage']}x"
+    fig_name = f"{outdir}/{meta['sample']}_copy_number_plot.pdf"
+    plt.figure(figsize=(3.5, 1.25))
     # prepare chromosome input fpr plotting
     chromosomes = list(dict.fromkeys(offsets))
     chr_label = [x.replace('chr','') for x in chromosomes]
@@ -68,26 +69,38 @@ def plotting(bin_data, seg_data, offsets, cat_colours, meta, outdir):
     plt.ylim(-3, 3)
     # plt.axhline(0, color='black', linestyle='--', linewidth=1)
     for lim in chr_limits:
-        plt.axvline(x=lim, color='black', linewidth=0.5)
+        plt.axvline(x=lim, color='black', linewidth=0.25)
     # # add gois
     # for gene in gois_plotting:
     #     plt.axvline(x=gene[0], color=gene_colour, linewidth=0.5)
     #     plt.text(gene[0]+500000,3,gene[1],rotation=90, color=gene_colour, fontsize=5)
     plt.margins(x=0) 
-    # plt.suptitle(title, fontsize=7) 
-    # plt.title(subtitle,fontsize=6)
-    # plt.title(title,fontsize=7, loc='left', fontweight='bold')
-    plt.title(title,fontsize=7, loc='left')
-    plt.title(subtitle,fontsize=7, loc='right')
+    # plt.suptitle(title, fontsize=5) 
+    # plt.title(subtitle,fontsize=5)
+    # plt.title(title,fontsize=5, loc='left', fontweight='bold')
+    # plt.title(title,fontsize=5, loc='left')
+    # plt.title(subtitle,fontsize=5, loc='right')
+    plt.title(f"{title}\n{subtitle}", fontsize=5, loc='left', pad=2)
     # plt.title('Copy Number Profile')
-    plt.xlabel('Chromosome',fontsize=6)
-    plt.ylabel('Copy number (log2R)',fontsize=6)
-    plt.xticks(midpoints, chr_label,fontsize=5)
+    plt.xlabel('Chromosome',fontsize=5)
+    plt.ylabel('Copy number (log2R)',fontsize=5)
+    # set thin axis spine linewidth for all sides
+    ax = plt.gca()
+    for spine in ax.spines.values():
+        spine.set_linewidth(0.2)
+    plt.tick_params(width=0.2)
+    desired_labels = {str(i) for i in range(1, 12)}.union({str(i) for i in range(12, 23, 2)})
+    # keep all tick positions but only show text for the desired labels;
+    # use empty string for ticks we want to keep but not label
+    display_labels = [lab if lab in desired_labels else '' for lab in chr_label]
+    ax.set_xticks(midpoints)
+    ax.set_xticklabels(display_labels, fontsize=5)
+    # plt.xticks(midpoints, chr_label,fontsize=5)
     plt.yticks(fontsize=5)
     # plt.legend(loc='upper right', markerscale=4)
     plt.grid(False)
     plt.tight_layout()  
-    # plt.rcParams.update({'font.size': 6})  
+    # plt.rcParams.update({'font.size': 5})  
     # plt.rc('font', **font)
     # Save plot
     plt.savefig(fig_name, dpi=300)
@@ -202,9 +215,9 @@ def focal_plotting(outdir, meta, offsets, cat_colours, region_data, roi_coords, 
     # Prepare figure
     sample,roi_name = meta['sample'],meta['roi_name']
     title = f"{sample} | region: {roi_name}"
-    subtitle = f"CN change separation={meta['cnsep']}; T-statistic={meta['T']}; p={meta['pval']}"
+    subtitle = f"CN deviation={meta['cnsep']}; T-statistic={meta['T']}; $\it{{P}}${meta['pval']}"
     fig_name = f"{outdir}/{sample}_focal_analysis_{roi_name}.pdf"
-    fig = plt.figure(figsize=(7, 2))
+    fig = plt.figure(figsize=(3.5, 1.25))
     gs = fig.add_gridspec(1, 2, width_ratios=[6, 1], wspace=0)
     p_main = fig.add_subplot(gs[0])
     p_side = fig.add_subplot(gs[1], sharey=p_main)
@@ -242,37 +255,64 @@ def focal_plotting(outdir, meta, offsets, cat_colours, region_data, roi_coords, 
             )
     chr_limits=chr_limits[:-1]
     # Customizing the plot
-    # plt.ylim(-3, 3)
+    minval,maxval = min([d['binned'] for d in region_data])-1, max([d['binned'] for d in region_data])+1
+    plt.ylim(minval,maxval)
+    # plt.ylim((maxval*-1),maxval)
     for lim in chr_limits:
-        p_main.axvline(x=lim, color='black', linewidth=0.5)
-    p_main.set_xlabel('Chromosome',fontsize=6)
-    p_main.set_ylabel('Copy number (log2R)',fontsize=6)
-    p_main.set_xticks(midpoints, chr_label,fontsize=5)
-    p_main.text(0.0, 1.05, title, fontsize=7, ha='left', va='bottom', transform=p_main.transAxes)
-    p_main.text(1.0, 1.05, subtitle, fontsize=7, ha='right', va='bottom', transform=p_main.transAxes)
+        p_main.axvline(x=lim, color='black', linewidth=0.25)
+    p_main.set_xlabel('Chromosome',fontsize=5)
+    p_main.set_ylabel('Copy number (log2R)',fontsize=5)
+    # p_main.set_xticks(midpoints, chr_label,fontsize=5)
+    # only label chromosomes 1-10 and even chromosomes >=12 (12,14,...,22)
+    
+    # desired_labels = [str(i) for i in range(1, 12)] + [str(i) for i in range(13, 23, 2)]
+    # selected = [(pos, lab) for pos, lab in zip(midpoints, chr_label) if lab in desired_labels]
+    # if selected:
+    #     sel_pos, sel_lab = zip(*selected)
+    #     p_main.set_xticks(sel_pos)
+    #     p_main.set_xticklabels(sel_lab, fontsize=5)
+    # else:
+    #     p_main.set_xticks(midpoints)
+    #     p_main.set_xticklabels(chr_label, fontsize=5)
+    
+    desired_labels = {str(i) for i in range(1, 12)}.union({str(i) for i in range(12, 23, 2)})
+    # keep all tick positions but only show text for the desired labels;
+    # use empty string for ticks we want to keep but not label
+    display_labels = [lab if lab in desired_labels else '' for lab in chr_label]
+    p_main.set_xticks(midpoints)
+    p_main.set_xticklabels(display_labels, fontsize=5)
+
+    # p_main.text(0.0, 1.05, title, fontsize=5, ha='left', va='bottom', transform=p_main.transAxes)
+    # p_main.text(1.0, 1.05, subtitle, fontsize=5, ha='right', va='bottom', transform=p_main.transAxes)
+    p_main.set_title(f"{title}\n{subtitle}", fontsize=5, loc='left', pad=2)
     p_main.tick_params(axis='y', labelsize=5)
     p_main.grid(False)
     p_main.margins(y=0)
     p_main.margins(x=0.01)
     p_main.set_xlim(p_main.get_xlim()[0], p_main.get_xlim()[1])
+    # change all spines to thinner lines
+    for axis in ['top','bottom','left','right']:
+        p_main.spines[axis].set_linewidth(0.2)
+    p_main.tick_params(width=0.2)
     ## add in side density plot ##
     if density_points != None:
         y_vals, density = zip(*density_points)
         p_side.fill_betweenx(y_vals, 0, density, color=cat_colours['background'], alpha=0.6)
         p_side.plot(density, y_vals, color=cat_colours['background'], linewidth=0.5)
-        p_side.set_xlabel('Density', fontsize=6)
+        p_side.set_xlabel('Density', fontsize=5)
     p_side.tick_params(axis='y', left=False, labelleft=False)
     p_side.tick_params(axis='x', bottom=False, labelbottom=False)
     p_side.spines['right'].set_visible(False)
     p_side.spines['top'].set_visible(False)
     p_side.spines['bottom'].set_visible(False)
+    p_side.spines['left'].set_linewidth(0.2)
     # plot asthetics
     plt.yticks(fontsize=5)
     plt.xticks(fontsize=5)
     plt.margins(x=0) 
     plt.tight_layout()  
-    # plt.title(title,fontsize=7, loc='center')
-    # plt.title(subtitle,fontsize=7)
+    # plt.title(title,fontsize=5, loc='center')
+    # plt.title(subtitle,fontsize=5)
     # Save plot
     plt.savefig(fig_name, dpi=300)
     plt.close()
@@ -280,15 +320,20 @@ def focal_plotting(outdir, meta, offsets, cat_colours, region_data, roi_coords, 
 def label_pvalue(pval):
     pval = float(pval)
     if pval <= 0.0001:
-        plab = '≤0.0001****'
+        # plab = '≤0.0001****'
+        plab = '≤0.0001'
     elif pval <= 0.001:
-        plab = '≤0.001***'
+        # plab = '≤0.001***'
+        plab = '≤0.001'
     elif pval <= 0.01:
-        plab = '≤0.01**'
+        # plab = '≤0.01**'
+        plab = '≤0.01'
     elif pval <= 0.05:
-        plab = '≤0.05*'
+        # plab = '≤0.05*'
+        plab = '≤0.05'
     elif pval > 0.05:
-        plab = 'NS'
+        plab = '=NS'
+        # plab = '>0.05'
     return plab
     
 def plot_focal_results(focal_cn, focal_out, sample, outdir):
