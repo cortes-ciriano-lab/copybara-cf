@@ -12,7 +12,7 @@ with open("README.md", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="COPYBARA-cf",
+    name="COPYBARA",
     version=f"{helper.__version__}",
     author="Carolin Sauer",
     author_email="csauer@ebi.ac.uk",
