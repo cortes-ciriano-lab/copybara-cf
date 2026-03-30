@@ -10,13 +10,9 @@ from multiprocessing import cpu_count
 import sys
 import pysam
 import pybedtools
-# import copy
 import statistics
 import math
-# from scipy.stats import pearsonr
-# import numpy as np
-# from statsmodels.nonparametric.smoothers_lowess import lowess
-# from scipy.interpolate import interp1d
+
 
 def count_reads_in_curr_bin(bam, chrom, start, end, readcount_mapq):
     chunk_read_count = 0

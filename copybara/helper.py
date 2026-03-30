@@ -2,7 +2,8 @@
 Module containing misc. useful functions for COPYBARA
 Created: 23/10/2024
 Python 3.9.7
-Carolin Sauer - Adapted from Hillary Elrick
+Carolin Sauer
+(adapted from Hillary Elrick)
 """
 
 import re

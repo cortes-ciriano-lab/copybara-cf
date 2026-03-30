@@ -128,6 +128,3 @@ def analyse_focal(outdir, sample, read_counts_path, blacklisting, roi, cnfit, al
     # outfile.close()
     return in_data, out, make_plot
   
-
-#### builing site code dump ####
-
