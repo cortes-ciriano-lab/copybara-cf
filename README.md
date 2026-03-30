@@ -3,7 +3,7 @@
 ## Contents
 * [Installation](#installation)
   + [Install COPYBARA with Conda](#install-copybara-with-conda)
-  + [Alternately, Install COPYBARA from Source](#alternately-install-copybara-from-source)
+  + [Install COPYBARA from Source](#install-copybara-from-source)
   + [Check COPYBARA Installation](#check-copybara-installation)
 * [Run COPYBARA](#run-copybara)
   + [Mandatory Arguments](#mandatory-arguments)
@@ -35,9 +35,9 @@ conda install -c bioconda copybara
 
 This will install all dependencies and allow you to use COPYBARA on the command-line.
 
-### Alternatively, install COPYBARA from Source
+### Install COPYBARA from Source
 
-Alternatively, you can install COPYBARA from source, by first cloning this repository:
+**Alternatively**, you can install COPYBARA from source, by first cloning this repository:
 
 ```
 git clone https://github.com/cmsauer/COPYBARA.git
