@@ -3,7 +3,6 @@ Setup file for package publishing
 Created: 06/11/2024
 Python 3.9.7
 Carolin Sauer
-modified from Hillary Elrick
 """
 import setuptools
 
@@ -18,7 +17,7 @@ setuptools.setup(
     author="Carolin Sauer",
     author_email="csauer@ebi.ac.uk",
     url="https://github.com/cmsauer/COPYBARA",
-    description="COPYBARA-cf - copy number analysis for cfDNA long read sequencing data",
+    description="COPYBARA - copy number analysis for cfDNA sequencing data",
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=setuptools.find_packages(),
