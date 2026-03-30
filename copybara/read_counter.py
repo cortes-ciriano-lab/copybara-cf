@@ -301,9 +301,7 @@ def count_reads(outdir, tumour, normal, panel_of_normals, sample, bin_annotation
 
     normalised_counts = filter_correct_normalise(nmode=nmode, countData=countData)
 
-    #----
-    # 4. Get results and write out
-    #----
+    # Get results and write out
     outfile = open(f"{outdir}/{sample}_raw_read_counts.tsv", "w")
     if blacklisting == True:
         header=['bin', 'chromosome','start','end', 'gc_content', 'known_bases', 'overlap_blacklist', 'use_bin', 'tumour_read_count', 'normal_read_count']
@@ -315,7 +313,6 @@ def count_reads(outdir, tumour, normal, panel_of_normals, sample, bin_annotation
         outfile.write(Line)
     outfile.close()
 
-    
     
     # outfile2 = open(f"{outdir}/{sample}_read_counts_filtered.tsv", "w")
     # for r in filtered_counts:

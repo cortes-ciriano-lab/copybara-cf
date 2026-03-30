@@ -75,13 +75,7 @@ def plotting(bin_data, seg_data, offsets, cat_colours, meta, outdir):
     #     plt.axvline(x=gene[0], color=gene_colour, linewidth=0.5)
     #     plt.text(gene[0]+500000,3,gene[1],rotation=90, color=gene_colour, fontsize=5)
     plt.margins(x=0) 
-    # plt.suptitle(title, fontsize=5) 
-    # plt.title(subtitle,fontsize=5)
-    # plt.title(title,fontsize=5, loc='left', fontweight='bold')
-    # plt.title(title,fontsize=5, loc='left')
-    # plt.title(subtitle,fontsize=5, loc='right')
     plt.title(f"{title}\n{subtitle}", fontsize=5, loc='left', pad=2)
-    # plt.title('Copy Number Profile')
     plt.xlabel('Chromosome',fontsize=5)
     plt.ylabel('Copy number (log2R)',fontsize=5)
     # set thin axis spine linewidth for all sides
@@ -95,13 +89,9 @@ def plotting(bin_data, seg_data, offsets, cat_colours, meta, outdir):
     display_labels = [lab if lab in desired_labels else '' for lab in chr_label]
     ax.set_xticks(midpoints)
     ax.set_xticklabels(display_labels, fontsize=5)
-    # plt.xticks(midpoints, chr_label,fontsize=5)
     plt.yticks(fontsize=5)
-    # plt.legend(loc='upper right', markerscale=4)
     plt.grid(False)
     plt.tight_layout()  
-    # plt.rcParams.update({'font.size': 5})  
-    # plt.rc('font', **font)
     # Save plot
     plt.savefig(fig_name, dpi=300)
     plt.close()
@@ -206,7 +196,6 @@ def plot_copy_number(absolute_cn_path, log2r_cn_path, cn_fit_path, sample, no_pl
     # estimate chromosome offsets
     offsets = calc_chrom_offset(seg_data)
     # plot data 
-    # plotting(bin_data, seg_data, offsets, goi_list, cat_colours, gene_colour, meta, outdir)
     plotting(bin_data, seg_data, offsets, cat_colours, meta, outdir)
 
 
@@ -262,28 +251,13 @@ def focal_plotting(outdir, meta, offsets, cat_colours, region_data, roi_coords, 
         p_main.axvline(x=lim, color='black', linewidth=0.25)
     p_main.set_xlabel('Chromosome',fontsize=5)
     p_main.set_ylabel('Copy number (log2R)',fontsize=5)
-    # p_main.set_xticks(midpoints, chr_label,fontsize=5)
     # only label chromosomes 1-10 and even chromosomes >=12 (12,14,...,22)
-    
-    # desired_labels = [str(i) for i in range(1, 12)] + [str(i) for i in range(13, 23, 2)]
-    # selected = [(pos, lab) for pos, lab in zip(midpoints, chr_label) if lab in desired_labels]
-    # if selected:
-    #     sel_pos, sel_lab = zip(*selected)
-    #     p_main.set_xticks(sel_pos)
-    #     p_main.set_xticklabels(sel_lab, fontsize=5)
-    # else:
-    #     p_main.set_xticks(midpoints)
-    #     p_main.set_xticklabels(chr_label, fontsize=5)
-    
     desired_labels = {str(i) for i in range(1, 12)}.union({str(i) for i in range(12, 23, 2)})
     # keep all tick positions but only show text for the desired labels;
     # use empty string for ticks we want to keep but not label
     display_labels = [lab if lab in desired_labels else '' for lab in chr_label]
     p_main.set_xticks(midpoints)
     p_main.set_xticklabels(display_labels, fontsize=5)
-
-    # p_main.text(0.0, 1.05, title, fontsize=5, ha='left', va='bottom', transform=p_main.transAxes)
-    # p_main.text(1.0, 1.05, subtitle, fontsize=5, ha='right', va='bottom', transform=p_main.transAxes)
     p_main.set_title(f"{title}\n{subtitle}", fontsize=5, loc='left', pad=2)
     p_main.tick_params(axis='y', labelsize=5)
     p_main.grid(False)
@@ -311,8 +285,6 @@ def focal_plotting(outdir, meta, offsets, cat_colours, region_data, roi_coords, 
     plt.xticks(fontsize=5)
     plt.margins(x=0) 
     plt.tight_layout()  
-    # plt.title(title,fontsize=5, loc='center')
-    # plt.title(subtitle,fontsize=5)
     # Save plot
     plt.savefig(fig_name, dpi=300)
     plt.close()

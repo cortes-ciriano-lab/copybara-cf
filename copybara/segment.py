@@ -29,12 +29,9 @@ start_t = timeit.default_timer()
 # TO DO
 ###
 # Add anscombe as optional parameter
-# Also add functionality to include and exclude y and sex chr in general. (estimate sex?)
-# Also plotting title with info and stats.. plot fewer points etc
+# Also add functionality to include and exclude y and sex chr in general
 
-#----
-# 2. Define functions
-#----
+# Define functions
 
 # Initial CBS code adapted from: https://github.com/jeremy9959/cbs
 def cbs_stat(x):
@@ -322,8 +319,8 @@ def segment_copy_number(outdir, smoothened_cn_path, min_segment_size, shuffles, 
         outfile.write(Line)
     outfile.close()
 
-    ############### PLOTTING ###############
 
+    ############### PLOTTING ###############
     # # Used for developing code and debugging but removed as plot is not very pretty...
 
     # # define chromosomes and positions for plotting
