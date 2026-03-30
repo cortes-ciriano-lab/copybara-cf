@@ -1,4 +1,4 @@
-# ![COPYBARA](/docs/COPYBARA_logo.pdf)
+# ![COPYBARA](/docs/COPYBARA_logo.png)
 
 ## Contents
 * [Installation](#installation)
