@@ -6,10 +6,10 @@
   + [Install COPYBARA from Source](#install-copybara-from-source)
   + [Check COPYBARA Installation](#check-copybara-installation)
 * [Run COPYBARA](#run-copybara)
-  + [Mandatory Arguments](#mandatory-arguments)
-  + [Optional Arguments](#optional-arguments)
   + [Panel of Normals Generation](#panel-of-normals-generation)
   + [Focal Amplification Analysis](#focal-amplification-analysis)
+  + [Mandatory Arguments](#mandatory-arguments)
+  + [Optional Arguments](#optional-arguments)
 * [Output Files](#output-files)
 * [Troubleshooting](#troubleshooting)
 * [License](#license)
@@ -21,7 +21,7 @@ COPYBARA is a copy number analysis tool for long-read cell-free DNA (cfDNA) sequ
 
 COPYBARA has been tested on Oxford Nanopore (ONT) sequencing reads aligned with minimap2. It requires a Unix-based operating system and has been developed and tested on Linux.
 
-For further information, benchmarking, and citation, please refer to our [COPYBARA publication](LINK).
+For further information, benchmarking, and citation, please refer to our [preprint](https://github.com/cortes-ciriano-lab/COPYBARA).
 
 ## Installation
 
@@ -169,19 +169,19 @@ Argument | Description
 
 ## Output Files
 
-COPYBARA generates several output files in the specified output directory:
+**COPYBARA** generates several output files in the specified output directory:
 
-- `{sample}_{binsize}_raw_read_counts.tsv` - Raw read counts per bin
-- `{sample}_{binsize}_read_counts_mnorm_log2r.tsv` - Matched-normal normalized log2 ratios
-- `{sample}_{binsize}_read_counts_mnorm_log2r_segmented.tsv` - Segmented log2 ratios
-- `{sample}_{binsize}_fitted_purity_ploidy.tsv` - Fitted purity and ploidy values
-- `{sample}_{binsize}_segmented_absolute_copy_number.tsv` - Final absolute copy number segments
-- `{sample}_{binsize}_copy_number_plot.png` - Genome-wide copy number plot
-- `{sample}_genes_of_interest.tsv` - Copy number values for genes of interest (if --goi provided)
+- `{sample}_raw_read_counts.tsv` - Raw read counts per bin
+- `{sample}_read_counts_pon_log2r_segmented.tsv` - Segmented and normalised (self, PoN or matched normal) log2 ratios
+- `{sample}_fitted_purity_ploidy.tsv` - Fitted purity (tumour fraction) and ploidy values
+- `{sample}_segmented_absolute_copy_number.tsv` - Final absolute copy number segments
+- `{sample}_copy_number_plot.pdf` - Genome-wide copy number plot
 
-For focal analysis:
-- `{sample}_focal_analysis_summary_stats.tsv` - Summary statistics for regions of interest
+For **COPYBARA focal** analysis the following output files are generated for each gene or region of interest:
+
 - `{sample}_focal_analysis_stats_{roi}.tsv` - Detailed statistics per ROI
+- `{sample}_focal_analysis_stats_{roi}.pdf` - COPYBARA focal plot 
+In addition, for each sample a summary table (`{sample}_focal_analysis_summary_stats.tsv`) across all ROIs is outputted in the specified output directory.
 
 ## Troubleshooting
 
@@ -196,6 +196,3 @@ Copyright (c) 2024 - All rights reserved.
 ## Contacts
 
 Carolin Sauer: csauer@ebi.ac.uk
-
-
-
