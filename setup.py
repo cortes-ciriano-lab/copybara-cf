@@ -16,7 +16,7 @@ setuptools.setup(
     version=f"{helper.__version__}",
     author="Carolin Sauer",
     author_email="csauer@ebi.ac.uk",
-    url="https://github.com/cmsauer/COPYBARA",
+    url="https://github.com/cortes-ciriano-lab/COPYBARA",
     description="COPYBARA - copy number analysis for cfDNA sequencing data",
     long_description=long_description,
     long_description_content_type="text/markdown",
