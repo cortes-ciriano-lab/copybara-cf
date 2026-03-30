@@ -35,13 +35,8 @@ logo = """
 ▝▚▄▄▖▝▚▄▞▘▐▌    ▐▌  ▐▙▄▞▘▐▌ ▐▌▐▌ ▐▌▐▌ ▐▌  ▝▚▄▖▐▌  
 """
 
-"""
-Add in matched normal and panel of normal to args define in copybara run function and arugments of parser
-Add parameter to overrule and set ploidy if known from tumour
-Write code to estimate tMAD score!
-Gene mapping for genes of interest and categorise if gain amp loss del present 
-Correct tumour purity if purity 1 and ploidy 0 (or if completely flat profile, i.e. no changes present...)
-"""
+#####
+# COPYBARA pon
 #####
 def copybara_pon(args):
     """ main function for PoN generation """
@@ -106,6 +101,8 @@ def copybara_pon(args):
     helper.time_function("Performed read counting", checkpoints, time_str)
     helper.time_function("Total time to generate panel of normals", checkpoints, time_str, final=True)
 
+#####
+# COPYBARA focal
 #####
 def copybara_focal(args):
     """ main function for focal analysis and ecDNA detection in regions of interest (ROIs) """
@@ -227,6 +224,8 @@ def copybara_focal(args):
 
 
 #####
+# COPYBARA (main)
+#####
 def copybara_main(args):
     """ main function for copy number analysis """
     print(f'blacklisting = {args.blacklisting}\nblacklist: {args.blacklist}')
@@ -322,7 +321,6 @@ def copybara_main(args):
 
 ####
 # bam/cram checker into pon_generator when opening lists! 
-# Put in PON checker and normalisation in read counter
 # above values into parameters and defaults! 
 # improve segmentation and decrease merging?
 # fix no_blacklist flag... 
