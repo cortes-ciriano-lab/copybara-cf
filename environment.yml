@@ -1,7 +1,8 @@
 # This file may be used to create an environment using:
-# $ conda create --name <env> --file environment.yml
+# $ conda env create --name <env> --file environment.yml
 # platform: linux-64
 channels:
+  - conda-forge
   - bioconda
 dependencies:
   - python=3.9
