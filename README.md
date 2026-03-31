@@ -49,7 +49,7 @@ To install from source, COPYBARA requires Python 3.9 with dependencies as listed
 To install and manage dependencies with conda, create a new environment and install dependencies (including Python 3.9) with the `environment.yml` file in the top-level of the repository:
 
 ```
-conda env create --name <env> --file environment.yml
+conda create --name <env> --file environment.yml
 ```
 
 #### Install Dependencies with pip
