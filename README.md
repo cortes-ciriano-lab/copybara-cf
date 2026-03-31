@@ -21,7 +21,7 @@ COPYBARA is a copy number analysis tool for long-read cell-free DNA (cfDNA) sequ
 
 COPYBARA has been tested on Oxford Nanopore (ONT) sequencing reads aligned with minimap2. It requires a Unix-based operating system and has been developed and tested on Linux.
 
-For further information, benchmarking, and citation, please refer to our [preprint](https://github.com/cortes-ciriano-lab/COPYBARA).
+For further information, benchmarking, and citation, please refer to our [preprint](https://github.com/cortes-ciriano-lab/copybara-cf).
 
 ## Installation
 
@@ -40,7 +40,7 @@ This will install all dependencies and allow you to use COPYBARA on the command-
 **Alternatively**, you can install COPYBARA from source, by first cloning this repository:
 
 ```
-git clone https://github.com/cmsauer/COPYBARA.git
+git clone https://github.com/cortes-ciriano-lab/copybara-cf.git
 ```
 
 To install from source, COPYBARA requires Python 3.9 with dependencies as listed in the `requirements.txt` file. All dependencies can be installed via conda or pip.
