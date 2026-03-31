@@ -196,3 +196,5 @@ Copyright (c) 2024 - All rights reserved.
 ## Contacts
 
 Carolin Sauer: csauer@ebi.ac.uk
+
+Isidro Cortés Ciriano: icortes@ebi.ac.uk
