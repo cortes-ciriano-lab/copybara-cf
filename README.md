@@ -30,7 +30,7 @@ For further information, benchmarking, and citation, please refer to our [prepri
 The recommended and easiest way to install COPYBARA is via conda:
 
 ```
-conda install -c bioconda copybara
+conda install -c bioconda copybara-cf
 ```
 
 This will install all dependencies and allow you to use COPYBARA on the command-line.
