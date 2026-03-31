@@ -13,3 +13,4 @@ dependencies:
   - pysam=0.20.0
   - pandas=2.0.0
   - matplotlib=3.7.1
+  - intervaltree
